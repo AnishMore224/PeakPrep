@@ -1,8 +1,15 @@
 import mongoose, { Document } from "mongoose";
 
+
+interface IUser extends Document {
+    username: string;
+    password: string;
+    role: 'admin' | 'hr' | 'student';
+}
 interface IStudent extends Document {
     userId: mongoose.Types.ObjectId;
     name: string;
+    email: string;
     section: string;
     branch: string;
     admissionYear: number;
@@ -33,11 +40,10 @@ interface IFeedback extends Document {
     comment: string;
 }
 
-
 interface IAdmin extends Document {
     userId: mongoose.Types.ObjectId;
     name: string;
     email: string;
 }
 
-export type { IStudent, IHR, ICompany, IFeedback, IAdmin };
+export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin };
