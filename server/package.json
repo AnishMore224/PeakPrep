@@ -15,11 +15,10 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "server": "file:"
-    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.8.4",
+    "server": "file:",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

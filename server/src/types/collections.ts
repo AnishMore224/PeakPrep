@@ -7,7 +7,7 @@ interface IUser extends Document {
     role: 'admin' | 'hr' | 'student';
 }
 interface IStudent extends Document {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     name: string;
     email: string;
     section: string;
@@ -19,7 +19,7 @@ interface IStudent extends Document {
 }
 
 interface IHR extends Document {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     companyId: mongoose.Types.ObjectId;
     name: string;
     email: string;
@@ -28,12 +28,12 @@ interface IHR extends Document {
 interface ICompany extends Document {
     name: string;
     hr: mongoose.Types.ObjectId[];
-    shortlistedStudents: mongoose.Types.ObjectId[];
-    selectedStudents: mongoose.Types.ObjectId[];
+    shortlistedStudents: string[];
+    selectedStudents: string[];
 }
 
 interface IFeedback extends Document {
-    studentId: mongoose.Types.ObjectId;
+    studentId: string;
     companyName: string;
     type: 'pi' | 'gd' | 'training';
     rating: number;
@@ -41,7 +41,7 @@ interface IFeedback extends Document {
 }
 
 interface IAdmin extends Document {
-    userId: mongoose.Types.ObjectId;
+    userId: string;
     name: string;
     email: string;
 }
