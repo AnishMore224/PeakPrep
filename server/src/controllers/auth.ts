@@ -16,18 +16,10 @@ export const register = async (req: Request, res: Response): Promise<any> => {
         const { name, username, email, password, branch, section } = req.body; // check the sequence (should match with the frontend)
 
         // Check if all fields are provided
-        const missingfields = [];
-        if (!name) missingfields.push("name");
-        if (!username) missingfields.push("username");
-        if (!email) missingfields.push("email");
-        if (!password) missingfields.push("password");
-        if (!branch) missingfields.push("branch");
-        if (!section) missingfields.push("section");
-
-        if (missingfields.length > 0) {
+        if (!name || !username || !email || !password || !branch || !section) {
             return res
                 .status(400)
-                .json({ ...response, error: `All fields are required. \n missingfields: ${missingfields}` });
+                .json({ ...response, error: "All fields are required." });
         }
 
         // get database key

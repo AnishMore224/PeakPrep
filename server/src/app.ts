@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 
 // Routes
 import authRoutes from './routes/auth';
+import getDetailsRoutes from './routes/details';
+import adminRoutes from './routes/adminControls';
 
 dotenv.config();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/getDetails", getDetailsRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript!');
