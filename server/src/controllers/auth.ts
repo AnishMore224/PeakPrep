@@ -12,6 +12,7 @@ import HR from "../models/HR";
 
 
 export const register = async (req: Request, res: Response): Promise<any> => {
+    let user: IUser | null = null;
     try {
         const { name, username, email, password, branch, section } = req.body; // check the sequence (should match with the frontend)
 
@@ -40,7 +41,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
         const userId = uuidv4();
 
         // Create and save the new user
-        const user = new User({
+        user = new User({
             _id: userId,
             username,
             password: hashedPassword,
@@ -82,10 +83,12 @@ export const register = async (req: Request, res: Response): Promise<any> => {
         });
 
     } catch (err: Error | any | null) {
+        if (user) {
+            await user.deleteOne();
+        }
         res.status(500).json({ ...response, error: err.message });
     }
 };
-
 
 export const login = async (req: Request, res: Response): Promise<any> => {
     try {
@@ -193,6 +196,4 @@ export const logout = (req: Request, res: Response) => {
       success: true,
       data: { message: "Logged out successfully" },
     });
-  };
-
-  
+};

@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { IStudent } from '../types/collections';
 
 const StudentSchema: Schema = new Schema({
-    _id: { type: String, required: true },
+    _id: { type: String, required: true }, // Registration number
     userId: { type: String, ref: 'User', required: true, index: true },
     name: { type: String, required: true },
     section: { type: String, required: true },
