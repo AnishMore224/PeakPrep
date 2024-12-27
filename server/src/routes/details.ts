@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import { companies, company, hr, hrs, student, students } from '../controllers/details';
+import { companies, company, feedbacks, hr, hrs, student, students } from '../controllers/details';
 
 
 var router = express.Router();
@@ -9,6 +9,7 @@ router.get('/companies', companies);
 router.get('/company', company);
 router.get('/hrs', hrs);
 router.get('/hr', hr);
+router.get('/feedbacks',feedbacks);
 
 
 export default router;

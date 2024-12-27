@@ -3,7 +3,7 @@ import { IFeedback } from '../types/collections';
 
 const FeedbackSchema: Schema = new Schema(
     {
-        studentId: { type: String, ref: 'Student', required: true, index: true },
+        studentId: [{ type: String, ref: 'Student', required: true, index: true }],
         companyName: { type: String, required: true },
         type: { type: String, required: true, enum: ['pi', 'gd', 'training'] },
         rating: { type: Number, required: true, min: 1, max: 5 },
