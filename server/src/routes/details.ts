@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { companies, company, feedbacks, hr, hrs, student, students } from '../controllers/details';
 
-
 var router = express.Router();
+
 router.get('/students', students);
 router.get('/student', student);
 router.get('/companies', companies);
