@@ -40,7 +40,7 @@ export const addHr = async (req: Request, res: Response): Promise<any> => {
         await companyRecord.save();
 
         const { userId: hrUserId, ...hrDetails } = newHr.toObject();
-        res.send({ ...response, message: 'HR added successfully.', data: { hr: hrDetails } });
+        res.send({ ...response,success: true, message: 'HR added successfully.', data: { hr: hrDetails } });
     } catch (error) {
         if (newUser) {
             await newUser.deleteOne();
@@ -51,7 +51,9 @@ export const addHr = async (req: Request, res: Response): Promise<any> => {
 
 export const deleteHr = async (req: Request, res: Response): Promise<any> => {
     const { email } = req.body;
-    
+     if (!email) {
+        return res.status(400).send({ ...response, error: 'Email required' });
+    }
     try {
       const hr = await HR.findOne({ email });
         if (!hr) {
