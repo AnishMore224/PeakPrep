@@ -1,15 +1,19 @@
-import express, { NextFunction, Request, Response } from 'express';
-import { companies, company, feedbacks, hr, hrs, student, students } from '../controllers/details';
+import express from 'express';
+import { companies, company, hr, hrs, student, students } from '../controllers/details';
+import { isAdmin, isHrOrAdmin, isHrOrStudentOrAdmin, isStudent } from '../middlewares/authenticate';
 
 var router = express.Router();
 
-router.get('/students', students);
-router.get('/student', student);
-router.get('/companies', companies);
-router.get('/company', company);
-router.get('/hrs', hrs);
-router.get('/hr', hr);
-router.get('/feedbacks',feedbacks);
+router.get('/students',isAdmin, students);
 
+router.get('/student',isHrOrAdmin, student);
+
+router.get('/companies', isAdmin, companies);
+
+router.get('/company',isHrOrStudentOrAdmin, company);
+
+router.get('/hrs',isAdmin, hrs);
+
+router.get('/hr',isHrOrStudentOrAdmin, hr);
 
 export default router;

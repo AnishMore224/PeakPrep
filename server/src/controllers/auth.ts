@@ -59,7 +59,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
             branch,
             feedback: [],
             companies: [],
-            placedAt: null,
+            placedAt: [],
         });
         await student.save();
 
@@ -143,10 +143,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             });
         }
         else if (user.role === "admin") {
-            // Generate JWT token
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
-
             const admin = await Admin.findOne({ userId: user._id });
+            // Generate JWT token
+            const token = jwt.sign({ id: user._id, role: user.role, email: admin?.email }, process.env.JWT_SECRET || 'your_secret_key');
             res.status(200).json({
                 ...response,
                 success: true,
@@ -162,10 +161,10 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             });
         }
         else if (user.role === "hr") {
-            // Generate JWT token
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
-
             const hr = await HR.findOne({ userId: user._id });
+            // Generate JWT token
+            const token = jwt.sign({ id: user._id, role: user.role, email: hr?.email}, process.env.JWT_SECRET || 'your_secret_key');
+
             res.status(200).json({
                 ...response,
                 success: true,
