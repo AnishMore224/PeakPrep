@@ -4,20 +4,22 @@ import Student from "../models/Student";
 import Company from "../models/Company";
 import Feedback from "../models/Feedback";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+import HR from "../models/HR";
 
 export const addFeedback = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  const { studentId, companyName, type, rating, comment } = req.body;
-  if (!studentId || !companyName || !type || !rating || !comment) {
+  const { studentIds, companyName, type, rating, comment } = req.body;
+  if (!studentIds || !companyName || !type || !rating || !comment) {
     return res
       .status(400)
       .send({ ...response, error: "All fields are required." });
   }
   try {
-    const student = await Student.findOne({ _id: studentId });
-    if (!student) {
+    const students = await Student.find({ _id: { $in: studentIds } });
+    if (!students.length || students.length !== studentIds.length) {
       return res.status(404).send({ ...response, error: "Student not found." });
     }
 
@@ -27,7 +29,7 @@ export const addFeedback = async (
     }
 
     const feedback = new Feedback({
-      studentId,
+      studentId: studentIds,
       companyName,
       type,
       rating,
@@ -36,8 +38,10 @@ export const addFeedback = async (
 
     await feedback.save();
 
-    student.feedback.push(feedback._id as mongoose.Types.ObjectId);
-    await student.save();
+    students.forEach(async (student) => {
+      student.feedback.push(feedback._id as mongoose.Types.ObjectId);
+      await student.save();
+    });
 
     res.send({
       ...response,
@@ -60,7 +64,9 @@ export const deleteFeedback = async (
       .send({ ...response, error: "Feedback ID required." });
   }
   try {
-    const feedback = await Feedback.findOne({ _id: feedbackId });
+    const feedback = await Feedback.findOne({
+      _id: feedbackId as mongoose.Types.ObjectId,
+    });
     if (!feedback) {
       return res
         .status(404)
@@ -96,7 +102,9 @@ export const updateFeedback = async (
       .send({ ...response, error: "All fields are required." });
   }
   try {
-    const feedback = await Feedback.findOne({ _id: feedbackId });
+    const feedback = await Feedback.findOne({
+      _id: feedbackId as mongoose.Types.ObjectId,
+    });
     if (!feedback) {
       return res
         .status(404)
@@ -119,12 +127,13 @@ export const updateFeedback = async (
 //Called by Student
 export const feedbacks = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { regd_no } = req.body;
+    const { token } = req.body;
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
 
-    if (!regd_no) {
+    if (!decoded) {
       return res.status(400).json({ error: "All fields are required" });
     }
-    const student = await Student.findOne({ _id: regd_no }).populate({
+    const student = await Student.findOne({ _id: decoded.username }).populate({
       path: "feedback",
       select: "-studentId", // Exclude the studentId field from the populated feedback documents
     });
@@ -151,12 +160,16 @@ export const feedbacks = async (req: Request, res: Response): Promise<any> => {
 //Called by Admin, HR and Student
 export const feedback = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { _id, company_name, regd_no, token } = req.body;
-    if (!token) {
+    const { feedbackId, company_name, regd_no, token } = req.body;
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    if (!decoded) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    if (token.role === "student" || token.role === "admin") {
+    if (decoded.role === "student" || decoded.role === "admin") {
+      if (decoded.role === "student" && decoded.username !== regd_no) {
+        return res.status(403).json({ error: "Access denied" });
+      }
       if (!regd_no || !company_name) {
         return res.status(400).json({ error: "All fields are required" });
       }
@@ -173,11 +186,13 @@ export const feedback = async (req: Request, res: Response): Promise<any> => {
         data: feedbackData,
         message: "Successfully fetched feedback",
       });
-    } else if (token.role === "hr") {
-      if (!_id) {
+    } else if (decoded.role === "hr") {
+      if (!feedbackId) {
         return res.status(400).json({ error: "All fields are required" });
       }
-      const feedback = await Feedback.findOne({ _id });
+      const feedback = await Feedback.findOne({
+        _id: feedbackId as mongoose.Types.ObjectId,
+      });
       if (!feedback) {
         return res.status(404).json({ error: "Feedback not found" });
       }

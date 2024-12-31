@@ -79,9 +79,9 @@ export const isHr = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
+    const user = await User.findOne({ _id: decoded.id });
 
-    if (!user || user.role !== "hr" || user.username !== decoded.email) {
+    if (!user || user.role !== "hr") {
       return res.status(403).send({ error: "Access denied." });
     }
     next();
@@ -105,9 +105,9 @@ export const isStudent = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
-
-    if (!user || user.role !== "student" || user.username !== decoded.regd_no) {
+    const user = await User.findOne({ _id: decoded.id });
+    
+    if (!user || user.role !== "student") {
       return res.status(403).send({ error: "Access denied." });
     }
     next();
@@ -131,13 +131,9 @@ export const isHrOrAdmin = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
+    const user = await User.findOne({ _id: decoded.id });
 
-    if (
-      !user ||
-      (user.role !== "hr" && user.role !== "admin") ||
-      user.username !== decoded.email
-    ) {
+    if (!user || (user.role !== "hr" && user.role !== "admin")) {
       return res.status(403).send({ error: "Access denied." });
     }
     next();
@@ -161,14 +157,9 @@ export const isStudentOrAdmin = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
+    const user = await User.findOne({ _id: decoded.id });
 
-    if (
-      !user ||
-      (user.role !== "student" && user.role !== "admin") ||
-      (user.role === "student" && user.username !== decoded.regd_no) ||
-      (user.role === "admin" && user.username !== decoded.email)
-    ) {
+    if (!user || (user.role !== "student" && user.role !== "admin")) {
       return res.status(403).send({ error: "Access denied." });
     }
     next();
@@ -192,14 +183,9 @@ export const isHrOrStudent = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
+    const user = await User.findOne({ _id: decoded.id });
 
-    if (
-      !user ||
-      (user.role !== "hr" && user.role !== "student") ||
-      (user.role === "hr" && user.username !== decoded.email) ||
-      (user.role === "student" && user.username !== decoded.regd_no)
-    ) {
+    if (!user || (user.role !== "hr" && user.role !== "student")) {
       return res.status(403).send({ error: "Access denied." });
     }
     next();
@@ -223,16 +209,11 @@ export const isHrOrStudentOrAdmin = async (
     }
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    const user = await User.findOne({ _id: decoded._id });
+    const user = await User.findOne({ _id: decoded.id });
 
     if (
       !user ||
-      (user.role !== "hr" &&
-        user.role !== "student" &&
-        user.role !== "admin") ||
-      (user.role === "hr" && user.username !== decoded.email) ||
-      (user.role === "student" && user.username !== decoded.regd_no) ||
-      (user.role === "admin" && user.username !== decoded.email)
+      (user.role !== "hr" && user.role !== "student" && user.role !== "admin")
     ) {
       return res.status(403).send({ error: "Access denied." });
     }

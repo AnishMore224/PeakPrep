@@ -7,15 +7,15 @@ var router = express.Router();
 
 router.post('/addSelectedStudents', isHrOrAdmin, addSelectedStudent);
 
-router.post('updateSelectedStudents', isHrOrAdmin, updateSelectedStudent);
+router.post('/updateSelectedStudents', isHrOrAdmin, updateSelectedStudent);
 
-router.delete('removeSelectedStudents', isHrOrAdmin, removeSelectedStudent);
+router.delete('/removeSelectedStudents', isHrOrAdmin, removeSelectedStudent);
 
-router.post('addShortlistedStudents', isHrOrAdmin, addShortlistStudent);
+router.post('/addShortlistedStudents', isHrOrAdmin, addShortlistStudent);
 
-router.post('updateShortlistedStudents', isHrOrAdmin, updateShortlistStudent);
+router.post('/updateShortlistedStudents', isHrOrAdmin, updateShortlistStudent);
 
-router.delete('removeShortlistedStudents', isHrOrAdmin, removeShortlistStudent);
+router.delete('/removeShortlistedStudents', isHrOrAdmin, removeShortlistStudent);
 
 router.get('/getSelectedStudents', isHrOrAdmin, getSelectedStudents);
 

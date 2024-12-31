@@ -8,7 +8,6 @@ export const addShortlistStudent = async (
   res: Response
 ): Promise<any> => {
   const { studentIds, companyName } = req.body;
-
   if (!studentIds || !companyName) {
     return res
       .status(400)
@@ -20,7 +19,7 @@ export const addShortlistStudent = async (
     if (!company) {
       return res.status(404).json({ message: "Company not found" });
     }
-
+    
     const students = await Student.find({ _id: { $in: studentIds } });
     if (students.length !== studentIds.length) {
       return res
@@ -49,7 +48,7 @@ export const addShortlistStudent = async (
 
     return res
       .status(200)
-      .json({ message: "Students shortlisted successfully" });
+      .json({ success: true, message: "Students shortlisted successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -118,7 +117,7 @@ export const updateShortlistStudent = async (
 
     return res
       .status(200)
-      .json({ message: "Students shortlisted successfully" });
+      .json({ success: true, message: "Students shortlisted successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -169,9 +168,10 @@ export const removeShortlistStudent = async (
     );
     await company.save();
 
-    return res
-      .status(200)
-      .json({ message: "Students removed from shortlist successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "Students removed from shortlist successfully",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -218,7 +218,9 @@ export const addSelectedStudent = async (
         return student.save();
       })
     );
-    return res.status(200).json({ message: "Students selected successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Students selected successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -277,7 +279,9 @@ export const updateSelectedStudent = async (
     // Update the company's selectedStudents field
     company.selectedStudents = studentIds;
     await company.save();
-    return res.status(200).json({ message: "Students selected successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Students selected successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -322,9 +326,10 @@ export const removeSelectedStudent = async (
       (studentId) => !studentIds.includes(studentId)
     );
     await company.save();
-    return res
-      .status(200)
-      .json({ message: "Students removed from selection successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "Students removed from selection successfully",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -349,7 +354,9 @@ export const getSelectedStudents = async (
     const students = await Student.find({
       _id: { $in: company.selectedStudents },
     }).select("-placedAt -companies -userId -feedback");
-    return res.status(200).json({ students });
+    return res
+      .status(200)
+      .json({ success: true, data: students, message: "Students found" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
@@ -375,7 +382,9 @@ export const getShortlistedStudents = async (
       _id: { $in: company.shortlistedStudents },
     }).select("-placedAt -companies -userId -feedback");
 
-    return res.status(200).json({ students });
+    return res
+      .status(200)
+      .json({ success: true, data: students, message: "Students found" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });

@@ -21,7 +21,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/details", getDetailsRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("api/feedback", feedbackRoutes);
+app.use("/api/feedback", feedbackRoutes);
 app.use("/api/studentSelection", studentSelectionRoutes);
 
 app.get("/", (req: Request, res: Response) => {
