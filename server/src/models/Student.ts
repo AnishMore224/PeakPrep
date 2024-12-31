@@ -5,12 +5,13 @@ const StudentSchema: Schema = new Schema({
     _id: { type: String, required: true }, // Registration number
     userId: { type: String, ref: 'User', required: true, index: true },
     name: { type: String, required: true },
+    email: { type: String, required: true },
     section: { type: String, required: true },
     branch: { type: String, required: true },
     admissionYear: { type: Number, required: true },
     feedback: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
     companies: [{ type: Schema.Types.ObjectId, ref: 'Company' }],
-    placedAt: { type: Schema.Types.ObjectId, ref: 'Company', default: null }
+    placedAt: [{ type: Schema.Types.ObjectId, ref: 'Company', default: null }]
 }, {
     timestamps: true,
     versionKey: false
