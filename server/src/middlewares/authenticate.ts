@@ -13,7 +13,7 @@ export const isAdmin = async (req: Request, res: Response, next: NextFunction): 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string || 'your_secret_key');
     const user = await User.findOne({ _id: decoded.id });
 
-    if (!user || user.role !== 'admin') {
+    if (!user || user.role !== 'admin') { // can check from token also
       return res.status(403).send({ error: 'Access denied.' });
     }
 

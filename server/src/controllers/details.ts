@@ -44,7 +44,6 @@ export const students = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-
 //Called by HR and admin
 export const student = async (req: Request, res: Response): Promise<any> => {
   try {
