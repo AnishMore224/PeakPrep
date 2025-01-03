@@ -86,7 +86,7 @@ export const updateEmail = async (req: Request, res: Response): Promise<any> => 
             student.email = newEmail;
             await student.save();
         } else if (user.role === "hr") {
-            hr = await HR.findOne({ _id: username });
+            hr = await HR.findOne({ email: username });
             if (!hr) {
                 return res.status(404).json({ ...response, error: "HR not found." });
             }
