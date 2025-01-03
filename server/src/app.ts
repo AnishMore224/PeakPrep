@@ -8,6 +8,7 @@ import getDetailsRoutes from "./routes/details";
 import adminRoutes from "./routes/adminControls";
 import feedbackRoutes from "./routes/feedback";
 import studentSelectionRoutes from "./routes/studentSelection";
+import userRoutes from "./routes/user";
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.use("/api/details", getDetailsRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/studentSelection", studentSelectionRoutes);
+app.use("/api/user", userRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript!");
