@@ -122,6 +122,9 @@ export const company = async (req: Request, res: Response): Promise<any> => {
     if (decoded.role === "student") {
       const { shortlistedStudents, selectedStudents, ...companyData } =
         company.toObject();
+      if(!shortlistedStudents.includes(decoded.username) && !selectedStudents.includes(decoded.username)){
+        return res.status(403).json({ ...response, error: "Access denied" });
+      }
       return res.status(200).json({
         ...response,
         success: true,
@@ -192,6 +195,17 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
 
     if (decoded.role === "student") {
       const { userId, companyId, ...hrData } = hr.toObject();
+      const company = await Company.findById(companyId);
+      if (!company) {
+        return res.status(404).json({ ...response, error: "Company not found" });
+      }
+
+      if (
+        !company.shortlistedStudents.includes(decoded.username) &&
+        !company.selectedStudents.includes(decoded.username)
+      ) {
+        return res.status(403).json({ ...response, error: "Access denied" });
+      }
       return res.status(200).json({
         ...response,
         success: true,

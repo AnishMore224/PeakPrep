@@ -125,7 +125,7 @@ export const updateFeedback = async (
 };
 
 //Called by Student
-export const feedbacks = async (req: Request, res: Response): Promise<any> => {
+export const getFeedbacks = async (req: Request, res: Response): Promise<any> => {
   try {
     const { token } = req.body;
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
@@ -158,7 +158,7 @@ export const feedbacks = async (req: Request, res: Response): Promise<any> => {
 };
 
 //Called by Admin, HR and Student
-export const feedback = async (req: Request, res: Response): Promise<any> => {
+export const getFeedback = async (req: Request, res: Response): Promise<any> => {
   try {
     const { feedbackId, company_name, regd_no, token } = req.body;
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
@@ -190,6 +190,7 @@ export const feedback = async (req: Request, res: Response): Promise<any> => {
       if (!feedbackId) {
         return res.status(400).json({ error: "All fields are required" });
       }
+      
       const feedback = await Feedback.findOne({
         _id: feedbackId as mongoose.Types.ObjectId,
       });
