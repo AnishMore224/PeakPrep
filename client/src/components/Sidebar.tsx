@@ -37,7 +37,7 @@ export const Sidebar: React.FC = () => {
     <aside
       className={`
     fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300
-     md:overflow-y-auto overflow-y-scroll
+     md:overflow-y-auto overflow-y-scroll z-10
     ${isSidebarVisible ? "block" : "hidden"} 
     md:block 
     ${!isSidebarVisible ? "md:w-20" : "md:w-64"}
