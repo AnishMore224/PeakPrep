@@ -1,26 +1,26 @@
 import React from 'react';
 import { Bell, Menu } from 'lucide-react';
-import { useUI } from '../contexts/UIContext';
+import { useUIContext } from '../contexts/UIContext';
 
 interface HeaderProps {
   title?: string; // Optional title to display in the header
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
-  const { toggleSidebarCollapsed } = useUI();
+  const { toggleSidebar } = useUIContext();
 
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-sm fixed w-full z-10">
+    <header className="flex items-center justify-between p-4 bg-white shadow-sm fixed top-0 left-0 w-full h-16 z-50">
       {/* Left: Hamburger Menu and Optional Title */}
       <div className="flex items-center space-x-4">
         <button
-          onClick={toggleSidebarCollapsed}
+          onClick={toggleSidebar}
           className="p-2 rounded-md hover:bg-gray-100"
           aria-label="Toggle Sidebar"
         >
           <Menu size={24} />
         </button>
-        {title && <h1 className="text-lg font-bold">{title}</h1>}
+        {title && <h1 className="text-xl font-bold">{title}</h1>}
       </div>
 
       {/* Right: Notifications and Profile */}

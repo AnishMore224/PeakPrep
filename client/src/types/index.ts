@@ -24,13 +24,6 @@ export interface ScheduleItem {
   type: "interview" | "review" | "practice" | "analytics";
 }
 
-export interface UIContextProps {
-  isSidebarCollapsed: boolean;
-  isSidebarVisible: boolean;
-  toggleSidebarCollapsed: () => void;
-  toggleSidebarVisible: () => void;
-}
-
 export interface SidebarProps {
   isCollapsed: boolean; // Controls whether the sidebar is collapsed
   onToggle: () => void; // Function to toggle the collapse state
