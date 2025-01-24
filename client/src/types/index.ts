@@ -24,6 +24,13 @@ export interface ScheduleItem {
   type: "interview" | "review" | "practice" | "analytics";
 }
 
+export interface SidebarProps {
+  isCollapsed: boolean; // Controls whether the sidebar is collapsed
+  onToggle: () => void; // Function to toggle the collapse state
+  isVisible?: boolean; // Controls visibility of the sidebar (used for smaller screens)
+  onClose?: () => void; // Function to close the sidebar on smaller screens
+}
+
 export interface LoginForm {
   email: string;
   password: string;
