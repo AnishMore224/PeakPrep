@@ -30,3 +30,40 @@ export interface SidebarProps {
   isVisible?: boolean; // Controls visibility of the sidebar (used for smaller screens)
   onClose?: () => void; // Function to close the sidebar on smaller screens
 }
+
+export interface LoginForm {
+  email: string;
+  password: string;
+  keepSignedIn: boolean;
+}
+
+export interface SignUpForm {
+  userType: 'student' | 'hr';
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  branch?: string;
+  section?: string;
+  company?: string;
+  collegeId?: string;
+}
+
+export interface ProfileField {
+  label: string;
+  value: string;
+  type?: string;
+  fullWidth?: boolean;
+}
+
+export interface Document {
+  name: string;
+  type: string;
+  editable?: boolean;
+}
+
+export interface DocumentSectionProps {
+  title: string;
+  documents: Document[];
+  showUpload?: boolean;
+}
