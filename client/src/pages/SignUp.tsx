@@ -272,7 +272,7 @@ export const SignUp = () => {
         </div>
         <div className="image bg-gray-200 p-6 flex items-center justify-center">
           <img
-            src="/signup.png"
+            src="../../public/signup.png"
             alt="Graduate illustration"
             className="w-full max-w-[450px]"
           />

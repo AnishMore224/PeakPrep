@@ -17,7 +17,7 @@ export const Login: React.FC = () => {
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">
           <img
-            src="/Login1.png"
+            src="../../public/Login1.png"
             alt="Graduate illustration"
             className="w-full max-w-[400px]"
           />

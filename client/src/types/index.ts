@@ -1,3 +1,21 @@
+import type { LucideIcon } from 'lucide-react';
+
+export interface Company {
+  title: string;
+  description: string;
+  tag1: string;
+  tag2: string;
+  tag3: string;
+}
+
+export interface SidebarItemProps {
+  icon: LucideIcon;
+  text: string;
+  isActive?: boolean;
+  isExpanded?: boolean;
+  onClick?: () => void;
+}
+
 export interface NavItem {
   id: string;
   label: string;

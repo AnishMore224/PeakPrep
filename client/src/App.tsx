@@ -14,6 +14,8 @@ import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
 import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
+import ShortListedCompanies from "./pages/ShortListedCompanies";
+import ChatBot from "./pages/ChatBot";
 
 function MainLayout() {
   const location = useLocation();
@@ -35,7 +37,11 @@ function MainLayout() {
       )}
       <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
         {shouldShowHeaderSidebar && <Sidebar />}
-        <main className={`flex-1 ${shouldShowHeaderSidebar ? "p-6 md:p-8 bg-gray-50" : ""}`}>
+        <main
+          className={`flex-1 ${
+            shouldShowHeaderSidebar ? " bg-gray-50" : ""
+          } ${location.pathname === "/ChatBot" ? "pt-0 pb-0 " : "p-6 md:p-8"}`}
+        >
           <Routes>
             <Route
               path="/"
@@ -61,6 +67,8 @@ function MainLayout() {
                 isAuthenticated ? <Profile /> : <Navigate to="/login" state={{ from: location }} replace />
               }
             />
+            <Route path="/ShortListedCompanies" element={<ShortListedCompanies />} />
+            <Route path="/ChatBot" element={<ChatBot />} />
           </Routes>
         </main>
       </div>

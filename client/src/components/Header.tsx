@@ -4,7 +4,7 @@ import { useUIContext } from "../contexts/ui.context";
 import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
-  title?: string; // Optional title to display in the header
+  title?: string; 
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
