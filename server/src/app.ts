@@ -9,14 +9,23 @@ import adminRoutes from "./routes/adminControls";
 import feedbackRoutes from "./routes/feedback";
 import studentSelectionRoutes from "./routes/studentSelection";
 import userRoutes from "./routes/user";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT || 3031;
 
 // middlewares
 app.use(express.json());
+
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.options("*", cors());
 
 // routes
 app.use("/api/auth", authRoutes);

@@ -1,26 +1,14 @@
 import React, { useState } from "react";
-import { LoginForm } from "../types/index";
 import "../../public/Login1.png";
 import "../../public/bg1.png";
+import { useAuth } from "../contexts/auth.context";
 export const Login: React.FC = () => {
-  const [formData, setFormData] = useState<LoginForm>({
-    email: "",
-    password: "",
-    keepSignedIn: false,
-  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you would typically handle the login logic
-  };
+  const { login, loginInfo, loginError, isLoginLoading, updateLoginInfo } = useAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    updateLoginInfo({ ...loginInfo, [name]: value });
   };
 
   return (
@@ -57,22 +45,22 @@ export const Login: React.FC = () => {
             </h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-8">
+          <form onSubmit={login} className="space-y-8">
             <div>
               <label
-                htmlFor="email"
+                htmlFor="username"
                 className="block text-lg font-medium text-gray-700 mb-2"
               >
-                Email
+                Username
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
+                id="username"
+                name="username"
+                type="text"
+                value={loginInfo.username}
                 onChange={handleInputChange}
                 className="input-field text-lg"
-                placeholder="Enter your email"
+                placeholder="Enter your username"
                 required
               />
             </div>
@@ -88,14 +76,14 @@ export const Login: React.FC = () => {
                 id="password"
                 name="password"
                 type="password"
-                value={formData.password}
+                value={loginInfo.password}
                 onChange={handleInputChange}
                 className="input-field text-lg"
                 placeholder="Enter your password"
                 required
               />
             </div>
-
+{/* 
             <div className="flex items-center">
               <input
                 id="keepSignedIn"
@@ -111,7 +99,7 @@ export const Login: React.FC = () => {
               >
                 Keep me signed in
               </label>
-            </div>
+            </div> */}
 
             <button type="submit" className="btn-primary text-lg py-3 px-6">
               Log in
