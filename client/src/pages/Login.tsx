@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { LoginForm } from "../types/index";
-import "../../public/Login1.png";
+// import "../../public/Login1.png";
 import "../../public/bg1.png";
 export const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginForm>({
     email: "",
-    password: "",
+    password: "", 
     keepSignedIn: false,
   });
 
@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">
           <img
-            src="/Login1.png"
+            src="../../public/Login1.png"
             alt="Graduate illustration"
             className="w-full max-w-[400px]"
           />

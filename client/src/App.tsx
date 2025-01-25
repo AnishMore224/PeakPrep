@@ -7,6 +7,8 @@ import { UIProvider } from "./contexts/UIContext";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
+import ShortListedCompanies from "./pages/ShortListedCompanies";
+import ChatBot from "./pages/ChatBot";
 
 function MainLayout() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -35,14 +37,16 @@ function MainLayout() {
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
           className={`flex-1 ${
-            shouldShowHeaderSidebar ? "p-6 md:p-8 bg-gray-50" : ""
-          }`}
+            shouldShowHeaderSidebar ? " bg-gray-50" : ""
+          } ${location.pathname === "/ChatBot" ? "pt-0 pb-0 " : "p-6 md:p-8"}`}
         >
           <Routes>
             <Route path="/" element={<StudentDashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/ShortListedCompanies" element={<ShortListedCompanies />} />
+            <Route path="/ChatBot" element={<ChatBot />} />
           </Routes>
         </main>
       </div>

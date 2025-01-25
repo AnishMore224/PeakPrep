@@ -3,7 +3,7 @@ import { Bell, Menu } from 'lucide-react';
 import { useUIContext } from '../contexts/UIContext';
 
 interface HeaderProps {
-  title?: string; // Optional title to display in the header
+  title?: string; 
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {

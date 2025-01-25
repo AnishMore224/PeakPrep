@@ -1,6 +1,5 @@
 import React from "react";
 import { ProfileField } from "../types";
-import "../../public/profile.png";
 
 export const ProfileView = () => {
   const profileFields: ProfileField[] = [
@@ -17,7 +16,7 @@ export const ProfileView = () => {
       <div className="flex items-center gap-4 mb-8">
         <div className="relative">
           <img
-            src="/profile.png"
+            src="../../public/profile.png"
             alt="Profile"
             className="w-16 h-16 rounded-full"
           />
