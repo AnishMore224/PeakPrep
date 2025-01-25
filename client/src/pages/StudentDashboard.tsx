@@ -1,7 +1,7 @@
 import React from "react";
 import { Bell, Users, Plus, Calendar } from "lucide-react";
 import { DashboardMetric, ScheduleItem } from "../types";
-import { useUIContext } from "../contexts/UIContext";
+import { useUIContext } from "../contexts/ui.context";
 
 const scheduleItems: ScheduleItem[] = [
   { id: "1", title: "Resume review", time: "10:00 - 10:30", type: "review" },

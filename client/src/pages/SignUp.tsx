@@ -1,33 +1,38 @@
-import React, { useState } from "react";
-import { LoginForm, SignUpForm } from "../types/index";
+import { useState } from "react";
 import "../../public/signup.png";
+import { useAuth } from "../contexts/auth.context";
+import { studentRegisterInfoType, HrRegisterInfoType } from "../types/index";
 
 export const SignUp = () => {
-  const [formData, setFormData] = useState<SignUpForm>({
-    userType: "student",
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    branch: "",
-    section: "",
-    company: "",
-    collegeId: "",
-  });
+  const [userType, setUserType] = useState("student");
+  const {
+    studentRegister,
+    hrRegister,
+    studentRegisterInfo,
+    hrRegisterInfo,
+    updateStudentRegisterInfo,
+    updateHrRegisterInfo,
+    isRegisterLoading,
+    registerError,
+  } = useAuth();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const changeUserType = (type: string) => {
+    setUserType(type);
+  }
+
+  const handleStudentRegisterInfoChange = (event: any) => {
+    updateStudentRegisterInfo({
+      ...studentRegisterInfo,
+      [event.target.name]: event.target.value,
+    });
   };
 
-  const handleUserTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({ ...formData, userType: e.target.value as "student" | "hr" });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-  };
+  const handleHrRegisterInfoChange = (event: any) => {
+    updateHrRegisterInfo({
+      ...hrRegisterInfo,
+      [event.target.name]: event.target.value,
+    });
+  }
 
   return (
     <div className="signup min-h-screen bg-gray-50 flex items-center justify-center p-4">
@@ -54,7 +59,10 @@ export const SignUp = () => {
           </div>
 
           <div className="signupi h-110 overflow-y-auto mx-auto">
-            <form onSubmit={handleSubmit} className="space-y-6 px-4 pb-3">
+            <form
+              onSubmit={userType === "student" ? studentRegister : hrRegister}
+              className="space-y-6 px-4 pb-3"
+            >
               <div>
                 <label
                   htmlFor="userType"
@@ -65,8 +73,8 @@ export const SignUp = () => {
                 <select
                   id="userType"
                   name="userType"
-                  value={formData.userType}
-                  onChange={handleUserTypeChange}
+                  value={userType}
+                  onChange={(e) => changeUserType(e.target.value)}
                   className="input-field text-base"
                 >
                   <option value="student">Student</option>
@@ -74,7 +82,7 @@ export const SignUp = () => {
                 </select>
               </div>
 
-              {formData.userType === "student" && (
+              {userType === "student" && (
                 <>
                   <div>
                     <label
@@ -87,8 +95,8 @@ export const SignUp = () => {
                       id="name"
                       name="name"
                       type="text"
-                      value={formData.name}
-                      onChange={handleInputChange}
+                      value={studentRegisterInfo.name}
+                      onChange={handleStudentRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your name"
                       required
@@ -103,10 +111,10 @@ export const SignUp = () => {
                     </label>
                     <input
                       id="regdno"
-                      name="regdno"
+                      name="username"
                       type="text"
-                      value={formData.username}
-                      onChange={handleInputChange}
+                      value={studentRegisterInfo.username}
+                      onChange={handleStudentRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your registration number"
                       required
@@ -123,8 +131,8 @@ export const SignUp = () => {
                       id="branch"
                       name="branch"
                       type="text"
-                      value={formData.branch}
-                      onChange={handleInputChange}
+                      value={studentRegisterInfo.branch}
+                      onChange={handleStudentRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your branch"
                       required
@@ -141,8 +149,8 @@ export const SignUp = () => {
                       id="section"
                       name="section"
                       type="text"
-                      value={formData.section}
-                      onChange={handleInputChange}
+                      value={studentRegisterInfo.section}
+                      onChange={handleStudentRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your section"
                       required
@@ -151,7 +159,7 @@ export const SignUp = () => {
                 </>
               )}
 
-              {formData.userType === "hr" && (
+              {userType === "hr" && (
                 <>
                   <div>
                     <label
@@ -164,8 +172,8 @@ export const SignUp = () => {
                       id="name"
                       name="name"
                       type="text"
-                      value={formData.name}
-                      onChange={handleInputChange}
+                      value={hrRegisterInfo.name}
+                      onChange={handleHrRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your name"
                       required
@@ -182,8 +190,8 @@ export const SignUp = () => {
                       id="company"
                       name="company"
                       type="text"
-                      value={formData.company}
-                      onChange={handleInputChange}
+                      value={hrRegisterInfo.company}
+                      onChange={handleHrRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your company"
                       required
@@ -200,8 +208,8 @@ export const SignUp = () => {
                       id="collegeId"
                       name="collegeId"
                       type="text"
-                      value={formData.collegeId}
-                      onChange={handleInputChange}
+                      value={hrRegisterInfo.collegeId}
+                      onChange={handleHrRegisterInfoChange}
                       className="input-field text-base"
                       placeholder="Enter your college ID"
                       required
@@ -221,8 +229,8 @@ export const SignUp = () => {
                   id="email"
                   name="email"
                   type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
+                  value={userType === "student" ? studentRegisterInfo.email : hrRegisterInfo.email}
+                  onChange={userType === "student" ? handleStudentRegisterInfoChange : handleHrRegisterInfoChange}
                   className="input-field text-base"
                   placeholder="Enter your email"
                   required
@@ -240,8 +248,8 @@ export const SignUp = () => {
                   id="password"
                   name="password"
                   type="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
+                  value={userType === "student" ? studentRegisterInfo.password : hrRegisterInfo.password}
+                  onChange={userType === "student" ? handleStudentRegisterInfoChange : handleHrRegisterInfoChange}
                   className="input-field text-base"
                   placeholder="Enter your password"
                   required
@@ -260,8 +268,7 @@ export const SignUp = () => {
                 Log in
               </a>
             </p>
-            </div>
-
+          </div>
         </div>
         <div className="image bg-gray-200 p-6 flex items-center justify-center">
           <img
