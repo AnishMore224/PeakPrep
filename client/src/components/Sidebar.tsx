@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   LayoutDashboard,
   Building2,
@@ -10,7 +12,8 @@ import {
   LogOut,
 } from "lucide-react";
 import { NavItem } from "../types";
-import { useUIContext } from "../contexts/UIContext";
+import { useUIContext } from "../contexts/ui.context";
+import { useAuth } from "../contexts/auth.context";
 
 const navItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
@@ -32,6 +35,8 @@ const navItems: NavItem[] = [
 
 export const Sidebar: React.FC = () => {
   const { isSidebarVisible, toggleSidebar } = useUIContext();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <aside
@@ -73,7 +78,7 @@ export const Sidebar: React.FC = () => {
           {navItems.map((item) => (
             <a
               key={item.id}
-              href={item.href}
+              onClick={() => navigate(item.href)}
               className={`
                 flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-100
                 ${!isSidebarVisible ? "justify-center" : ""}
@@ -97,7 +102,7 @@ export const Sidebar: React.FC = () => {
             `}
             aria-label="Sign out"
           >
-            <LogOut size={24} />
+            <LogOut onClick={logout} size={24} />
             {isSidebarVisible && <span>Sign out</span>}
           </button>
         </div>

@@ -1,39 +1,41 @@
-import React, { useState } from "react";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import Header from "./components/Header";
 import { StudentDashboard } from "./pages/StudentDashboard";
-import { UIProvider } from "./contexts/UIContext";
+import { UIProvider } from "./contexts/ui.context";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
+import LoadingScreen from "./pages/LoadingScreen";
+import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 
 function MainLayout() {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const location = useLocation();
   const hideHeaderSidebarPaths = ["/login", "/signup"];
-  const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
-    location.pathname
-  );
+  const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(location.pathname);
+  const { isAuthenticated, authLoading } = useAuth();
+
+  // Global loading state
+  if (authLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
       {shouldShowHeaderSidebar && (
         <Header
-          title={
-            location.pathname === "/"
-              ? "Dashboard"
-              : location.pathname.substring(1)
-          }
+          title={location.pathname === "/" ? "Dashboard" : location.pathname.substring(1)}
         />
       )}
-      <div
-        className={`flex flex-1 ${
-          !shouldShowHeaderSidebar ? "pt-0" : "pt-16"
-        }`}
-      >
+      <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
           className={`flex-1 ${
@@ -41,10 +43,30 @@ function MainLayout() {
           } ${location.pathname === "/ChatBot" ? "pt-0 pb-0 " : "p-6 md:p-8"}`}
         >
           <Routes>
-            <Route path="/" element={<StudentDashboard />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" state={{ from: location }} replace />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                isAuthenticated ? <Navigate to="/" replace /> : <Login />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                isAuthenticated ? <Navigate to="/" replace /> : <SignUp />
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                isAuthenticated ? <Profile /> : <Navigate to="/login" state={{ from: location }} replace />
+              }
+            />
             <Route path="/ShortListedCompanies" element={<ShortListedCompanies />} />
             <Route path="/ChatBot" element={<ChatBot />} />
           </Routes>
@@ -56,11 +78,13 @@ function MainLayout() {
 
 export function App() {
   return (
-    <UIProvider>
-      <BrowserRouter>
-        <MainLayout />
-      </BrowserRouter>
-    </UIProvider>
+    <AuthProvider>
+      <UIProvider>
+        <BrowserRouter>
+          <MainLayout />
+        </BrowserRouter>
+      </UIProvider>
+    </AuthProvider>
   );
 }
 

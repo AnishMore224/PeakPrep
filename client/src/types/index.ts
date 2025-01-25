@@ -50,7 +50,7 @@ export interface SidebarProps {
 }
 
 export interface LoginForm {
-  email: string;
+  username: string; // or email for admin or hr
   password: string;
   keepSignedIn: boolean;
 }
@@ -85,8 +85,21 @@ export interface DocumentSectionProps {
   documents: Document[];
   showUpload?: boolean;
 }
-export interface Message {
-  text: string;
-  time: string;
-  isUser: boolean;
+
+export interface studentRegisterInfoType {
+  username: string;
+  email: string;
+  name: string;
+  branch: string;
+  section: string;
+  password: string;
+}
+
+export interface HrRegisterInfoType {
+  username: string;
+  email: string;
+  collegeId: string;
+  name: string;
+  company: string;
+  password: string;
 }
