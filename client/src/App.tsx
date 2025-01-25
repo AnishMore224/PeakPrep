@@ -31,46 +31,46 @@ function MainLayout() {
   return (
     <>
       {shouldShowHeaderSidebar && (
-        <Header
-          title={location.pathname === "/" ? "Dashboard" : location.pathname.substring(1)}
-        />
+      <Header
+        title={location.pathname === "/" ? "Dashboard" : location.pathname.substring(1).replace(/(^|\s)\S/g, (t) => t.toUpperCase())}
+      />
       )}
       <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
-        {shouldShowHeaderSidebar && <Sidebar />}
-        <main
-          className={`flex-1 ${
-            shouldShowHeaderSidebar ? " bg-gray-50" : ""
-          } ${location.pathname === "/ChatBot" ? "pt-0 pb-0 " : "p-6 md:p-8"}`}
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={
-                isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" state={{ from: location }} replace />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? <Navigate to="/" replace /> : <Login />
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                isAuthenticated ? <Navigate to="/" replace /> : <SignUp />
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                isAuthenticated ? <Profile /> : <Navigate to="/login" state={{ from: location }} replace />
-              }
-            />
-            <Route path="/ShortListedCompanies" element={<ShortListedCompanies />} />
-            <Route path="/ChatBot" element={<ChatBot />} />
-          </Routes>
-        </main>
+      {shouldShowHeaderSidebar && <Sidebar />}
+      <main
+        className={`flex-1 ${
+        !shouldShowHeaderSidebar || location.pathname === "/chatbot" ? "bg-gray-50 p-0" : "p-6 md:p-8"
+        }`}
+      >
+        <Routes>
+        <Route
+          path="/"
+          element={
+          isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" state={{ from: location }} replace />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+          isAuthenticated ? <Navigate to="/" replace /> : <Login />
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+          isAuthenticated ? <Navigate to="/" replace /> : <SignUp />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+          isAuthenticated ? <Profile /> : <Navigate to="/login" state={{ from: location }} replace />
+          }
+        />
+        <Route path="/companies" element={<ShortListedCompanies />} />
+        <Route path="/ChatBot" element={<ChatBot />} />
+        </Routes>
+      </main>
       </div>
     </>
   );

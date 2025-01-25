@@ -5,7 +5,7 @@ import { Message } from '../types/index';
 import { MessageList } from '../components/MessageList';
 import { ActionButtons } from '../components/ActionButtons';
 import { ChatInput } from '../components/ChatInput';
-import { UIProvider, useUIContext } from '../contexts/UIContext';
+import { UIProvider, useUIContext } from '../contexts/ui.context';
 
 function ChatBot() {
     const { isSidebarVisible } = useUIContext();
