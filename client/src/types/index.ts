@@ -103,3 +103,9 @@ export interface HrRegisterInfoType {
   company: string;
   password: string;
 }
+
+export interface Message {
+  text: string;
+  time: string;
+  isUser: boolean;
+}

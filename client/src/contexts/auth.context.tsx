@@ -6,8 +6,9 @@ import React, {
   ReactNode,
   useCallback,
 } from "react";
-import { postRequest, getRequest, putRequest } from "../utils/services";
+import { postRequest, getRequest } from "../utils/services";
 import { HrRegisterInfoType, studentRegisterInfoType } from "../types";
+import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = "http://localhost:3030/api/auth";
 
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Admin | Student | Hr | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
@@ -80,8 +81,30 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
-      setUser(response.data.user);
       setIsAuthenticated(true);
+      // decode token and set role
+      const decoded: any = jwtDecode(token);
+      const role = decoded.role;
+      if (role === "student") {
+        const { email, name, branch, section } = { ...response.data.user };
+        const student = {
+          role,
+          username: decoded.username,
+          email,
+          name,
+          branch,
+          section,
+        };
+        setUser(student);
+      } else if (role === "hr") {
+        const { role, email, name, companyId } = { ...response.data.user };
+        const hr = { role, email, name, companyId, username: email };
+        setUser(hr);
+      } else if (role === "admin") {
+        const { role, username, email, name } = { ...response.data.user };
+        const admin = { role, username, email, name };
+        setUser(admin);
+      }
     },
     [loginInfo] // dependencies
   );
@@ -117,6 +140,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setJwtToken(token);
       setUser(response.data.user);
       setIsAuthenticated(true);
+      const { username, email, name, branch, section } = {
+        ...response.data.user,
+      };
+      const student = {
+        role: "student",
+        username,
+        email,
+        name,
+        branch,
+        section,
+      };
+      setUser(student);
     },
     [studentRegisterInfo] // dependencies
   );
@@ -126,9 +161,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       event.preventDefault();
       setIsRegisterLoading(true);
       setRegisterError(null);
-
+      if (HrRegisterInfo.collegeId !== process.env.COLLEGE_ID) {
+        setIsRegisterLoading(false);
+        return setRegisterError("Invalid College ID");
+      }
       const response = await postRequest(
-        `${BASE_URL}/addHr`, // check the url later
+        `${BASE_URL}/registerHr`,
         JSON.stringify(HrRegisterInfo)
       );
 
@@ -147,8 +185,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
-      setUser(response.data.user);
       setIsAuthenticated(true);
+      const { role, email, name, companyId } = { ...response.data.user };
+      const hr = {
+        role,
+        email,
+        name,
+        companyId,
+        username: HrRegisterInfo.username,
+      };
+      setUser(hr);
     },
     [HrRegisterInfo] // dependencies
   );
@@ -168,9 +214,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           setAuthLoading(true);
           const response = await getRequest(`${BASE_URL}/user`, token);
           if (response.error) throw new Error(response.error);
-          setUser(response.data.user);
           setIsAuthenticated(true);
           setJwtToken(token);
+          const decoded: any = jwtDecode(token);
+          const role = decoded.role;
+          if (role === "student") {
+            const { email, name, branch, section } = {
+              ...response.data.user,
+            };
+            console.log("Student: ", response);
+            const student = {
+              role,
+              username: decoded.username,
+              email,
+              name,
+              branch,
+              section,
+            };
+            setUser(student);
+          } else if (role === "hr") {
+            const { role, email, name, companyId } = { ...response.data.user };
+            const hr = { role, email, name, companyId, username: email };
+            setUser(hr);
+          } else if (role === "admin") {
+            const { role, username, email, name } = { ...response.data.user };
+            const admin = { role, username, email, name };
+            setUser(admin);
+          }
         } catch (error) {
           console.error("Failed to decode token or fetch user:", error);
           localStorage.removeItem("token");
@@ -224,10 +294,32 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-export interface User {}
+export interface Admin {
+  role: string;
+  username: string;
+  email: string;
+  name: string;
+}
+
+export interface Student {
+  role: string;
+  username: string;
+  email: string;
+  name: string;
+  branch: string;
+  section: string;
+}
+
+export interface Hr {
+  role: string;
+  username: string;
+  email: string;
+  name: string;
+  companyId: string;
+}
 
 export interface AuthContextType {
-  user: User | null;
+  user: Student | Hr | Admin | null;
   logout: () => void;
   isAuthenticated: boolean;
   jwtToken: string | null;

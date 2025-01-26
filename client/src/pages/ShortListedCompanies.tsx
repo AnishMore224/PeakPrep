@@ -3,7 +3,7 @@ import { companies } from '../utils/compaines';
 import { CompanyCard } from '../components/CompanyCard';
 import { SearchBar } from '../components/SearchBar';
 import { Sidebar } from '../components/Sidebar';
-import { useUIContext } from "../contexts/UIContext";
+import { useUIContext } from "../contexts/ui.context";
 
 function ShortListedCompanies() {
     const { isSidebarVisible } = useUIContext();
