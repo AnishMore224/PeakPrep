@@ -11,7 +11,8 @@ const StudentSchema: Schema = new Schema({
     admissionYear: { type: Number, required: true },
     feedback: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
     companies: [{ type: Schema.Types.ObjectId, ref: 'Company' }],
-    placedAt: [{ type: Schema.Types.ObjectId, ref: 'Company', default: null }]
+    placedAt: [{ type: Schema.Types.ObjectId, ref: 'Company', default: null }],
+    completedCompanies: [{ type: Schema.Types.ObjectId, ref: 'Company' }]
 }, {
     timestamps: true,
     versionKey: false
