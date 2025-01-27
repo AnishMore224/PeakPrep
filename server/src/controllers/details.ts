@@ -120,9 +120,9 @@ export const company = async (req: Request, res: Response): Promise<any> => {
     }
 
     if (decoded.role === "student") {
-      const { shortlistedStudents, selectedStudents, ...companyData } =
+      const { shortlistedStudents, selectedStudents,completedStudents, ...companyData } =
         company.toObject();
-      if(!shortlistedStudents.includes(decoded.username) && !selectedStudents.includes(decoded.username)){
+      if(!shortlistedStudents.includes(decoded.username)){
         return res.status(403).json({ ...response, error: "Access denied" });
       }
       return res.status(200).json({
@@ -220,6 +220,62 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
         message: "Successfully fetched HR",
       });
     }
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ ...response, error: "Internal Server Error" });
+  }
+};
+
+export const getStudentSelections = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { regd_no, token } = req.body;
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    if (!regd_no || !decoded) {
+      return res
+        .status(400)
+        .json({ ...response, error: "All fields are required" });
+    }
+
+    if (decoded.role === "student" && decoded.username !== regd_no) {
+      return res.status(403).json({ ...response, error: "Access denied" });
+    }
+
+    const student = await Student.findOne({ _id: regd_no });
+    if (!student) {
+      return res.status(404).json({ ...response, error: "Student not found" });
+    }
+    
+    const companies= await Company.find({ _id: { $in: student.companies } }).populate({ path: 'hr', select: 'name' });
+    const completedCompanies = await Company.find({ _id: { $in: student.completedCompanies } }).populate({ path: 'hr', select: 'name' });
+    const placedAt = await Company.find({ _id: { $in: student.placedAt } }).populate({ path: 'hr', select: 'name' });
+
+    class CompanyData {
+      name: string | undefined;
+      tags: string[] | undefined;
+      hr: string[] | undefined;
+      placed: boolean | undefined;
+      completed: boolean | undefined;
+    }
+
+    const companyData: CompanyData[] = [];
+    companies.forEach((company) => {
+      const data = new CompanyData();
+      data.name = company.name;
+      data.tags = company.tags;
+      data.hr = company.hr.map((hr: any) => hr.name);
+      data.placed = placedAt.some((placed) => placed.name === company.name);
+      data.completed = completedCompanies.some((completed) => completed.name === company.name);
+      companyData.push(data);
+    }); 
+
+    return res.status(200).json({
+      ...response,
+      success: true,
+      data: companies,
+      message: "Successfully fetched companies",
+    });
   } catch (error) {
     console.error(error);
     return res

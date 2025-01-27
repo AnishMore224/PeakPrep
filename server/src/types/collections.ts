@@ -16,6 +16,7 @@ interface IStudent extends Document {
     feedback: mongoose.Types.ObjectId[];
     companies: mongoose.Types.ObjectId[];
     placedAt: mongoose.Types.ObjectId[];
+    completedCompanies: mongoose.Types.ObjectId[];
 }
 
 interface IHR extends Document {
@@ -30,6 +31,8 @@ interface ICompany extends Document {
     hr: mongoose.Types.ObjectId[];
     shortlistedStudents: string[];
     selectedStudents: string[];
+    completedStudents: string[];
+    tags: string[];
 }
 
 interface IFeedback extends Document {
