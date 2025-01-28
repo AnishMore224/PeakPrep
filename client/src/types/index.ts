@@ -109,3 +109,16 @@ export interface Message {
   time: string;
   isUser: boolean;
 }
+export interface StatCardProps {
+    title: string;
+    value: string;
+    change: string;
+    icon: React.ReactNode;
+}
+export interface Candidate {
+  name: string;
+  major: string;
+  year: string;
+  gpa: number;
+  status: string;
+}

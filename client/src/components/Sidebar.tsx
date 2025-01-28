@@ -15,7 +15,7 @@ import { NavItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
 import { useAuth } from "../contexts/auth.context";
 
-const navItems: NavItem[] = [
+const studentNavItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
   {
     id: "companies",
@@ -33,10 +33,33 @@ const navItems: NavItem[] = [
   { id: "chatbot", label: "ChatBot", icon: Bot, href: "/chatbot" },
 ];
 
+const hrNavItems: NavItem[] = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { id: "candidates", label: "Candidates", icon: Building2, href: "/candidates" },
+  { id: "interviews", label: "Interviews", icon: History, href: "/interviews" },
+  { id: "feedbacks", label: "Feedbacks", icon: MessageSquare, href: "/feedbacks" },
+];
+
+const adminNavItems: NavItem[] = [
+  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { id: "users", label: "Users", icon: Building2, href: "/users" },
+  { id: "settings", label: "Settings", icon: History, href: "/settings" },
+  { id: "logs", label: "Logs", icon: MessageSquare, href: "/logs" },
+];
+
 export const Sidebar: React.FC = () => {
   const { isSidebarVisible, toggleSidebar } = useUIContext();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  let navItems: NavItem[] = [];
+  if (user?.role === "student") {
+    navItems = studentNavItems;
+  } else if (user?.role === "hr") {
+    navItems = hrNavItems;
+  } else if (user?.role === "admin") {
+    navItems = adminNavItems;
+  }
 
   return (
     <aside

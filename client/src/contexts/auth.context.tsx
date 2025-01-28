@@ -161,7 +161,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       event.preventDefault();
       setIsRegisterLoading(true);
       setRegisterError(null);
-      if (HrRegisterInfo.collegeId !== process.env.COLLEGE_ID) {
+      const collegeId = import.meta.env.VITE_COLLEGE_ID;
+      if (HrRegisterInfo.collegeId !== collegeId) {
         setIsRegisterLoading(false);
         return setRegisterError("Invalid College ID");
       }
