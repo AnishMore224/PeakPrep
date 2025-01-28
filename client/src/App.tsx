@@ -15,7 +15,7 @@ import { Profile } from "./pages/Profile";
 import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
-import ChatBot from "./pages/ChatBot";
+import ChatBot from "./pages/ChatBot1";
 
 function MainLayout() {
   const location = useLocation();
