@@ -16,12 +16,14 @@ import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
-
+import { Candidate } from "./pages/Candidates";
+// import { AdminDashboard } from "./pages/AdminDashboard";
+import { HRDashboard } from "./pages/HrDashboard";
 function MainLayout() {
   const location = useLocation();
   const hideHeaderSidebarPaths = ["/login", "/signup"];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(location.pathname);
-  const { isAuthenticated, authLoading } = useAuth();
+  const { isAuthenticated, authLoading,user } = useAuth();
 
   // Global loading state
   if (authLoading) {
@@ -46,7 +48,7 @@ function MainLayout() {
         <Route
           path="/"
           element={
-          isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" state={{ from: location }} replace />
+          isAuthenticated ? user?.role ==='student'? <StudentDashboard />: user?.role === 'admin' ? null : <HRDashboard/> : <Navigate to="/login" state={{ from: location }} replace />
           }
         />
         <Route
@@ -67,8 +69,9 @@ function MainLayout() {
           isAuthenticated ? <Profile /> : <Navigate to="/login" state={{ from: location }} replace />
           }
         />
-        <Route path="/companies" element={<ShortListedCompanies />} />
-        <Route path="/ChatBot" element={<ChatBot />} />
+        <Route path="/companies" element={isAuthenticated ? <ShortListedCompanies/> :  <Navigate to="/login" state={{ from: location }} replace />} />
+        <Route path="/candidates" element={isAuthenticated ? <Candidate/> :  <Navigate to="/login" state={{ from: location }} replace />}  />
+        <Route path="/ChatBot" element={isAuthenticated ? <ChatBot/> :  <Navigate to="/login" state={{ from: location }} replace />} />
         </Routes>
       </main>
       </div>

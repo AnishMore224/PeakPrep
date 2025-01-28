@@ -7,9 +7,7 @@ import React, {
   useCallback,
 } from "react";
 import { postRequest, getRequest } from "../utils/services";
-import { postRequest, getRequest } from "../utils/services";
 import { HrRegisterInfoType, studentRegisterInfoType } from "../types";
-import { jwtDecode } from "jwt-decode";
 import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = "http://localhost:3030/api/auth";
@@ -18,7 +16,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<Admin | Student | Hr | null>(null);
   const [user, setUser] = useState<Admin | Student | Hr | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [jwtToken, setJwtToken] = useState<string | null>(null);
@@ -164,7 +161,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       event.preventDefault();
       setIsRegisterLoading(true);
       setRegisterError(null);
-      if (HrRegisterInfo.collegeId !== process.env.COLLEGE_ID) {
+      const collegeId = import.meta.env.VITE_COLLEGE_ID;
+      if (HrRegisterInfo.collegeId !== collegeId) {
         setIsRegisterLoading(false);
         return setRegisterError("Invalid College ID");
       }
