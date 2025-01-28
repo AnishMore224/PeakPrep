@@ -47,7 +47,7 @@ function MainLayout() {
           }
         />
       )}
-      <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
+      <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-15"}`}>
       {shouldShowHeaderSidebar && <Sidebar />}
       <main
         className={`flex-1 ${
