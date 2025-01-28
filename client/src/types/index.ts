@@ -1,11 +1,11 @@
 import type { LucideIcon } from 'lucide-react';
 
 export interface Company {
-  title: string;
-  description: string;
-  tag1: string;
-  tag2: string;
-  tag3: string;
+  name: string;
+  hr: string[];
+  tags: string[];
+  placed: boolean;
+  completed: boolean; 
 }
 
 export interface SidebarItemProps {
@@ -107,5 +107,5 @@ export interface HrRegisterInfoType {
 export interface Message {
   text: string;
   time: string;
-  isUser: boolean;
+  isUser: boolean;
 }

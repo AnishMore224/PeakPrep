@@ -1,5 +1,5 @@
 import React from "react";
-import { Bell, Users, Plus, Calendar } from "lucide-react";
+import { Users, Plus, Calendar } from "lucide-react";
 import { DashboardMetric, ScheduleItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
 

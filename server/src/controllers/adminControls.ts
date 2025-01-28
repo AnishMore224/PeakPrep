@@ -191,7 +191,7 @@ export const deleteAdmin = async (req: Request, res: Response): Promise<any> => 
 
 // review this function
 export const addCompany = async (req: Request, res: Response): Promise<any> => {
-    const { name } = req.body;
+    const { name, tags } = req.body;
     if (!name) {
         return res.status(400).send({ ...response, error: 'Missing required fields.' });
     }
@@ -200,7 +200,7 @@ export const addCompany = async (req: Request, res: Response): Promise<any> => {
         if (existingCompany) {
             return res.status(400).send({ ...response, error: 'Company already exists.' });
         }
-        const newCompany = new Company({ name });
+        const newCompany = new Company({ name, tags: tags || [] });
         await newCompany.save();
         res.send({ ...response, success: true, message: 'Company added successfully.', data: { company: newCompany } });
     } catch (error) {
@@ -220,6 +220,12 @@ export const deleteCompany = async (req: Request, res: Response): Promise<any> =
 
         // Remove HRs associated with the company
         await HR.deleteMany({ companyId: company._id });
+
+        // Remove students associated with the company
+        await Student.updateMany(
+            { $or: [{ _id: { $in: company.shortlistedStudents } }, { _id: { $in: company.selectedStudents } }, { _id: company.completedStudents }] },
+            { $pull: { companies: company._id, placedAt: company._id, completedCompanies: company._id} }
+        );
 
         // Remove the company
         await Company.findByIdAndDelete(company._id);
