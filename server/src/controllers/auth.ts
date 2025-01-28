@@ -29,12 +29,10 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     // Check if the user already exists
     const existingUser = await User.findOne({ username }); //
     if (existingUser) {
-      return res
-        .status(400)
-        .json({
-          ...response,
-          error: "User already exists with this username.",
-        });
+      return res.status(400).json({
+        ...response,
+        error: "User already exists with this username.",
+      });
     }
 
     // Hash the password
@@ -83,6 +81,77 @@ export const register = async (req: Request, res: Response): Promise<any> => {
           branch,
           section,
           email,
+        },
+      },
+    });
+  } catch (err: Error | any | null) {
+    if (user) {
+      await user.deleteOne();
+    }
+    res.status(500).json({ ...response, error: err.message });
+  }
+};
+
+export const registerHr = async (req: Request, res: Response): Promise<any> => {
+  let user: IUser | null = null;
+  try {
+    const { name, email, password, companyId } = req.body;
+
+    // Check if all fields are provided
+    if (!name || !email || !password || !companyId) {
+      return res
+        .status(400)
+        .json({ ...response, error: "All fields are required." });
+    }
+
+    // Check if the user already exists
+    const existingUser = await User.findOne({ username: email });
+    if (existingUser) {
+      return res.status(400).json({
+        ...response,
+        error: "User already exists with this email.",
+      });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const userId = uuidv4();
+
+    // Create and save the new user
+    user = new User({
+      _id: userId,
+      username: email,
+      password: hashedPassword,
+      role: "hr",
+    });
+    await user.save();
+
+    const hr = new HR({
+      userId: user._id,
+      email,
+      companyId,
+      name,
+    });
+    await hr.save();
+
+    const token = jwt.sign(
+      { id: user._id, username: email, role: "hr" },
+      process.env.JWT_SECRET || "your_secret_key"
+    );
+
+    res.status(201).json({
+      ...response,
+      success: true,
+      message: "User registered successfully",
+      data: {
+        token,
+        user: {
+          name,
+          email,
+          companyId,
+          username: email,
+          role: "hr",
         },
       },
     });
@@ -213,57 +282,59 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
     const { id, role, username } = decoded;
     if (role === "student") {
       const student = await Student.findOne({ _id: username });
-        if (!student) {
-            return res
-            .status(404)
-            .json({ ...response, error: "Student not found." });
-        }
-        res.status(200).json({
-            ...response,
-            success: true,
-            data: {
-                name: student.name,
-                regd_no: student._id,
-                branch: student.branch,
-                section: student.section,
-                email: student.email,
-                role,
-            },
-        });
+      if (!student) {
+        return res
+          .status(404)
+          .json({ ...response, error: "Student not found." });
+      }
+      res.status(200).json({
+        ...response,
+        success: true,
+        data: {
+          user: {
+            name: student.name,
+            regd_no: student._id,
+            branch: student.branch,
+            section: student.section,
+            email: student.email,
+            role,
+          },
+        },
+      });
     } else if (role === "admin") {
-        const admin = await Admin.findOne({ email: username });
-        if (!admin) {
-            return res
-            .status(404)
-            .json({ ...response, error: "Admin not found." });
-        }
-        res.status(200).json({
-            ...response,
-            success: true,
-            data: {
-                name: admin.name,
-                username,
-                role,
-            },
-        });
+      const admin = await Admin.findOne({ email: username });
+      if (!admin) {
+        return res.status(404).json({ ...response, error: "Admin not found." });
+      }
+      res.status(200).json({
+        ...response,
+        success: true,
+        data: {
+          user: {
+            name: admin.name,
+            username,
+            role,
+          },
+        },
+      });
     } else if (role === "hr") {
-        const hr = await HR.findOne({ email: username });
-        if (!hr) {
-            return res
-            .status(404)
-            .json({ ...response, error: "HR not found." });
-        }
-        res.status(200).json({
-            ...response,
-            success: true,
-            data: {
-                name: hr.name,
-                email: hr.email,
-                companyId: hr.companyId,
-                username,
-                role,
-            },
-        });
+      const hr = await HR.findOne({ email: username });
+      if (!hr) {
+        return res.status(404).json({ ...response, error: "HR not found." });
+      }
+      res.status(200).json({
+        ...response,
+        success: true,
+        data: {
+          user: {
+            name: hr.name,
+            email: hr.email,
+            companyId: hr.companyId,
+            username,
+            role,
+          },
+        },
+      });
     }
   } catch (err: Error | any | null) {
     res.status(500).json({ ...response, error: err.message });
