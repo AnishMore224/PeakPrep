@@ -15,7 +15,7 @@ import { Profile } from "./pages/Profile";
 import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
-import ChatBot from "./pages/ChatBot1";
+import ChatBot from "./pages/ChatBot";
 
 function MainLayout() {
   const location = useLocation();
@@ -35,7 +35,7 @@ function MainLayout() {
         title={location.pathname === "/" ? "Dashboard" : location.pathname.substring(1).replace(/(^|\s)\S/g, (t) => t.toUpperCase())}
       />
       )}
-      <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
+      <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-15"}`}>
       {shouldShowHeaderSidebar && <Sidebar />}
       <main
         className={`flex-1 ${

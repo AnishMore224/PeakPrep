@@ -1,5 +1,6 @@
 import React from 'react';
 import { Message } from '../types';
+import ReactMarkdown from 'react-markdown';
 
 interface MessageBubbleProps {
   message: Message;
@@ -15,7 +16,8 @@ export function MessageBubble({ message }: MessageBubbleProps) {
             : 'bg-gray-100 text-gray-800 rounded-bl-none'
         }`}
       >
-        <p className="break-words">{message.text}</p>
+        {/* <p >{message.text}</p> */}
+        <ReactMarkdown className="break-words">{message.text}</ReactMarkdown>
         <p className={`text-xs mt-1 ${message.isUser ? 'text-gray-100' : 'text-gray-500'}`}>
           {message.time}
         </p>
