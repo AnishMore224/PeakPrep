@@ -18,7 +18,7 @@ export function MessageList({ messages }: MessageListProps) {
   }, [messages]);
 
   return (
-    <div className="h-[calc(100vh-16rem)] md:h-[calc(100vh-14rem)] overflow-y-auto p-4 space-y-4">
+    <div className="h-[calc(100vh-16rem)] md:h-[calc(100vh-14rem)] overflow-y-auto p-4 space-y-4 chat pt-7">
       {messages.map((message, index) => (
         <MessageBubble key={index} message={message} />
       ))}
