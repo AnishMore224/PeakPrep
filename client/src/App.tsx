@@ -16,13 +16,17 @@ import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
+import Feedbacks from "./pages/Feedbacks";
+import FeedbackForm from "./pages/Feedbackform";
 import { Candidate } from "./pages/Candidates";
 // import { AdminDashboard } from "./pages/AdminDashboard";
 import { HRDashboard } from "./pages/HrDashboard";
 function MainLayout() {
   const location = useLocation();
   const hideHeaderSidebarPaths = ["/login", "/signup"];
-  const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(location.pathname);
+  const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
+    location.pathname
+  );
   const { isAuthenticated, authLoading,user } = useAuth();
 
   // Global loading state
@@ -33,9 +37,15 @@ function MainLayout() {
   return (
     <>
       {shouldShowHeaderSidebar && (
-      <Header
-        title={location.pathname === "/" ? "Dashboard" : location.pathname.substring(1).replace(/(^|\s)\S/g, (t) => t.toUpperCase())}
-      />
+        <Header
+          title={
+            location.pathname === "/"
+              ? "Dashboard"
+              : location.pathname
+                  .substring(1)
+                  .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
+          }
+        />
       )}
       <div className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}>
       {shouldShowHeaderSidebar && <Sidebar />}
@@ -49,6 +59,7 @@ function MainLayout() {
           path="/"
           element={
           isAuthenticated ? user?.role ==='student'? <StudentDashboard />: user?.role === 'admin' ? null : <HRDashboard/> : <Navigate to="/login" state={{ from: location }} replace />
+
           }
         />
         <Route
@@ -72,6 +83,8 @@ function MainLayout() {
         <Route path="/companies" element={isAuthenticated ? <ShortListedCompanies/> :  <Navigate to="/login" state={{ from: location }} replace />} />
         <Route path="/candidates" element={isAuthenticated ? <Candidate/> :  <Navigate to="/login" state={{ from: location }} replace />}  />
         <Route path="/ChatBot" element={isAuthenticated ? <ChatBot/> :  <Navigate to="/login" state={{ from: location }} replace />} />
+        <Route path="/feedbacks" element={<Feedbacks />} />
+        <Route path="/feedbackform" element={<FeedbackForm />} />
         </Routes>
       </main>
       </div>
