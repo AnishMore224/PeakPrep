@@ -122,3 +122,19 @@ export interface Candidate {
   gpa: number;
   status: string;
 }
+
+export interface Feedback {
+  companyName: string;
+  type: string;
+  comment: string;
+  rating: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Student{
+  name: string ;
+  branch : string;
+  admissionYear: number;
+  status: "Pending" | "Selected" | "Completed" | string;
+}

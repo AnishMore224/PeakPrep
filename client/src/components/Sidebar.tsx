@@ -19,11 +19,10 @@ const studentNavItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
   {
     id: "companies",
-    label: "Shortlisted companies",
+    label: "Companies",
     icon: Building2,
     href: "/companies",
   },
-  { id: "past", label: "Past companies", icon: History, href: "/past" },
   {
     id: "feedbacks",
     label: "Feedbacks",
@@ -37,7 +36,7 @@ const hrNavItems: NavItem[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/" },
   { id: "candidates", label: "Candidates", icon: Building2, href: "/candidates" },
   { id: "interviews", label: "Interviews", icon: History, href: "/interviews" },
-  { id: "feedbacks", label: "Feedbacks", icon: MessageSquare, href: "/feedbacks" },
+  // { id: "feedbacks", label: "Feedbacks", icon: MessageSquare, href: "/feedbacks" },
 ];
 
 const adminNavItems: NavItem[] = [
