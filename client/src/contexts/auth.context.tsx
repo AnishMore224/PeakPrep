@@ -97,8 +97,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         };
         setUser(student);
       } else if (role === "hr") {
-        const { role, email, name, companyId } = { ...response.data.user };
-        const hr = { role, email, name, companyId, username: email };
+        const { role, email, name, companyName } = { ...response.data.user };
+        const hr = { role, email, name, companyName, username: email };
         setUser(hr);
       } else if (role === "admin") {
         const { role, username, email, name } = { ...response.data.user };
@@ -187,12 +187,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("token", token);
       setJwtToken(token);
       setIsAuthenticated(true);
-      const { role, email, name, companyId } = { ...response.data.user };
+      const { role, email, name, companyName } = { ...response.data.user };
       const hr = {
         role,
         email,
         name,
-        companyId,
+        companyName,
         username: HrRegisterInfo.username,
       };
       setUser(hr);
@@ -234,8 +234,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             };
             setUser(student);
           } else if (role === "hr") {
-            const { role, email, name, companyId } = { ...response.data.user };
-            const hr = { role, email, name, companyId, username: email };
+            const { role, email, name, companyName } = { ...response.data.user };
+            const hr = { role, email, name, companyName, username: email };
             setUser(hr);
           } else if (role === "admin") {
             const { role, username, email, name } = { ...response.data.user };
@@ -316,7 +316,7 @@ export interface Hr {
   username: string;
   email: string;
   name: string;
-  companyId: string;
+  companyName: string;
 }
 
 export interface AuthContextType {
