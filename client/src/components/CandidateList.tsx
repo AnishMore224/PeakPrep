@@ -13,8 +13,8 @@ export function CandidateList({ filter, majorFilter }: CandidateListProps) {
   const filteredStudents = students.filter(
     (student) =>
       (student.name.toLowerCase().includes(filter.toLowerCase()) ||
-      (student.status.toLowerCase().includes(filter.toLowerCase())) &&
-        student.branch.toLowerCase().includes(majorFilter.toLowerCase()))
+      (student.status.toLowerCase().includes(filter.toLowerCase()))) &&
+        student.branch.toLowerCase().includes(majorFilter.toLowerCase())
   );
 
   return (
