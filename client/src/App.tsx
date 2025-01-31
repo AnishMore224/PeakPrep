@@ -23,6 +23,8 @@ import { Candidate } from "./pages/Candidates";
 import { HRDashboard } from "./pages/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
+import { CompanyProvider } from "./contexts/company.context";
+
 function MainLayout() {
   const location = useLocation();
   const hideHeaderSidebarPaths = ["/login", "/signup"];
@@ -127,12 +129,16 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/feedbacks" element={isAuthenticated ? (
+            <Route
+              path="/feedbacks"
+              element={
+                isAuthenticated ? (
                   <Feedbacks />
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )
-              } />
+              }
+            />
             <Route path="/feedbackform" element={<FeedbackForm />} />
           </Routes>
         </main>
@@ -145,13 +151,15 @@ export function App() {
   return (
     <AuthProvider>
       <UIProvider>
-        <StudentProvider>
-          <FeedbackProvider>
-            <BrowserRouter>
-              <MainLayout />
-            </BrowserRouter>
-          </FeedbackProvider>
-        </StudentProvider>
+        <CompanyProvider>
+          <StudentProvider>
+            <FeedbackProvider>
+              <BrowserRouter>
+                <MainLayout />
+              </BrowserRouter>
+            </FeedbackProvider>
+          </StudentProvider>
+        </CompanyProvider>
       </UIProvider>
     </AuthProvider>
   );
