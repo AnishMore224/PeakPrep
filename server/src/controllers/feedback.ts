@@ -5,7 +5,6 @@ import Company from "../models/Company";
 import Feedback from "../models/Feedback";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import HR from "../models/HR";
 
 export const addFeedback = async (
   req: Request,
@@ -127,7 +126,10 @@ export const updateFeedback = async (
 //Called by Student
 export const getFeedbacks = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { token } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+    if(!token) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
 
     if (!decoded) {

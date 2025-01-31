@@ -9,6 +9,7 @@ import User from "../models/User";
 import Student from "../models/Student";
 import Admin from "../models/Admin";
 import HR from "../models/HR";
+import Company from "../models/Company";
 
 export const register = async (req: Request, res: Response): Promise<any> => {
   let user: IUser | null = null;
@@ -95,10 +96,10 @@ export const register = async (req: Request, res: Response): Promise<any> => {
 export const registerHr = async (req: Request, res: Response): Promise<any> => {
   let user: IUser | null = null;
   try {
-    const { name, email, password, companyId } = req.body;
+    const { name, email, password, company } = req.body;
 
     // Check if all fields are provided
-    if (!name || !email || !password || !companyId) {
+    if (!name || !email || !password || !company) {
       return res
         .status(400)
         .json({ ...response, error: "All fields are required." });
@@ -112,7 +113,11 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
         error: "User already exists with this email.",
       });
     }
-
+    const companyObject = await Company.findOne({ name: company });
+    if (!companyObject) {
+      return res.status(404).json({ ...response, error: "Company not found." });
+    }
+    
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -126,11 +131,11 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
       role: "hr",
     });
     await user.save();
-
+    
     const hr = new HR({
       userId: user._id,
       email,
-      companyId,
+      companyId: companyObject._id,
       name,
     });
     await hr.save();
@@ -149,7 +154,7 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
         user: {
           name,
           email,
-          companyId,
+          companyId: companyObject._id,
           username: email,
           role: "hr",
         },
@@ -240,9 +245,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user._id, role: user.role, username: hr?.email },
-        process.env.JWT_SECRET || "your_secret_key"
+        process.env.JWT_SECRET as string
       );
-
+      const company = await Company.findOne({ _id: hr?.companyId });
       res.status(200).json({
         ...response,
         success: true,
@@ -252,7 +257,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: hr?.name,
             email: hr?.email,
-            companyId: hr?.companyId,
+            companyName: company?.name,
             username,
             role: user.role,
           },
@@ -322,6 +327,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       if (!hr) {
         return res.status(404).json({ ...response, error: "HR not found." });
       }
+      const company = await Company.findOne({ _id: hr.companyId });
       res.status(200).json({
         ...response,
         success: true,
@@ -329,7 +335,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: hr.name,
             email: hr.email,
-            companyId: hr.companyId,
+            companyName: company?.name,
             username,
             role,
           },

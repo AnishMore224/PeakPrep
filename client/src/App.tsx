@@ -16,6 +16,13 @@ import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
+import Feedbacks from "./pages/Feedbacks";
+import FeedbackForm from "./pages/Feedbackform";
+import { Candidate } from "./pages/Candidates";
+// import { AdminDashboard } from "./pages/AdminDashboard";
+import { HRDashboard } from "./pages/HrDashboard";
+import { FeedbackProvider } from "./contexts/feedback.context";
+import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
 
 function MainLayout() {
@@ -24,7 +31,7 @@ function MainLayout() {
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
   );
-  const { isAuthenticated, authLoading } = useAuth();
+  const { isAuthenticated, authLoading, user } = useAuth();
 
   // Global loading state
   if (authLoading) {
@@ -45,7 +52,7 @@ function MainLayout() {
         />
       )}
       <div
-        className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-16"}`}
+        className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-15"}`}
       >
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
@@ -60,7 +67,11 @@ function MainLayout() {
               path="/"
               element={
                 isAuthenticated ? (
-                  <StudentDashboard />
+                  user?.role === "student" ? (
+                    <StudentDashboard />
+                  ) : user?.role === "admin" ? null : (
+                    <HRDashboard />
+                  )
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )
@@ -88,8 +99,47 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/companies" element={<ShortListedCompanies />} />
-            <Route path="/ChatBot" element={<ChatBot />} />
+            <Route
+              path="/companies"
+              element={
+                isAuthenticated ? (
+                  <ShortListedCompanies />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/candidates"
+              element={
+                isAuthenticated ? (
+                  <Candidate />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/ChatBot"
+              element={
+                isAuthenticated ? (
+                  <ChatBot />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/feedbacks"
+              element={
+                isAuthenticated ? (
+                  <Feedbacks />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route path="/feedbackform" element={<FeedbackForm />} />
           </Routes>
         </main>
       </div>
@@ -100,13 +150,17 @@ function MainLayout() {
 export function App() {
   return (
     <AuthProvider>
-      <CompanyProvider>
-        <UIProvider>
-          <BrowserRouter>
-            <MainLayout />
-          </BrowserRouter>
-        </UIProvider>
-      </CompanyProvider >
+      <UIProvider>
+        <CompanyProvider>
+          <StudentProvider>
+            <FeedbackProvider>
+              <BrowserRouter>
+                <MainLayout />
+              </BrowserRouter>
+            </FeedbackProvider>
+          </StudentProvider>
+        </CompanyProvider>
+      </UIProvider>
     </AuthProvider>
   );
 }
