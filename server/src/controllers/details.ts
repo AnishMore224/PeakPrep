@@ -229,19 +229,20 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const getStudentSelections = async (req: Request, res: Response): Promise<any> => {
+  console.log('getStudentSelections');
   try {
-    const { regd_no, token } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+    if( !token ) {
+      return res.status(400).json({ ...response, error: "Unauthorized !" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!regd_no || !decoded) {
+    if (!decoded) {
       return res
         .status(400)
         .json({ ...response, error: "All fields are required" });
     }
-
-    if (decoded.role === "student" && decoded.username !== regd_no) {
-      return res.status(403).json({ ...response, error: "Access denied" });
-    }
-
+    const regd_no = decoded.username;
+    console.log(regd_no);
     const student = await Student.findOne({ _id: regd_no });
     if (!student) {
       return res.status(404).json({ ...response, error: "Student not found" });
@@ -273,7 +274,7 @@ export const getStudentSelections = async (req: Request, res: Response): Promise
     return res.status(200).json({
       ...response,
       success: true,
-      data: companies,
+      data: {companies: companyData},
       message: "Successfully fetched companies",
     });
   } catch (error) {

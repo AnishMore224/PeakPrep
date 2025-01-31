@@ -1,48 +1,56 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { companies } from '../utils/compaines';
-import { CompanyCard } from '../components/CompanyCard';
+import React, { useState, useCallback, useMemo } from 'react';
+import { useUIContext } from '../contexts/ui.context';
+import { useCompany } from '../contexts/company.context';
 import { SearchBar } from '../components/SearchBar';
-import { Sidebar } from '../components/Sidebar';
-import { useUIContext } from "../contexts/ui.context";
+import { CompanyCard } from '../components/CompanyCard';
 
 function ShortListedCompanies() {
-    const { isSidebarVisible } = useUIContext();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isSidebarVisible } = useUIContext();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const { companies } = useCompany();
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
   }, []);
 
-  const filteredCompanies = useMemo(() => {
-    if (!searchTerm) return companies;
-    return companies.filter(company => 
-      company.title.toLowerCase().includes(searchTerm) || 
-      company.description.toLowerCase().includes(searchTerm)
-    );
-  }, [searchTerm]);
+  const handleSort = useCallback((order: 'asc' | 'desc') => {
+    setSortOrder(order);
+  }, []);
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const filteredAndSortedCompanies = useMemo(() => {
+    let filteredCompanies = companies;
+    if (searchTerm) {
+      filteredCompanies = companies.filter(
+        (company) =>
+          company.name.toLowerCase().includes(searchTerm) ||
+          company.hr.some(hr => hr.toLowerCase().includes(searchTerm)) ||
+          company.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+    }
+    return filteredCompanies.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+  }, [searchTerm, companies, sortOrder]);
 
   return (
-    <div className={`flex-1 bg-gray-50 transition-all duration-300 ${
+    <div
+      className={`flex-1 bg-gray-50 transition-all duration-300 ${
         isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
-      }`}>
+      }`}
+    >
       <div className="flex h-full">
         {/* Main Content */}
-        <div className="flex-1 flex flex-col h-full overflow-hidden">          
-          <div className="flex-1 overflow-y-auto">
-            <div className="p-8 pt-0">
-              <SearchBar onSearch={handleSearch} />
-              
-              <div className="space-y-4 mt-6">
-                {filteredCompanies.map((company, index) => (
-                  <CompanyCard key={index} company={company} />
-                ))}
-              </div>
-            </div>
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
+          <SearchBar onSearch={handleSearch} onSort={handleSort} />
+          <div className="flex-1 overflow-y-auto p-4">
+            {filteredAndSortedCompanies.map((company) => (
+              <CompanyCard key={company.name} company={company} />
+            ))}
           </div>
         </div>
       </div>
