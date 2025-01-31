@@ -134,7 +134,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (response.error) return setRegisterError(response.error);
-      console.log("studentRegister Response: ", response.data);
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
@@ -223,7 +222,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             const { email, name, branch, section } = {
               ...response.data.user,
             };
-            console.log("Student: ", response);
             const student = {
               role,
               username: decoded.username,
