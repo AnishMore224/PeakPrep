@@ -18,6 +18,8 @@ import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 import Feedbacks from "./pages/Feedbacks";
 import FeedbackForm from "./pages/Feedbackform";
+
+import AdminDashboard from "./pages/AdminDashBoard";
 import { Candidate } from "./pages/Candidates";
 // import { AdminDashboard } from "./pages/AdminDashboard";
 import { HRDashboard } from "./pages/HrDashboard";
@@ -171,6 +173,7 @@ function MainLayout() {
               }
             />
             <Route path="/feedbackform" element={<FeedbackForm />} />
+            <Route path="/admindashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
       </div>
