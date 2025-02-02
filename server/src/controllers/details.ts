@@ -22,7 +22,7 @@ export const students = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: studentsData,
+      data: {studentsData},
       message: "Successfully fetched students",
     });
   } catch (error) {
@@ -87,7 +87,7 @@ export const companies = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: companies,
+      data: {companies},
       message: "Successfully fetched companies",
     });
   } catch (error) {

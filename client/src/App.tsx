@@ -24,6 +24,9 @@ import { HRDashboard } from "./pages/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
+import AllCompanies from "./pages/admin/companies";
+import NotAuthorized from "./pages/NotAuthorized";
+import { AllCandidate } from "./pages/admin/Candidates";
 
 function MainLayout() {
   const location = useLocation();
@@ -134,6 +137,34 @@ function MainLayout() {
               element={
                 isAuthenticated ? (
                   <Feedbacks />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/allcompanies"
+              element={
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCompanies />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/allcandidates"
+              element={
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCandidate />
+                  )
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )

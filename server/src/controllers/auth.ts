@@ -236,6 +236,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: admin?.name,
             username,
+            email: username,
             role: user.role,
           },
         },
@@ -318,6 +319,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: admin.name,
             username,
+            email: username,
             role,
           },
         },
