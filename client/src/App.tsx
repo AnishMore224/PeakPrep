@@ -18,16 +18,14 @@ import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 import Feedbacks from "./pages/Feedbacks";
 import FeedbackForm from "./pages/Feedbackform";
-<<<<<<< HEAD
+
 import AdminDashboard from "./pages/AdminDashBoard";
-=======
 import { Candidate } from "./pages/Candidates";
 // import { AdminDashboard } from "./pages/AdminDashboard";
 import { HRDashboard } from "./pages/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
->>>>>>> b764d732e93e4ada8726c86797f4f07ea59d7675
 
 function MainLayout() {
   const location = useLocation();
