@@ -18,6 +18,7 @@ import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 import Feedbacks from "./pages/Feedbacks";
 import FeedbackForm from "./pages/Feedbackform";
+import AdminDashboard from "./pages/AdminDashBoard";
 
 function MainLayout() {
   const location = useLocation();
@@ -93,6 +94,7 @@ function MainLayout() {
             <Route path="/ChatBot" element={<ChatBot />} />
             <Route path="/feedbacks" element={<Feedbacks />} />
             <Route path="/feedbackform" element={<FeedbackForm />} />
+            <Route path="/admindashboard" element={<AdminDashboard />} />
           </Routes>
         </main>
       </div>
