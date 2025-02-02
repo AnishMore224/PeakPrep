@@ -1,16 +1,18 @@
-import React from 'react';
+interface ActionButtonsProps {
+  onActionClick: (actionText: string) => Promise<void>;
+}
 
-export function ActionButtons() {
+export const ActionButtons: React.FC<ActionButtonsProps> = ({ onActionClick }) => {
   return (
-    <div className="flex flex-wrap gap-2 mb-4">
-      <button className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
-        Schedule Interview
+    <div className="flex flex-wrap gap-2 mb-3">
+      <button onClick={() => onActionClick('Tell Me about my resume')} className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
+        Tell Me about my resume
       </button>
-      <button className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
-        Analyze Data
+      <button onClick={() => onActionClick('Tell Me about my skills')} className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
+        Tell Me about my skills
       </button>
-      <button className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
-        FAQs
+      <button onClick={() => onActionClick('Tell Me about my projects')} className="bg-[#00BCD4] text-white px-4 py-2 rounded-full hover:bg-[#00ACC1] transition-colors text-sm sm:text-base">
+        Tell Me about my projects
       </button>
     </div>
   );

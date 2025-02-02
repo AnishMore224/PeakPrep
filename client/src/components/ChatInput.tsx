@@ -5,9 +5,10 @@ interface ChatInputProps {
   inputText: string;
   setInputText: (text: string) => void;
   handleSend: () => void;
+  disabled: boolean;
 }
 
-export function ChatInput({ inputText, setInputText, handleSend }: ChatInputProps) {
+export function ChatInput({ inputText, setInputText, handleSend, disabled }: ChatInputProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -22,6 +23,7 @@ export function ChatInput({ inputText, setInputText, handleSend }: ChatInputProp
         value={inputText}
         onChange={(e) => setInputText(e.target.value)}
         onKeyPress={handleKeyPress}
+        disabled={disabled}
         placeholder="Type your message..."
         className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent text-sm sm:text-base"
       />
