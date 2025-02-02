@@ -245,9 +245,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user._id, role: user.role, username: hr?.email },
-        process.env.JWT_SECRET || "your_secret_key"
+        process.env.JWT_SECRET as string
       );
-
+      const company = await Company.findOne({ _id: hr?.companyId });
       res.status(200).json({
         ...response,
         success: true,
@@ -257,7 +257,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: hr?.name,
             email: hr?.email,
-            companyId: hr?.companyId,
+            companyName: company?.name,
             username,
             role: user.role,
           },
@@ -327,6 +327,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
       if (!hr) {
         return res.status(404).json({ ...response, error: "HR not found." });
       }
+      const company = await Company.findOne({ _id: hr.companyId });
       res.status(200).json({
         ...response,
         success: true,
@@ -334,7 +335,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
           user: {
             name: hr.name,
             email: hr.email,
-            companyId: hr.companyId,
+            companyName: company?.name,
             username,
             role,
           },

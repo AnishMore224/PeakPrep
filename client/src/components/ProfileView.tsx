@@ -59,7 +59,7 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
             <ProfileField label="Name" value={(user as Hr).name} />
             <ProfileField label="Username" value={(user as Hr).username} />
             <ProfileField label="Email" value={(user as Hr).email} />
-            <ProfileField label="Company ID" value={(user as Hr).companyId} />
+            <ProfileField label="Company Name" value={(user as Hr).companyName} />
           </>
         ) : (
           <>
