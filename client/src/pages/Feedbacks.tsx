@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useUIContext } from "../contexts/ui.context";
 
 interface FeedbackCard {
   company: string;
@@ -79,9 +80,11 @@ function Feedbacks() {
       )
     );
   };
-
+  const { isSidebarVisible } = useUIContext();
   return (
-    <div className="min-h-screen bg-background p-6 md:ml-64 ml-0">
+    <div
+      className={`flex-1 p-6 md:p-8 bg-gray-50 transition-all duration-300 ${isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"}`}
+    >
       <div className="mb-6">
         <input
           type="text"
