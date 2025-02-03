@@ -21,19 +21,25 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
   const getStudents = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/students`, token);
     if (response.success) {
-      const student = Array.isArray(response.data.shortlistedStudents) ? response.data.shortlistedStudents.map((student: any) => {
-        return {
-          id: student._id,
-          name: student.name,
-          branch: student.branch,
-          admissionYear: student.admissionYear,
-          status: response.data.selectedStudents.some((s: any) => s._id === student._id)
-        ? "Selected"
-        : response.data.completedStudents.some((s: any) => s._id === student._id)
-        ? "Done"
-        : "Pending",
-        };
-      }) : [];
+      const student = Array.isArray(response.data.shortlistedStudents)
+        ? response.data.shortlistedStudents.map((student: any) => {
+            return {
+              id: student._id,
+              name: student.name,
+              branch: student.branch,
+              admissionYear: student.admissionYear,
+              status: response.data.selectedStudents.some(
+                (s: any) => s._id === student._id
+              )
+                ? "Selected"
+                : response.data.completedStudents.some(
+                    (s: any) => s._id === student._id
+                  )
+                ? "Done"
+                : "Pending",
+            };
+          })
+        : [];
       console.log(student);
       setStudents(student);
     }
@@ -41,14 +47,14 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token) {
+    if (token) {
       const decode = jwtDecode(token);
-      if(decode && (decode as any)?.role !== "hr") {
+      if (decode && (decode as any)?.role !== "hr") {
         return;
       }
-    }
+    } else return;
     getStudents();
-  }, [getStudents,user]);
+  }, [getStudents, user]);
   return (
     <StudentContext.Provider value={{ students, getStudents }}>
       {children}

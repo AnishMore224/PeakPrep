@@ -31,6 +31,8 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if(!token) return;
     getCompanies();
   }, [getCompanies]);
 

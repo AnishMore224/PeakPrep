@@ -229,7 +229,6 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const getStudentSelections = async (req: Request, res: Response): Promise<any> => {
-  console.log('getStudentSelections');
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if( !token ) {
@@ -242,7 +241,6 @@ export const getStudentSelections = async (req: Request, res: Response): Promise
         .json({ ...response, error: "All fields are required" });
     }
     const regd_no = decoded.username;
-    console.log(regd_no);
     const student = await Student.findOne({ _id: regd_no });
     if (!student) {
       return res.status(404).json({ ...response, error: "Student not found" });
