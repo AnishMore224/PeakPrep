@@ -120,24 +120,30 @@ export const SignUp = () => {
                       required
                     />
                   </div>
-                  <div>
+                    <div>
                     <label
                       htmlFor="branch"
                       className="block text-base font-medium text-gray-700 mb-1"
                     >
                       Branch
                     </label>
-                    <input
+                    <select
                       id="branch"
                       name="branch"
-                      type="text"
                       value={studentRegisterInfo.branch}
                       onChange={handleStudentRegisterInfoChange}
                       className="input-field text-base"
-                      placeholder="Enter your branch"
                       required
-                    />
-                  </div>
+                    >
+                      <option value="" disabled>Select your branch</option>
+                      <option value="CSE">Computer Science Engineering (CSE)</option>
+                      <option value="CSIT">Computer Science and Information Technology (CSIT)</option>
+                      <option value="ECE">Electronics and Communication Engineering (ECE)</option>
+                      <option value="ME">Mechanical Engineering (ME)</option>
+                      <option value="CE">Civil Engineering (CE)</option>
+                      <option value="EE">Electrical Engineering (EE)</option>
+                    </select>
+                    </div>
                   <div>
                     <label
                       htmlFor="section"

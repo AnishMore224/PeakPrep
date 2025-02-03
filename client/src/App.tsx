@@ -18,12 +18,18 @@ import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 import Feedbacks from "./pages/Feedbacks";
 import FeedbackForm from "./pages/Feedbackform";
+
+import AdminDashboard from "./pages/AdminDashBoard";
 import { Candidate } from "./pages/Candidates";
 // import { AdminDashboard } from "./pages/AdminDashboard";
 import { HRDashboard } from "./pages/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
+import AllCompanies from "./pages/admin/companies";
+import NotAuthorized from "./pages/NotAuthorized";
+import { AllCandidate } from "./pages/admin/Candidates";
+import ResumeForm from "./pages/resume-builder/ResumeForm";
 
 function MainLayout() {
   const location = useLocation();
@@ -139,7 +145,37 @@ function MainLayout() {
                 )
               }
             />
+            <Route
+              path="/allcompanies"
+              element={
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCompanies />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/allcandidates"
+              element={
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCandidate />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/feedbackform" element={<FeedbackForm />} />
+            <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route path="/resume" element={<ResumeForm />} />
           </Routes>
         </main>
       </div>
