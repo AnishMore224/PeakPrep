@@ -12,7 +12,6 @@ export interface Feedback {
   updatedAt: Date;
 }
 function Feedbacks() {
-  const { isSidebarVisible } = useUIContext();
   const { feedbacks } = useFeedback();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredFeedback, setFilteredFeedback] =
