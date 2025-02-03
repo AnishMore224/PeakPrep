@@ -32,7 +32,7 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
       if (decode && (decode as any)?.role !== "student") {
         return;
       }
-    }
+    } else return;
     getFeedbacks();
   }, [getFeedbacks, user]);
   return (

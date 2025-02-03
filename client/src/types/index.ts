@@ -1,11 +1,22 @@
-import type { LucideIcon } from 'lucide-react';
+import type { LucideIcon } from "lucide-react";
+import type { ObjectId } from "mongoose";
 
 export interface Company {
   name: string;
   hr: string[];
   tags: string[];
   placed: boolean;
-  completed: boolean; 
+  completed: boolean;
+}
+
+export interface CompanyData {
+  // specifically for admin
+  name: string;
+  hr: ObjectId[];
+  shortlistedStudents: string[];
+  selectedStudents: string[];
+  completedStudents: string[];
+  tags: string[];
 }
 
 export interface SidebarItemProps {
@@ -21,6 +32,7 @@ export interface NavItem {
   label: string;
   icon: React.ComponentType;
   href: string;
+  fun: () => any | null | undefined;
 }
 
 export interface SidebarProps {
@@ -56,7 +68,7 @@ export interface LoginForm {
 }
 
 export interface SignUpForm {
-  userType: 'student' | 'hr';
+  userType: "student" | "hr";
   name: string;
   username: string;
   email: string;
@@ -110,10 +122,10 @@ export interface Message {
   isUser: boolean;
 }
 export interface StatCardProps {
-    title: string;
-    value: string;
-    change: string;
-    icon: React.ReactNode;
+  title: string;
+  value: string;
+  change: string;
+  icon: React.ReactNode;
 }
 export interface Candidate {
   name: string;
@@ -132,9 +144,22 @@ export interface Feedback {
   updatedAt: Date;
 }
 
-export interface Student{
-  name: string ;
-  branch : string;
+export interface Student {
+  name: string;
+  branch: string;
   admissionYear: number;
+  status: "Pending" | "Selected" | "Completed" | string;
+}
+
+export interface StudentData {
+  _id: string;
+  name: string;
+  section: string;
+  branch: string;
+  admissionYear: number;
+  feedback: ObjectId[];
+  companies: ObjectId[];
+  placedAt: ObjectId[];
+  email: string;
   status: "Pending" | "Selected" | "Completed" | string;
 }
