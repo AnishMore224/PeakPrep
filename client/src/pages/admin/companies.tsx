@@ -1,35 +1,37 @@
-import { useState, useCallback, useMemo } from 'react';
-import { useUIContext } from '../contexts/ui.context';
-import { useCompany } from '../contexts/company.context';
-import { SearchBar } from '../components/SearchBar';
-import { CompanyCard } from '../components/CompanyCard';
-import { Company} from '../types';
+import React, { useState, useCallback, useMemo } from "react";
+import { useUIContext } from "../../contexts/ui.context";
+import { useCompany } from "../../contexts/company.context";
+import { SearchBar } from "../../components/SearchBar";
+import { CompanyCard } from "../../components/admin/CompanyCard";
+import { CompanyData } from "../../types";
 
-function ShortListedCompanies() {
+function AllCompanies() {
   const { isSidebarVisible } = useUIContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const { companies } = useCompany();
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
   }, []);
 
-  const handleSort = useCallback((order: 'asc' | 'desc') => {
+  const handleSort = useCallback((order: "asc" | "desc") => {
     setSortOrder(order);
   }, []);
 
   const filteredAndSortedCompanies = useMemo(() => {
-    let filteredCompanies = companies as Company[];
+    let filteredCompanies = companies as CompanyData[];
     if (searchTerm) {
-      filteredCompanies = companies.filter(
-        (company): company is Company => 'name' in company && 
-          (company.name.toLowerCase().includes(searchTerm) ||
-          company.tags.some((tag:string) => tag.toLowerCase().includes(searchTerm))
-      ));
+      filteredCompanies = (companies as CompanyData[]).filter(
+        (company: CompanyData) =>
+          company.name.toLowerCase().includes(searchTerm) ||
+          company.tags.some((tag: string) =>
+            tag.toLowerCase().includes(searchTerm)
+          )
+      );
     }
     return filteredCompanies.sort((a, b) => {
-      if (sortOrder === 'asc') {
+      if (sortOrder === "asc") {
         return a.name.localeCompare(b.name);
       } else {
         return b.name.localeCompare(a.name);
@@ -58,4 +60,4 @@ function ShortListedCompanies() {
   );
 }
 
-export default ShortListedCompanies;
+export default AllCompanies;
