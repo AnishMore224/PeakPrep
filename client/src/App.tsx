@@ -29,6 +29,7 @@ import { CompanyProvider } from "./contexts/company.context";
 import AllCompanies from "./pages/admin/companies";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
+import ResumeForm from "./pages/resume-builder/ResumeForm";
 
 function MainLayout() {
   const location = useLocation();
@@ -174,6 +175,7 @@ function MainLayout() {
             />
             <Route path="/feedbackform" element={<FeedbackForm />} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
+            <Route path="/resume" element={<ResumeForm />} />
           </Routes>
         </main>
       </div>
