@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useUIContext } from "../../contexts/ui.context";
 import ResumePreview from "./Resume";
-import { exportToPdf } from "./exportPDF";
+import { generatePDF } from "./exportPDF";
+import Resume from "./generatePDF";
 
 interface ResumeData {
   name: string;
@@ -39,12 +40,11 @@ const initialResumeData: ResumeData = {
   skills: [],
 };
 
-const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  exportToPdf("resume-preview");
-};
-
 const ResumeForm: React.FC = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    generatePDF(resume);
+  };
   const [resume, setResume] = useState<ResumeData>(initialResumeData);
 
   const handleChange = (
@@ -124,6 +124,7 @@ const ResumeForm: React.FC = () => {
         </button>
       </form>
       <ResumePreview data={resume} />
+      <Resume />
     </div>
   );
 };
