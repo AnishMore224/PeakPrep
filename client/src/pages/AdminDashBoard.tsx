@@ -3,13 +3,11 @@ import {
   Users,
   Trophy,
   MessageSquare,
-  TrendingUp,
-  LayoutDashboard,
-  BarChart2,
-  Settings,
+  TrendingUp, 
   Star,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useUIContext } from "../contexts/ui.context";
 
 interface StatData {
   title: string;
@@ -43,6 +41,7 @@ interface Feedback {
 const AdminDashboard: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [selectedTab, setSelectedTab] = useState("group");
+   const { isSidebarVisible } = useUIContext();
 
   const stats: StatData[] = [
     {
@@ -69,15 +68,6 @@ const AdminDashboard: React.FC = () => {
       icon: TrendingUp,
       trend: { value: 8, positive: true },
     },
-  ];
-
-  const menuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", active: true },
-    { icon: Users, label: "Users" },
-    { icon: Trophy, label: "Contests" },
-    { icon: MessageSquare, label: "Feedback" },
-    { icon: BarChart2, label: "Analytics" },
-    { icon: Settings, label: "Settings" },
   ];
 
   const contests: Contest[] = [
@@ -145,31 +135,11 @@ const AdminDashboard: React.FC = () => {
   );
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
-        <div className="p-6">
-          <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <Trophy className="w-6 h-6 text-blue-500" />
-            Admin Portal
-          </h1>
-        </div>
-        <nav className="flex-1">
-          {menuItems.map((item) => (
-            <a
-              key={item.label}
-              href="#"
-              className={`flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-gray-50 ${
-                item.active ? "bg-blue-50 text-blue-600" : ""
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              <span>{item.label}</span>
-            </a>
-          ))}
-        </nav>
-      </div>
-
+    <div
+      className={`flex-1 bg-gray-50 transition-all duration-300 ${
+        isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
+      }`}
+    >
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="h-16 bg-white border-b border-gray-200 flex items-center px-6">

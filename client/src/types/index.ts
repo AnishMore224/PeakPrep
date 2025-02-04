@@ -163,3 +163,10 @@ export interface StudentData {
   email: string;
   status: "Pending" | "Selected" | "Completed" | string;
 }
+
+export interface Hr {
+  _id: string;
+  companyId:{ id: ObjectId, name: string }
+  name: string;
+  email: string;
+}
