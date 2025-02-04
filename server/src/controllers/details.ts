@@ -153,7 +153,7 @@ export const company = async (req: Request, res: Response): Promise<any> => {
 //Called by Admin
 export const hrs = async (req: Request, res: Response): Promise<any> => {
   try {
-    const hrs = await HR.find();
+    const hrs = await HR.find().populate({ path: 'companyId', select: 'name' });
     if (!hrs || hrs.length === 0) {
       return res.status(404).json({ ...response, error: "No HRs found" });
     }
@@ -166,7 +166,7 @@ export const hrs = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: hrsData,
+      data: {hrsData},
       message: "Successfully fetched HRs",
     });
   } catch (error) {

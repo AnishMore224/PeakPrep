@@ -30,6 +30,8 @@ import AllCompanies from "./pages/admin/companies";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
 import ResumeForm from "./pages/resume-builder/ResumeForm";
+import Hrs from "./pages/admin/Hrs";
+import { HrProvider } from "./contexts/hr.context";
 
 function MainLayout() {
   const location = useLocation();
@@ -75,7 +77,9 @@ function MainLayout() {
                 isAuthenticated ? (
                   user?.role === "student" ? (
                     <StudentDashboard />
-                  ) : user?.role === "admin" ? null : (
+                  ) : user?.role === "admin" ? (
+                    <AdminDashboard />
+                  ) : (
                     <HRDashboard />
                   )
                 ) : (
@@ -173,8 +177,21 @@ function MainLayout() {
                 )
               }
             />
+            <Route
+              path="/hrs"
+              element={
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <Hrs />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/feedbackform" element={<FeedbackForm />} />
-            <Route path="/admindashboard" element={<AdminDashboard />} />
             <Route path="/resume" element={<ResumeForm />} />
           </Routes>
         </main>
@@ -189,11 +206,13 @@ export function App() {
       <UIProvider>
         <CompanyProvider>
           <StudentProvider>
-            <FeedbackProvider>
-              <BrowserRouter>
-                <MainLayout />
-              </BrowserRouter>
-            </FeedbackProvider>
+            <HrProvider>
+              <FeedbackProvider>
+                <BrowserRouter>
+                  <MainLayout />
+                </BrowserRouter>
+              </FeedbackProvider>
+            </HrProvider>
           </StudentProvider>
         </CompanyProvider>
       </UIProvider>

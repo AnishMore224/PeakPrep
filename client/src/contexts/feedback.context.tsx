@@ -17,7 +17,7 @@ const FeedbackContext = createContext<FeedbackContextProps | undefined>(
 export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const token = localStorage.getItem("token");
-  const {user} = useAuth();
+  const { user } = useAuth();
   const getFeedbacks = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/feedbacks`, token);
     if (response.success) {
