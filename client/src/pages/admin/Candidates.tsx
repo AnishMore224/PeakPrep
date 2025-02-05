@@ -1,14 +1,50 @@
 import React from "react";
 import { Users, GraduationCap, TrendingUp } from "lucide-react";
-import { CandidateList } from "../../components/CandidateList";
+import { CandidateList } from "./../../components/admin/CandidateList";
 import { useUIContext } from "../../contexts/ui.context";
 import { StatCard } from "../../components/StatCard";
+import { useStudent } from "../../contexts/student.context";
+import { Student } from "../../types";
+
 
 export function AllCandidate() {
+  const { students } = useStudent();
   const { isSidebarVisible } = useUIContext();
   const [filter, setFilter] = React.useState<string>("");
   const [majorFilter, setMajorFilter] = React.useState<string>("");
-  
+
+  const filteredStudents = students.filter((student) => {
+    return (
+      (filter === "" || student.name.toLowerCase().includes(filter.toLowerCase()) || student.status.toLowerCase().includes(filter.toLowerCase())) &&
+      (majorFilter === "" || student.branch.toLowerCase() === majorFilter.toLowerCase())
+    );
+  });
+
+  const exportToCSV = () => {
+    const csvRows = [];
+    const headers = Object.keys(filteredStudents[0]);
+    csvRows.push(headers.join(","));
+
+    for (const student of filteredStudents) {
+      const values = headers.map(header => {
+        const value = (student as any)[header];
+        return Array.isArray(value) ? value.join(";") : value;
+      });
+      csvRows.push(values.join(","));
+    }
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", "students.csv");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   return (
     <div
       className={`flex-1 p-6 md:p-8 bg-gray-50 transition-all duration-300 ${
@@ -39,9 +75,17 @@ export function AllCandidate() {
 
       {/* Filters */}
       <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
-        <h2 className="text-xl text-blue-600 font-semibold mb-4">
-          Student Filters
-        </h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl text-blue-600 font-semibold">
+            Student Filters
+          </h2>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onClick={exportToCSV}
+          >
+            Export
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row gap-4">
           <input
             type="text"

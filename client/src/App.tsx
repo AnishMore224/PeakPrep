@@ -18,20 +18,20 @@ import ShortListedCompanies from "./pages/ShortListedCompanies";
 import ChatBot from "./pages/ChatBot";
 import Feedbacks from "./pages/Feedbacks";
 import FeedbackForm from "./pages/Feedbackform";
-
 import AdminDashboard from "./pages/AdminDashBoard";
-import { Candidate } from "./pages/Candidates";
 // import { AdminDashboard } from "./pages/AdminDashboard";
 import { HRDashboard } from "./pages/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
-import AllCompanies from "./pages/admin/companies";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
-import ResumeForm from "./pages/resume-builder/ResumeForm";
+import { AllCompanies } from "./pages/admin/Companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
+import ATS from "./pages/atsScore"; // Import the AtsScore component
+import OpenSource from "./pages/OpoenSource";
+
 
 function MainLayout() {
   const location = useLocation();
@@ -123,7 +123,7 @@ function MainLayout() {
               path="/candidates"
               element={
                 isAuthenticated ? (
-                  <Candidate />
+                  <AllCandidate />
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )
@@ -192,7 +192,9 @@ function MainLayout() {
               }
             />
             <Route path="/feedbackform" element={<FeedbackForm />} />
-            <Route path="/resume" element={<ResumeForm />} />
+            {/* <Route path="/resume" element={<ResumeForm />} /> */}
+            <Route path="/atsChecker" element={<ATS />} />
+            <Route path="/OpenSource" element={<OpenSource />} />
           </Routes>
         </main>
       </div>

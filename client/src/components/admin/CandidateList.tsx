@@ -1,6 +1,6 @@
 import React from "react";
-import { Candidate } from "../types";
-import { useStudent } from "../contexts/student.context";
+import { Candidate } from "../../types";
+import { useStudent } from "../../contexts/student.context";
 
 interface CandidateListProps {
   filter: string;

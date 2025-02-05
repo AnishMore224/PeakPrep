@@ -4,6 +4,7 @@ import { Filter, Search, SortDesc } from 'lucide-react';
 interface SearchBarProps {
   onSearch: (value: string) => void;
   onSort: (order: 'asc' | 'desc') => void;
+  onExport: () => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = React.memo(({ onSearch, onSort }) => {

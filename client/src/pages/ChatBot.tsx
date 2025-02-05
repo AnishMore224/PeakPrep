@@ -107,7 +107,7 @@ function ChatBot() {
     const response = await axios.post(
       "http://localhost:5001/api/gemini-response",
       {
-        inputText,
+        inputText,  
         pdfContent,
         chatHistory,
       }
