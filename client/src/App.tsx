@@ -26,7 +26,7 @@ import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
-import { AllCompanies } from "./pages/admin/Companies";
+import { AllCompanies } from "./pages/admin/companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/atsScore"; // Import the AtsScore component
@@ -35,7 +35,7 @@ import OpenSource from "./pages/OpenSource";
 import Home from "./pages/ContestMain/Home";
 import DailyContest from "./pages/ContestMain/DailyContest";
 import WeeklyContest from "./pages/ContestMain/WeeklyContest";
-
+import ResumeForm from "./pages/resume-builder/ResumeForm";
 
 function MainLayout() {
   const location = useLocation();
@@ -195,9 +195,48 @@ function MainLayout() {
               }
             />
             <Route path="/feedbackform" element={<FeedbackForm />} />
-            {/* <Route path="/resume" element={<ResumeForm />} /> */}
-            <Route path="/atsChecker" element={<ATS />} />
-            <Route path="/OpenSource" element={<OpenSource />} />
+            <Route
+              path="/resume"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ResumeForm />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/atsChecker"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ATS />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/openSource"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <OpenSource />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/contest-main" element={<Home />} />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />

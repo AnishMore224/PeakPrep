@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
 
 interface FileUploadProps {
@@ -7,9 +7,12 @@ interface FileUploadProps {
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, fileInputRef }) => {
+  const [fileName, setFileName] = useState<string | null>(null);
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files?.[0];
     if (uploadedFile) {
+      setFileName(uploadedFile.name);
       onFileUpload(uploadedFile);
     }
   };
@@ -22,6 +25,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, fileInputR
     event.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
     if (droppedFile) {
+      setFileName(droppedFile.name);
       onFileUpload(droppedFile);
     }
   };
@@ -59,6 +63,11 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, fileInputR
             <p className="mt-2 text-xs sm:text-sm text-gray-500">
               Supported formats: PDF, DOC, or DOCX (max 10MB)
             </p>
+            {fileName && (
+              <p className="mt-2 text-xs sm:text-sm text-gray-500">
+                Uploaded file: {fileName}
+              </p>
+            )}
           </div>
         </label>
       </div>

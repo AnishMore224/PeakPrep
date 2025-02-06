@@ -24,6 +24,11 @@ def get_gemini_response(input_text, pdf_content, chat_history):
     response = model.generate_content(full_input)
     return response.text
 
+def get_gemini_response_resume(input, pdf_content, prompt):
+    model = genai.GenerativeModel('gemini-1.5-flash')
+    response = model.generate_content([input, pdf_content[0], prompt])
+    return response.text
+
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
         # Convert PDF to image
@@ -67,6 +72,22 @@ def gemini_response():
     try:
         response_text = get_gemini_response(input_text, pdf_content, chat_history)
         return jsonify({'text': response_text})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/api/gemini-response-resume', methods=['POST'])
+def gemini_response_resume():
+    job_description = request.form['jobDescription']
+    prompt = request.form['prompt']
+    file = request.files['file']
+    print(job_description, prompt, file)
+    if not file:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    try:
+        pdf_content = input_pdf_setup(file)
+        response = get_gemini_response_resume(job_description, pdf_content, prompt)
+        return jsonify({'response': response})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

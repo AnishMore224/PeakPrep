@@ -37,6 +37,13 @@ const studentNavItems: NavItem[] = [
     fun: () => {},
   },
   {
+    id:"atschecker",
+    label:"ATS Checker",
+    icon: FileUser,
+    href:"/atschecker",
+    fun: () => {},
+  },
+  {
     id: "chatbot",
     label: "ChatBot",
     icon: Bot,
