@@ -63,7 +63,7 @@ const sampleRepositories: Repository[] = [
   }
 ];
 
-function App() {
+function OpenSource() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | ''>('');
 
@@ -104,4 +104,4 @@ function App() {
   );
 }
 
-export default App;
+export default OpenSource;
