@@ -27,10 +27,8 @@ def get_gemini_response(input_text, pdf_content, chat_history):
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
         # Convert PDF to image
-        print("bsahjfcbshjfbcvhj")
         images = pdf2image.convert_from_bytes(uploaded_file.read())
         first_page = images[0]
-        print("vbvdhjvbsdhjdvfbsdh")
         # Convert image to bytes
         img_byte_arr = io.BytesIO()
         first_page.save(img_byte_arr, format='JPEG')
@@ -48,7 +46,6 @@ def input_pdf_setup(uploaded_file):
 
 @app.route('/api/pdf-to-image', methods=['POST'])
 def pdf_to_image():
-    print("fsdfsdf")
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
@@ -67,7 +64,6 @@ def gemini_response():
     input_text = data.get('inputText')
     pdf_content = data.get('pdfContent')
     chat_history = data.get('chatHistory')
-    print("gfdgfdg")
     try:
         response_text = get_gemini_response(input_text, pdf_content, chat_history)
         return jsonify({'text': response_text})
