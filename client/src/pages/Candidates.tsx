@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, GraduationCap, TrendingUp } from "lucide-react";
-import { CandidateList } from "../components/CandidateList";
+// import { CandidateList } from "../components/CandidateList";
 import { useUIContext } from "../contexts/ui.context";
 import { StatCard } from "../components/StatCard";
 
@@ -73,10 +73,10 @@ export function Candidate() {
         <h2 className="text-xl text-blue-600 font-semibold mb-4">
           Student List
         </h2>
-        <CandidateList
+        {/* <CandidateList
           filter={filter}
           majorFilter={majorFilter}
-        />
+        /> */}
       </div>
     </div>
   );

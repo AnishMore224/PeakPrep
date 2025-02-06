@@ -12,7 +12,6 @@ export interface Feedback {
   updatedAt: Date;
 }
 function Feedbacks() {
-  const { isSidebarVisible } = useUIContext();
   const { feedbacks } = useFeedback();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredFeedback, setFilteredFeedback] =
@@ -39,7 +38,7 @@ function Feedbacks() {
       )
     );
   };
-
+  const { isSidebarVisible } = useUIContext();
   return (
     <div
       className={`flex-1 p-6 md:p-8 transition-all duration-300 ${
