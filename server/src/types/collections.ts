@@ -15,7 +15,7 @@ interface IStudent extends Document {
     admissionYear: number;
     feedback: mongoose.Types.ObjectId[];
     companies: mongoose.Types.ObjectId[];
-    placedAt: mongoose.Types.ObjectId | null;
+    placedAt: mongoose.Types.ObjectId[];
 }
 
 interface IHR extends Document {

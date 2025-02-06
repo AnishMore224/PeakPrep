@@ -59,11 +59,11 @@ export const register = async (req: Request, res: Response): Promise<any> => {
             branch,
             feedback: [],
             companies: [],
-            placedAt: null,
+            placedAt: [],
         });
         await student.save();
 
-        const token = jwt.sign({ user_id: user._id, regd_no: student._id, role: "student" }, process.env.JWT_SECRET || 'your_secret_key');
+        const token = jwt.sign({ id: user._id, username: student._id, role: "student" }, process.env.JWT_SECRET || 'your_secret_key');
         // user_id: UUID, regd_no: regd_No, role: student
 
         res.status(201).json({
@@ -124,7 +124,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
         if (user.role === "student") {
             const student = await Student.findOne({ _id: username })
             // Generate JWT token
-            const token = jwt.sign({ id: user._id, regd_no: username, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
+            const token = jwt.sign({ id: user._id, username: username, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
 
             res.status(200).json({
                 ...response,
@@ -143,10 +143,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             });
         }
         else if (user.role === "admin") {
-            // Generate JWT token
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
-
             const admin = await Admin.findOne({ userId: user._id });
+            // Generate JWT token
+            const token = jwt.sign({ id: user._id, role: user.role, username: admin?.email }, process.env.JWT_SECRET || 'your_secret_key');
             res.status(200).json({
                 ...response,
                 success: true,
@@ -162,10 +161,10 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             });
         }
         else if (user.role === "hr") {
-            // Generate JWT token
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET || 'your_secret_key');
-
             const hr = await HR.findOne({ userId: user._id });
+            // Generate JWT token
+            const token = jwt.sign({ id: user._id, role: user.role, username: hr?.email}, process.env.JWT_SECRET || 'your_secret_key');
+
             res.status(200).json({
                 ...response,
                 success: true,
