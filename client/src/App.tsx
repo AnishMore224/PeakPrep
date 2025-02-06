@@ -30,7 +30,11 @@ import { AllCompanies } from "./pages/admin/Companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/atsScore"; // Import the AtsScore component
-import OpenSource from "./pages/OpoenSource";
+import OpenSource from "./pages/OpenSource";
+// import Contest from "./pages/Contest";
+import Home from "./pages/ContestMain/Home";
+import DailyContest from "./pages/ContestMain/DailyContest";
+import WeeklyContest from "./pages/ContestMain/WeeklyContest";
 
 
 function MainLayout() {
@@ -54,21 +58,20 @@ function MainLayout() {
             location.pathname === "/"
               ? "Dashboard"
               : location.pathname
-                  .substring(1)
-                  .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
+                .substring(1)
+                .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
           }
         />
       )}
       <div
-        className={`flex flex-1 ${!shouldShowHeaderSidebar ? "pt-0" : "pt-15"}`}
+        className={`flex flex-1 ${!shouldShowHeaderSidebar || location.pathname === '/weekly-contest' || location.pathname === '/daily-contest' || location.pathname === '/contest-main'
+          ? "pt-1" : "pt-15"}`}
       >
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
-          className={`flex-1 ${
-            !shouldShowHeaderSidebar || location.pathname === "/chatbot"
-              ? "bg-gray-50 p-0"
+          className={`flex-1 ${!shouldShowHeaderSidebar || location.pathname === "/chatbot" ? "bg-gray-50 p-0"
               : "p-6 md:p-8"
-          }`}
+            }`}
         >
           <Routes>
             <Route
@@ -195,6 +198,9 @@ function MainLayout() {
             {/* <Route path="/resume" element={<ResumeForm />} /> */}
             <Route path="/atsChecker" element={<ATS />} />
             <Route path="/OpenSource" element={<OpenSource />} />
+            <Route path="/contest-main" element={<Home />} />
+            <Route path="/daily-contest" element={<DailyContest />} />
+            <Route path="/weekly-contest" element={<WeeklyContest />} />
           </Routes>
         </main>
       </div>
