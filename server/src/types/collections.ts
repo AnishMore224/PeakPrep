@@ -16,6 +16,7 @@ interface IStudent extends Document {
     feedback: mongoose.Types.ObjectId[];
     companies: mongoose.Types.ObjectId[];
     placedAt: mongoose.Types.ObjectId[];
+    completedCompanies: mongoose.Types.ObjectId[];
 }
 
 interface IHR extends Document {
@@ -30,6 +31,8 @@ interface ICompany extends Document {
     hr: mongoose.Types.ObjectId[];
     shortlistedStudents: string[];
     selectedStudents: string[];
+    completedStudents: string[];
+    tags: string[];
 }
 
 interface IFeedback extends Document {
@@ -46,4 +49,38 @@ interface IAdmin extends Document {
     email: string;
 }
 
-export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin };
+interface ResumeData {
+    name: string; // Name of the person
+    contact: {
+      email: string;  // Email address
+      phone: string;  // Phone number
+      linkedin: string;  // LinkedIn profile URL
+    };
+    summary: string; // A brief summary about the person
+    education: {
+      degree: string; // Degree obtained (e.g., "BS in Computer Science")
+      institution: string; // Institution name (e.g., "University of Pennsylvania")
+      year: string; // Year of study or graduation (e.g., "2000 - 2005")
+    }[];
+    experience: {
+      title: string; // Job title (e.g., "Software Engineer")
+      company: string; // Company name (e.g., "Apple")
+      years: string; // Duration of employment (e.g., "June 2005 – Aug 2007")
+      description: string; // Responsibilities or achievements
+    }[];
+    skills: string[]; // List of skills (e.g., ["JavaScript", "React", "Node.js"])
+    publications?: {
+      title: string; // Title of the publication
+      authors: string[]; // List of authors (e.g., ["John Doe", "Samwise Gamgee"])
+      link?: string; // Optional link to the publication
+    }[]; // Optional section for publications
+    projects?: {
+      name: string; // Project name
+      link: string; // URL to the project (e.g., GitHub repository)
+      description: string; // Brief description of the project
+    }[]; // Optional section for projects
+    [key: string]: any; // Allow additional dynamic properties
+  }
+  
+
+export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData };

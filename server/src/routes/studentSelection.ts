@@ -1,6 +1,7 @@
 import express from 'express';
-import { isHrOrAdmin } from '../middlewares/authenticate';
-import { addSelectedStudent, addShortlistStudent, getSelectedStudents, getShortlistedStudents, removeSelectedStudent, removeShortlistStudent, updateSelectedStudent, updateShortlistStudent } from '../controllers/studentSelection';
+import { isHr, isHrOrAdmin, isStudentOrAdmin } from '../middlewares/authenticate';
+import { addSelectedStudent, addShortlistStudent, getSelectedStudents, getShortlistedStudents, removeSelectedStudent, removeShortlistStudent, students, updateSelectedStudent, updateShortlistStudent } from '../controllers/studentSelection';
+import { getStudentSelections } from '../controllers/details';
 
 
 var router = express.Router();
@@ -20,5 +21,9 @@ router.delete('/removeShortlistedStudents', isHrOrAdmin, removeShortlistStudent)
 router.get('/getSelectedStudents', isHrOrAdmin, getSelectedStudents);
 
 router.get('/getShortlistedStudents', isHrOrAdmin, getShortlistedStudents);
+
+router.get('/companies', isStudentOrAdmin, getStudentSelections);
+
+router.get('/students', isHr, students);
 
 export default router;
