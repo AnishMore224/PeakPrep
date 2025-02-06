@@ -28,6 +28,38 @@ const sampleRepositories: Repository[] = [
     tags: ["graphql", "docker", "kubernetes"],
     difficulty: "advanced",
     stars: 2100,
+  },
+  {
+    id: 4,
+    title: "Vue.js Dashboard Template",
+    description: "Modern and responsive dashboard template built with Vue.js and Tailwind CSS.",
+    tags: ["vue", "tailwind", "dashboard"],
+    difficulty: "intermediate",
+    stars: 1500,
+  },
+  {
+    id: 5,
+    title: "Python Data Science Toolkit",
+    description: "Collection of data science utilities and notebooks for machine learning projects.",
+    tags: ["python", "data-science", "ml"],
+    difficulty: "advanced",
+    stars: 3200,
+  },
+  {
+    id: 6,
+    title: "React Native Starter Kit",
+    description: "Production-ready React Native template with authentication and common features.",
+    tags: ["react-native", "mobile", "typescript"],
+    difficulty: "intermediate",
+    stars: 1800,
+  },
+  {
+    id: 7,
+    title: "Go REST API Framework",
+    description: "Lightweight and fast REST API framework built with Go, featuring middleware support.",
+    tags: ["go", "api", "rest"],
+    difficulty: "advanced",
+    stars: 2800,
   }
 ];
 
