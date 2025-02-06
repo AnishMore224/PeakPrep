@@ -29,7 +29,6 @@ def input_pdf_setup(uploaded_file):
         # Convert PDF to image
         images = pdf2image.convert_from_bytes(uploaded_file.read())
         first_page = images[0]
-        
         # Convert image to bytes
         img_byte_arr = io.BytesIO()
         first_page.save(img_byte_arr, format='JPEG')
@@ -52,6 +51,7 @@ def pdf_to_image():
 
     file = request.files['file']
     try:
+        
         pdf_content = input_pdf_setup(file)
         return jsonify(pdf_content)
     except Exception as e:
@@ -59,11 +59,11 @@ def pdf_to_image():
 
 @app.route('/api/gemini-response', methods=['POST'])
 def gemini_response():
+
     data = request.get_json()
     input_text = data.get('inputText')
     pdf_content = data.get('pdfContent')
     chat_history = data.get('chatHistory')
-
     try:
         response_text = get_gemini_response(input_text, pdf_content, chat_history)
         return jsonify({'text': response_text})

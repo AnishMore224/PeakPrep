@@ -1,7 +1,8 @@
 import React from "react";
-import { Users, Plus, Calendar } from "lucide-react";
+import { Users, Plus, Calendar as CalendarIcon } from "lucide-react";
 import { DashboardMetric, ScheduleItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
+import Calendar from '../components/Calendar';
 
 const scheduleItems: ScheduleItem[] = [
   { id: "1", title: "Resume review", time: "10:00 - 10:30", type: "review" },
@@ -94,7 +95,7 @@ export const StudentDashboard: React.FC = () => {
           <div className="cursor-pointer bg-white p-6 rounded-xl shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Resume</h3>
-              <Calendar size={24} />
+              <CalendarIcon size={24} />
             </div>
           </div>
         </section>
@@ -105,7 +106,7 @@ export const StudentDashboard: React.FC = () => {
         {/* Challenges Calendar */}
         <div className="bg-white p-6 rounded-xl shadow-sm">
           <h3 className="text-lg font-semibold mb-4">Challenges Calendar</h3>
-          {/* Calendar component would go here */}
+          <Calendar />
         </div>
 
         {/* Registered Contests */}
@@ -145,3 +146,5 @@ export const StudentDashboard: React.FC = () => {
     </div>
   );
 };
+
+export default StudentDashboard

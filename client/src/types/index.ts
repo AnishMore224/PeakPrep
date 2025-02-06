@@ -170,3 +170,13 @@ export interface Hr {
   name: string;
   email: string;
 }
+export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+
+export interface Repository {
+  id: number;
+  title: string;
+  description: string;
+  tags: string[];
+  difficulty: Difficulty;
+  stars: number;
+}
