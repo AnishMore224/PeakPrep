@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
 import { Repository } from '../../types/index';
 import { DifficultyBadge } from './DifficultyBadge';
@@ -7,20 +7,18 @@ import { Pagination } from './Pagination';
 
 interface RepositoryListProps {
   repositories: Repository[];
+  searched: Boolean;
 }
 
 const ITEMS_PER_PAGE = 5;
 
-export function RepositoryList({ repositories }: RepositoryListProps) {
+export function RepositoryList({ repositories, searched  }: RepositoryListProps) {
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  if (repositories.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-500 text-lg">No repositories found matching your criteria.</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searched]);
+
 
   const totalPages = Math.ceil(repositories.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -50,7 +48,7 @@ export function RepositoryList({ repositories }: RepositoryListProps) {
                 <Sparkles className="h-5 w-5 text-yellow-500" />
                 <span className="font-medium">{repo.stars.toLocaleString()}</span>
               </div>
-              <button className="flex items-center justify-center space-x-2 px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 w-full sm:w-auto">
+              <button className="flex items-center justify-center space-x-2 px-6 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 w-full sm:w-auto" onClick={() => window.open(repo.html_url, '_blank')}>
                 <span>View Project</span>
                 <ArrowUpRight className="h-4 w-4" />
               </button>

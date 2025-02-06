@@ -1,78 +1,71 @@
-import React, { useState } from 'react';
-import { SearchBar } from '../components/GitHubOpenSource/SearchBar';
-import { DifficultyFilter } from '../components/GitHubOpenSource/DifficultyFilter';
-import { RepositoryList } from '../components/GitHubOpenSource/RepositoryList';
-import { Repository, Difficulty } from '../types/index';
-
-const sampleRepositories: Repository[] = [
-  {
-    id: 1,
-    title: "React Component Library",
-    description: "A collection of reusable React components with TypeScript support and comprehensive documentation.",
-    tags: ["react", "typescript", "ui"],
-    difficulty: "intermediate",
-    stars: 1240,
-  },
-  {
-    id: 2,
-    title: "Node.js API Starter",
-    description: "Beginner-friendly Node.js API boilerplate with Express, MongoDB, and authentication.",
-    tags: ["nodejs", "express", "mongodb"],
-    difficulty: "beginner",
-    stars: 856,
-  },
-  {
-    id: 3,
-    title: "GraphQL Microservices",
-    description: "Advanced microservices architecture using GraphQL, Docker, and Kubernetes.",
-    tags: ["graphql", "docker", "kubernetes"],
-    difficulty: "advanced",
-    stars: 2100,
-  },
-  {
-    id: 4,
-    title: "Vue.js Dashboard Template",
-    description: "Modern and responsive dashboard template built with Vue.js and Tailwind CSS.",
-    tags: ["vue", "tailwind", "dashboard"],
-    difficulty: "intermediate",
-    stars: 1500,
-  },
-  {
-    id: 5,
-    title: "Python Data Science Toolkit",
-    description: "Collection of data science utilities and notebooks for machine learning projects.",
-    tags: ["python", "data-science", "ml"],
-    difficulty: "advanced",
-    stars: 3200,
-  },
-  {
-    id: 6,
-    title: "React Native Starter Kit",
-    description: "Production-ready React Native template with authentication and common features.",
-    tags: ["react-native", "mobile", "typescript"],
-    difficulty: "intermediate",
-    stars: 1800,
-  },
-  {
-    id: 7,
-    title: "Go REST API Framework",
-    description: "Lightweight and fast REST API framework built with Go, featuring middleware support.",
-    tags: ["go", "api", "rest"],
-    difficulty: "advanced",
-    stars: 2800,
-  }
-];
+import React, { useState, useEffect } from "react";
+import { SearchBar } from "../components/GitHubOpenSource/SearchBar";
+import { DifficultyFilter } from "../components/GitHubOpenSource/DifficultyFilter";
+import { RepositoryList } from "../components/GitHubOpenSource/RepositoryList";
+import { Repository, Difficulty } from "../types/index";
+import axios from "axios";
 
 function OpenSource() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | ''>('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty | "">(
+    ""
+  );
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const [error, setError] = useState("");
 
-  const filteredRepos = sampleRepositories.filter(repo => {
-    const matchesSearch = repo.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         repo.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         repo.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesDifficulty = !selectedDifficulty || repo.difficulty === selectedDifficulty;
-    return matchesSearch && matchesDifficulty;
+  const fetchRepositories = async () => {
+    if (searchTerm.length <= 2) {
+      setError("Search term must be longer than 2 characters.");
+      return;
+    }
+
+    setLoading(true);
+    setRepositories([]);
+    setSearched(true);
+    setError("");
+    try {
+      const response = await axios.get(
+        `https://api.github.com/search/repositories`,
+        {
+          params: {
+            q: searchTerm,
+            sort: "stars",
+            order: "desc",
+          },
+        }
+      );
+
+      const repos = response.data.items.map((repo: any) => ({
+        id: repo.id,
+        title: repo.name,
+        description: repo.description,
+        tags: repo.topics || [],
+        difficulty: repo.topics.includes("beginner")
+          ? "beginner"
+          : repo.topics.includes("intermediate")
+          ? "intermediate"
+          : repo.topics.includes("advanced")
+          ? "advanced"
+          : "unknown",
+        stars: repo.stargazers_count,
+        html_url: repo.html_url,
+      }));
+
+      setRepositories(repos);
+    } catch (error) {
+      setError("Failed to fetch repositories. Please try again later.");
+    } finally {
+      setLoading(false);
+      // setSearched(false);
+    }
+  };
+
+  const filteredRepos = repositories.filter((repo) => {
+    const matchesDifficulty =
+      !selectedDifficulty || repo.difficulty === selectedDifficulty;
+    return matchesDifficulty;
   });
 
   return (
@@ -91,13 +84,39 @@ function OpenSource() {
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
             <SearchBar value={searchTerm} onChange={setSearchTerm} />
             <div className="mt-4">
-              <DifficultyFilter value={selectedDifficulty} onChange={setSelectedDifficulty} />
+              <DifficultyFilter
+                value={selectedDifficulty}
+                onChange={setSelectedDifficulty}
+              />
+            </div>
+            <div className="mt-4 text-center">
+              <button
+                onClick={fetchRepositories}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Search
+              </button>
             </div>
           </div>
         </div>
 
         <div className="max-w-3xl mx-auto">
-          <RepositoryList repositories={filteredRepos} />
+          {loading ? (
+            <p className="text-center text-gray-600">Loading repositories...</p>
+          ) : (
+            repositories.length == 0  && (
+              <div className="text-center py-12">
+                <p className="text-gray-500 text-lg">
+                  No repositories found matching your criteria.
+                </p>
+              </div>
+            )
+          )}
+          {error && <p className="text-center text-red-500">{error}</p>}
+
+          <RepositoryList repositories={filteredRepos} searched={searched} />
+
+          {/* Pagination Component */}
         </div>
       </div>
     </div>

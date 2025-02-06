@@ -179,4 +179,5 @@ export interface Repository {
   tags: string[];
   difficulty: Difficulty;
   stars: number;
+  html_url: string;
 }
