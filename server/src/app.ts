@@ -9,6 +9,7 @@ import adminRoutes from "./routes/adminControls";
 import feedbackRoutes from "./routes/feedback";
 import studentSelectionRoutes from "./routes/studentSelection";
 import userRoutes from "./routes/user";
+import genResume from "./routes/resume";
 import cors from "cors";
 
 dotenv.config();
@@ -20,7 +21,7 @@ const PORT = process.env.PORT || 3030;
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: process.env.CLIENT_URL || "http://localhost:5174",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -34,6 +35,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/studentSelection", studentSelectionRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/genResume", genResume );
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript!");

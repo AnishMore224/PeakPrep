@@ -9,7 +9,7 @@ function AllCompanies() {
   const { isSidebarVisible } = useUIContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const { companies } = useCompany();
+  const { companies } = useCompany(); 
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
