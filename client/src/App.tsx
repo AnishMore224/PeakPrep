@@ -36,7 +36,9 @@ import Home from "./pages/ContestMain/Home";
 import DailyContest from "./pages/ContestMain/DailyContest";
 import WeeklyContest from "./pages/ContestMain/WeeklyContest";
 import ResumeForm from "./pages/resume-builder/ResumeForm";
-import { AdminPanel } from "./pages/abc";
+import StudentFeedback from "./pages/Feedbackform";
+import { Candidate } from "./pages/Candidates";
+import ResourcesPage from "./pages/ResourcesPage";
 
 function MainLayout() {
   const location = useLocation();
@@ -127,7 +129,7 @@ function MainLayout() {
               path="/candidates"
               element={
                 isAuthenticated ? (
-                  <AllCandidate />
+                  <Candidate />
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )
@@ -195,7 +197,21 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/feedbackform" element={<FeedbackForm />} />
+            
+            <Route
+              path="/feedbackform/:id"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <FeedbackForm />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route
               path="/resume"
               element={
@@ -238,10 +254,24 @@ function MainLayout() {
                 )
               }
             />
+            <Route
+              path="/resources"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ResourcesPage />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/contest-main" element={<Home />} />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
-            <Route path="/abcd" element ={<AdminPanel />} />
+            <Route path="/student-details" element={<StudentFeedback />} />
           </Routes>
         </main>
       </div>

@@ -6,8 +6,8 @@ import {
   ReactNode,
   useCallback,
 } from "react";
-import { getRequest } from "../utils/services";
-import { Feedback } from "../types";
+import { getRequest, postRequest } from "../utils/services";
+import { Feedback,FeedbackAdd } from "../types";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./auth.context";
 const BASE_URL = "http://localhost:3030/api/feedback";
@@ -16,12 +16,35 @@ const FeedbackContext = createContext<FeedbackContextProps | undefined>(
 );
 export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [feedback, setFeedback] = useState<FeedbackAdd | null>(null);
   const token = localStorage.getItem("token");
   const { user } = useAuth();
   const getFeedbacks = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/feedbacks`, token);
     if (response.success) {
       setFeedbacks(response.data);
+    }
+  }, [token]);
+
+
+  const getFeedback = useCallback(async () => {
+    const response = await getRequest(`${BASE_URL}/feedback`, token);
+    if (response.success) {
+      setFeedbacks(response.data);
+    }
+  }, [token]);
+  
+  const addFeedback = useCallback(async (feedback: FeedbackAdd) => {
+     const response = await postRequest(`${BASE_URL}/addFeedback`, JSON.stringify(feedback), token);
+      if (response.success) {
+        setFeedback(feedback);
+      }
+    }, [token]);
+
+  const updateFeedback = useCallback(async (feedback: FeedbackAdd) => {
+    const response = await postRequest(`${BASE_URL}/updateFeedback`, JSON.stringify(feedback), token);
+    if (response.success) {
+      setFeedback(feedback);
     }
   }, [token]);
 
@@ -36,7 +59,7 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
     getFeedbacks();
   }, [getFeedbacks, user]);
   return (
-    <FeedbackContext.Provider value={{ feedbacks, getFeedbacks }}>
+    <FeedbackContext.Provider value={{ feedbacks, getFeedbacks, addFeedback, updateFeedback, getFeedback }}>
       {children}
     </FeedbackContext.Provider>
   );
@@ -45,6 +68,9 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
 export interface FeedbackContextProps {
   feedbacks: Feedback[];
   getFeedbacks: () => void;
+  addFeedback: (feedback: FeedbackAdd) => void;
+  updateFeedback: (feedback: FeedbackAdd) => void;
+  getFeedback: () => void;
 }
 
 export const useFeedback = () => {

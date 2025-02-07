@@ -29,7 +29,12 @@ function fillTemplate(template: string, data: ResumeData): string {
       \\end{twocolentry}
     `;
   });
-  filledTemplate = filledTemplate.replace("{{education1}}", educationStr).replace("{{/education}}", "");
+  if(data.education.length !== 0){
+    filledTemplate = filledTemplate.replace("{{education1}}", "\\section*{Education}"+educationStr).replace("{{/education}}", "");
+  }
+  else{
+    filledTemplate = filledTemplate.replace("{{education1}}", "").replace("{{/education}}", "");
+  }
 
   // Replace Experience data
   let experienceStr = "";
@@ -44,12 +49,22 @@ function fillTemplate(template: string, data: ResumeData): string {
       \\vspace{0.3 cm}
     `;
   });
-  filledTemplate = filledTemplate.replace("{{experience1}}", experienceStr).replace("{{/experience}}", "");
+  if(data.experience.length !== 0) {
+    filledTemplate = filledTemplate.replace("{{experience1}}", "\\section*{Experience}"+experienceStr).replace("{{/experience}}", "");
+  }
+  else{
+    filledTemplate = filledTemplate.replace("{{experience1}}", "").replace("{{/experience}}", "");
+  }
 
   // Replace Skills data
   let skillsStr = data.skills.map(skill => `\\item \\textbf {${skill}} \\`).join(" ");
-  filledTemplate = filledTemplate.replace("{{skills1}}", skillsStr).replace("{{/skills}}", "");
-
+  if(data.skills.length !== 0) {
+    filledTemplate = filledTemplate.replace("{{skills1}}", skillsStr ).replace("{{/skills}}", "");
+  }
+  else{
+    filledTemplate = filledTemplate.replace("{{skills1}}", "").replace("{{/skills}}", "");
+  }
+  
   // Replace Publications data
   let publicationStr = "";
   data.publications?.forEach((pub) => {
@@ -60,7 +75,12 @@ function fillTemplate(template: string, data: ResumeData): string {
       \\vspace{0.3 cm}
     `;
   });
-  filledTemplate = filledTemplate.replace("{{publications1}}", publicationStr).replace("{{/publications}}", "");
+  if( data.publications?.length !== 0){
+    filledTemplate = filledTemplate.replace("{{publications1}}", "\\section*{Publications}"+publicationStr).replace("{{/publications}}", "");
+  }
+  else{
+    filledTemplate = filledTemplate.replace("{{publications1}}", "").replace("{{/publications}}", "");
+  }
 
   // Replace Projects data
   let projectsStr = "";
@@ -72,7 +92,12 @@ function fillTemplate(template: string, data: ResumeData): string {
       \\vspace{0.3 cm}
     `;
   });
-  filledTemplate = filledTemplate.replace("{{projects1}}", projectsStr).replace("{{/projects}}", "");
+  if(data.projects?.length !== 0){
+    filledTemplate = filledTemplate.replace("{{projects1}}", "\\section*{Projects}"+projectsStr).replace("{{/projects}}", "");
+  }
+  else{
+    filledTemplate = filledTemplate.replace("{{projects1}}", "").replace("{{/projects}}", "");
+  }
 
   // Replace Additional Info data
   let additionalInfoStr = "";

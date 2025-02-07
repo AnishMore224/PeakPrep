@@ -36,7 +36,12 @@ export const students = async (req: Request, res: Response): Promise<any> => {
 //Called by HR and admin
 export const student = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { regd_no, token } = req.body;
+    const {id} = req.params;
+    const regd_no = id.slice(1);
+    const token = req.headers.authorization?.split(" ")[1];
+    if(!token) {
+      return res.status(400).json({ ...response, error: "Unauthorized !" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!regd_no || !decoded) {
       return res

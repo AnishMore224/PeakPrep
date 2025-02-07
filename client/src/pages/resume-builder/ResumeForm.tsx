@@ -179,7 +179,7 @@ const ResumeForm: React.FC = () => {
 
   const generatePDF = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:3030/api/genResume", {
+    const response = await fetch("http://localhost:3030/api/genResume/download", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
