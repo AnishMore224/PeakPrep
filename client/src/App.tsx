@@ -36,6 +36,8 @@ import Home from "./pages/ContestMain/Home";
 import DailyContest from "./pages/ContestMain/DailyContest";
 import WeeklyContest from "./pages/ContestMain/WeeklyContest";
 import ResumeForm from "./pages/resume-builder/ResumeForm";
+import { ScoreGauge } from "./components/atsScore/ScoreGauge";
+import { ContestProvider } from "./contexts/contest.context";
 
 function MainLayout() {
   const location = useLocation();
@@ -58,20 +60,28 @@ function MainLayout() {
             location.pathname === "/"
               ? "Dashboard"
               : location.pathname
-                .substring(1)
-                .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
+                  .substring(1)
+                  .replace(/(^|\s)\S/g, (t) => t.toUpperCase())
           }
         />
       )}
       <div
-        className={`flex flex-1 ${!shouldShowHeaderSidebar || location.pathname === '/weekly-contest' || location.pathname === '/daily-contest' || location.pathname === '/contest-main'
-          ? "pt-1" : "pt-15"}`}
+        className={`flex flex-1 ${
+          !shouldShowHeaderSidebar ||
+          location.pathname === "/weekly-contest" ||
+          location.pathname === "/daily-contest" ||
+          location.pathname === "/contest"
+            ? "pt-1"
+            : "pt-15"
+        }`}
       >
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
-          className={`flex-1 ${!shouldShowHeaderSidebar || location.pathname === "/chatbot" ? "bg-gray-50 p-0"
+          className={`flex-1 ${
+            !shouldShowHeaderSidebar || location.pathname === "/chatbot"
+              ? "bg-gray-50 p-0"
               : "p-6 md:p-8"
-            }`}
+          }`}
         >
           <Routes>
             <Route
@@ -237,9 +247,11 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/contest-main" element={<Home />} />
+            <Route path="/contest" element={<Home />} />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
+            <Route path="/test" element={<ScoreGauge score={100} />} />
+            <Route path="*" element={404} />
           </Routes>
         </main>
       </div>
@@ -255,9 +267,11 @@ export function App() {
           <StudentProvider>
             <HrProvider>
               <FeedbackProvider>
-                <BrowserRouter>
-                  <MainLayout />
-                </BrowserRouter>
+                <ContestProvider>
+                  <BrowserRouter>
+                    <MainLayout />
+                  </BrowserRouter>
+                </ContestProvider>
               </FeedbackProvider>
             </HrProvider>
           </StudentProvider>

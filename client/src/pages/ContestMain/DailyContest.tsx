@@ -5,26 +5,9 @@ import ProgressBar from '../../components/ContestCompo/ProgressBar';
 import NavigationButtons from '../../components/ContestCompo/NavigationButtons';
 import { useUIContext } from '../../contexts/ui.context';
 
-const mockQuestions = [
-  {
-    id: 1,
-    question: "What is the time complexity of QuickSort in the average case?",
-    options: ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
-    correctAnswer: 1
-  },
-  {
-    id: 2,
-    question: "Which data structure follows LIFO principle?",
-    options: ["Queue", "Stack", "Linked List", "Array"],
-    correctAnswer: 1
-  },
-  {
-    id: 3,
-    question: "What is the space complexity of BFS?",
-    options: ["O(V+E)", "O(V)", "O(E)", "O(1)"],
-    correctAnswer: 0
-  }
-];
+import questions from './DailyQuestions';
+
+const mockQuestions = questions.sort(() => 0.5 - Math.random()).slice(0, 10);
 
 const DailyContest = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
