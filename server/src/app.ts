@@ -10,6 +10,7 @@ import feedbackRoutes from "./routes/feedback";
 import studentSelectionRoutes from "./routes/studentSelection";
 import userRoutes from "./routes/user";
 import genResume from "./routes/resume";
+import contestRoutes from "./routes/contest";
 import cors from "cors";
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/feedback", feedbackRoutes);
 app.use("/api/studentSelection", studentSelectionRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/genResume", genResume );
+app.use("/api/contest", contestRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript!");

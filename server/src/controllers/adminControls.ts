@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ApiResponse, { response } from "../types/response";
-import { IUser } from "../types/collections";
+import { IUser, IHR } from "../types/collections";
 import HR from '../models/HR';
 import Student from '../models/Student';
 import Admin from '../models/Admin';
@@ -18,6 +18,7 @@ export const addHr = async (req: Request, res: Response): Promise<any> => {
         return res.status(400).send({ ...response, error: 'Missing required fields.' });
     }
     let newUser: IUser | null = null;
+    let newHr: IHR | null = null;
     try {
         const existingHr = await HR.findOne({ email });
         const existingUser = await User.findOne({ username: email });
@@ -32,7 +33,7 @@ export const addHr = async (req: Request, res: Response): Promise<any> => {
         const userId = uuidv4();
         const hashedPassword = await bcrypt.hash(password, 10);
         newUser = new User({ _id: userId, username: email, password: hashedPassword, role: 'hr' });
-        const newHr = new HR({ userId, email, name, companyId: companyRecord._id });
+        newHr = new HR({ userId, email, name, companyId: companyRecord._id });
 
         await newUser.save();
         await newHr.save();
@@ -44,6 +45,9 @@ export const addHr = async (req: Request, res: Response): Promise<any> => {
     } catch (error) {
         if (newUser) {
             await newUser.deleteOne();
+        }
+        if (newHr) {
+            await newHr.deleteOne();
         }
         res.status(500).send({ ...response, error });
     }
