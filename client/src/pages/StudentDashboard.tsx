@@ -3,6 +3,7 @@ import { Users, Plus, Calendar as CalendarIcon } from "lucide-react";
 import { DashboardMetric, ScheduleItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
 import Calendar from '../components/Calendar';
+import { useNavigate } from "react-router-dom";
 
 const scheduleItems: ScheduleItem[] = [
   { id: "1", title: "Resume review", time: "10:00 - 10:30", type: "review" },
@@ -33,6 +34,7 @@ const metrics: DashboardMetric[] = [
 
 export const StudentDashboard: React.FC = () => {
   const { isSidebarVisible } = useUIContext();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -85,16 +87,16 @@ export const StudentDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="cursor-pointer bg-white p-6 rounded-xl shadow-sm">
+          <div className="cursor-pointer bg-white p-6 rounded-xl shadow-sm" onClick={() => {navigate('/contest-main')}}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">Join a Contest</h3>
               <Plus size={24} />
             </div>
           </div>
 
-          <div className="cursor-pointer bg-white p-6 rounded-xl shadow-sm">
+          <div className="cursor-pointer bg-white p-6 rounded-xl shadow-sm" onClick={() => {navigate('/resume')}}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">Resume</h3>
+              <h3 className="text-lg font-semibold">Create Your Resume</h3>
               <CalendarIcon size={24} />
             </div>
           </div>
