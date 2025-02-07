@@ -4,6 +4,7 @@ import Student from "../models/Student";
 import mongoose, { mongo } from "mongoose";
 import jwt from "jsonwebtoken";
 import HR from "../models/HR";
+import { hr } from "./details";
 
 export const addShortlistStudent = async (
   req: Request,
@@ -47,75 +48,6 @@ export const addShortlistStudent = async (
         return student.save();
       })
     );
-
-    return res
-      .status(200)
-      .json({ success: true, message: "Students shortlisted successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error", error });
-  }
-};
-
-export const updateShortlistStudent = async (
-  req: Request,
-  res: Response
-): Promise<any> => {
-  const { studentIds, companyName } = req.body;
-
-  if (!studentIds || !companyName) {
-    return res
-      .status(400)
-      .json({ message: "Student IDs and Company name are required" });
-  }
-
-  try {
-    const company = await Company.findOne({ name: companyName });
-    if (!company) {
-      return res.status(404).json({ message: "Company not found" });
-    }
-
-    const newStudents = await Student.find({ _id: { $in: studentIds } });
-    if (newStudents.length !== studentIds.length) {
-      return res
-        .status(404)
-        .json({ message: "One or more students not found" });
-    }
-
-    // Find previous students who had the company ID in their companies field
-    const previousStudents = await Student.find({
-      _id: { $in: company.shortlistedStudents },
-    });
-
-    // Remove the company ID from the previous students' companies field
-    await Promise.all(
-      previousStudents.map((student) => {
-        student.companies = student.companies.filter(
-          (companyId) =>
-            !(companyId as mongoose.Types.ObjectId).equals(
-              company._id as mongoose.Types.ObjectId
-            )
-        );
-        return student.save();
-      })
-    );
-
-    // Add the company ID to the new students' companies field
-    await Promise.all(
-      newStudents.map((student) => {
-        student.companies = [
-          ...new Set([
-            ...student.companies,
-            company._id as mongoose.Types.ObjectId,
-          ]),
-        ];
-        return student.save();
-      })
-    );
-
-    // Update the company's shortlistedStudents field
-    company.shortlistedStudents = studentIds;
-    await company.save();
 
     return res
       .status(200)
@@ -220,67 +152,6 @@ export const addSelectedStudent = async (
         return student.save();
       })
     );
-    return res
-      .status(200)
-      .json({ success: true, message: "Students selected successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error", error });
-  }
-};
-
-export const updateSelectedStudent = async (
-  req: Request,
-  res: Response
-): Promise<any> => {
-  const { studentIds, companyName } = req.body;
-  if (!studentIds || !companyName) {
-    return res
-      .status(400)
-      .json({ message: "Student IDs and Company name are required" });
-  }
-  try {
-    const company = await Company.findOne({ name: companyName });
-    if (!company) {
-      return res.status(404).json({ message: "Company not found" });
-    }
-    const newStudents = await Student.find({ _id: { $in: studentIds } });
-    if (newStudents.length !== studentIds.length) {
-      return res
-        .status(404)
-        .json({ message: "One or more students not found" });
-    }
-    // Find previous students who had the company ID in their placedAt field
-    const previousStudents = await Student.find({
-      _id: { $in: company.selectedStudents },
-    });
-    // Remove the company ID from the previous students' placedAt field
-    await Promise.all(
-      previousStudents.map((student) => {
-        student.placedAt = student.placedAt.filter(
-          (companyId) =>
-            !(companyId as mongoose.Types.ObjectId).equals(
-              company._id as mongoose.Types.ObjectId
-            )
-        );
-        return student.save();
-      })
-    );
-    // Add the company ID to the new students' placedAt field
-    await Promise.all(
-      newStudents.map((student) => {
-        student.placedAt = [
-          ...new Set([
-            ...student.placedAt,
-            company._id as mongoose.Types.ObjectId,
-          ]),
-        ];
-        return student.save();
-      })
-    );
-    // Update the company's selectedStudents field
-    company.selectedStudents = studentIds;
-    await company.save();
     return res
       .status(200)
       .json({ success: true, message: "Students selected successfully" });
@@ -476,21 +347,107 @@ export const addCompletedStudent = async (
   }
 };
 
-export const updateCompletedStudent = async (
+export const updateShortlistStudent = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  const { studentIds, companyName } = req.body;
+  const { studentIds } = req.body;
+  const token = req.headers.authorization?.split(" ")[1];
+  const decoded: any = jwt.verify(
+    token as string,
+    process.env.JWT_SECRET as string
+  );
+  if (!decoded) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = decoded.id;
+  const hr = await HR.findOne({ userId: userId });
+  if (!hr) {
+    return res.status(404).json({ message: "HR not found" });
+  }
+  const company = await Company.findOne({ hr: { $in: [hr._id] } });
+  const companyName = company?.name;
   if (!studentIds || !companyName) {
     return res
       .status(400)
       .json({ message: "Student IDs and Company name are required" });
   }
+
   try {
-    const company = await Company.findOne({ name: companyName });
-    if (!company) {
-      return res.status(404).json({ message: "Company not found" });
+    const newStudents = await Student.find({ _id: { $in: studentIds } });
+    if (newStudents.length !== studentIds.length) {
+      return res
+        .status(404)
+        .json({ message: "One or more students not found" });
     }
+
+    // Find previous students who had the company ID in their companies field
+    const previousStudents = await Student.find({
+      _id: { $in: company.shortlistedStudents },
+    });
+    // Remove the company ID from the previous students' companies field
+    await Promise.all(
+      previousStudents.map((student) => {
+        student.companies = student.companies.filter(
+          (companyId) =>
+            !(companyId as mongoose.Types.ObjectId).equals(
+              company._id as mongoose.Types.ObjectId
+            )
+        );
+        return student.save();
+      })
+    );
+    // Add the company ID to the new students' companies field using $addToSet to avoid duplicates
+    await Promise.all(
+      newStudents.map((student) => {
+        return Student.updateOne(
+          { _id: student._id },
+          { $addToSet: { companies: company._id as mongoose.Types.ObjectId } }
+        );
+      })
+    );
+
+    // Update the company's shortlistedStudents field
+    company.shortlistedStudents = studentIds;
+    await company.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Students shortlisted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const updateCompletedStudent = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const { studentIds } = req.body;
+  const token = req.headers.authorization?.split(" ")[1];
+  const decoded: any = jwt.verify(
+    token as string,
+    process.env.JWT_SECRET as string
+  );
+  if (!decoded) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const userId = decoded.id;
+  const hr = await HR.findOne({ userId: userId });
+  if (!hr) {
+    return res.status(404).json({ message: "HR not found" });
+  }
+  const company = await Company.findOne({ hr: { $in: [hr._id] } });
+  const companyName = company?.name;
+  if (!studentIds || !companyName) {
+    return res
+      .status(400)
+      .json({ message: "Student IDs and Company name are required" });
+  }
+
+  try {
     const newStudents = await Student.find({ _id: { $in: studentIds } });
     if (newStudents.length !== studentIds.length) {
       return res
@@ -516,21 +473,93 @@ export const updateCompletedStudent = async (
     // Add the company ID to the new students' completedCompanies field
     await Promise.all(
       newStudents.map((student) => {
-        student.completedCompanies = [
-          ...new Set([
-            ...student.completedCompanies,
-            company._id as mongoose.Types.ObjectId,
-          ]),
-        ];
-        return student.save();
+        return Student.updateOne(
+          { _id: student._id },
+          { $addToSet: { completedCompanies: company._id as mongoose.Types.ObjectId } }
+        );
       })
     );
+
     // Update the company's completedStudents field
     company.completedStudents = studentIds;
     await company.save();
+
     return res
       .status(200)
       .json({ success: true, message: "Students completed successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+export const updateSelectedStudent = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const { studentIds } = req.body;
+  const token = req.headers.authorization?.split(" ")[1];
+  const decoded: any = jwt.verify(
+    token as string,
+    process.env.JWT_SECRET as string
+  );
+  if (!decoded) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = decoded.id;
+  const hr = await HR.findOne({ userId: userId });
+  if (!hr) {
+    return res.status(404).json({ message: "HR not found" });
+  }
+  const company = await Company.findOne({ hr: { $in: [hr._id] } });
+  const companyName = company?.name;
+  if (!studentIds || !companyName) {
+    return res
+      .status(400)
+      .json({ message: "Student IDs and Company name are required" });
+  }
+
+  try {
+    const newStudents = await Student.find({ _id: { $in: studentIds } });
+    if (newStudents.length !== studentIds.length) {
+      return res
+        .status(404)
+        .json({ message: "One or more students not found" });
+    }
+
+    // Find previous students who had the company ID in their placedAt field
+    const previousStudents = await Student.find({
+      _id: { $in: company.selectedStudents },
+    });
+    // Remove the company ID from the previous students' placedAt field
+    await Promise.all(
+      previousStudents.map((student) => {
+        student.placedAt = student.placedAt.filter(
+          (companyId) =>
+            !(companyId as mongoose.Types.ObjectId).equals(
+              company._id as mongoose.Types.ObjectId
+            )
+        );
+        return student.save();
+      })
+    );
+    // Add the company ID to the new students' placedAt field
+    await Promise.all(
+      newStudents.map((student) => {
+        return Student.updateOne(
+          { _id: student._id },
+          { $addToSet: { placedAt: company._id as mongoose.Types.ObjectId } }
+        );
+      })
+    );
+
+    // Update the company's selectedStudents field
+    company.selectedStudents = studentIds;
+    await company.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Students selected successfully" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server error", error });
