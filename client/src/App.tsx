@@ -26,7 +26,7 @@ import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
-import { AllCompanies } from "./pages/admin/companies";
+import AllCompanies from "./pages/admin/Companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/atsScore"; // Import the AtsScore component
@@ -36,6 +36,7 @@ import Home from "./pages/ContestMain/Home";
 import DailyContest from "./pages/ContestMain/DailyContest";
 import WeeklyContest from "./pages/ContestMain/WeeklyContest";
 import ResumeForm from "./pages/resume-builder/ResumeForm";
+import { AdminPanel } from "./pages/abc";
 
 function MainLayout() {
   const location = useLocation();
@@ -240,6 +241,7 @@ function MainLayout() {
             <Route path="/contest-main" element={<Home />} />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
+            <Route path="/abcd" element ={<AdminPanel />} />
           </Routes>
         </main>
       </div>
