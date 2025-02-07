@@ -1,7 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { IStudent } from '../types/collections';
 
-
 const StudentSchema: Schema = new Schema({
     _id: { type: String, required: true }, // Registration number
     userId: { type: String, ref: 'User', required: true, index: true },
@@ -14,6 +13,7 @@ const StudentSchema: Schema = new Schema({
     contests: [{
         contestId: { type: Schema.Types.ObjectId, ref: 'Contest' },
         score: { type: Number, required: true },
+        status: { type: String, enum: ['upcoming', 'ongoing', 'completed'], default: 'pending' }   
     }],
     feedback: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
     companies: [{ type: Schema.Types.ObjectId, ref: 'Company' }],

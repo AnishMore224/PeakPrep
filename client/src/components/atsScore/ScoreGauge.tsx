@@ -1,55 +1,65 @@
-import React from 'react';
+import React from "react";
 
 interface ScoreGaugeProps {
   score: number;
 }
 
 export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score }) => {
-  const calculateArcPath = (score: number) => {
-    const radius = 40;
-    const startAngle = -180;
-    const endAngle = 0;
-    const scoreAngle = startAngle + ((endAngle - startAngle) * score) / 100;
-    
-    const startX = 50 - radius * Math.cos((startAngle * Math.PI) / 180);
-    const startY = 45 - radius * Math.sin((startAngle * Math.PI) / 180);
-    const scoreX = 50 - radius * Math.cos((scoreAngle * Math.PI) / 180);
-    const scoreY = 45 - radius * Math.sin((scoreAngle * Math.PI) / 180);
+  // Ensure score stays within range (0-100)
+  const validScore = Math.min(100, Math.max(0, score));
 
-    const largeArcFlag = scoreAngle - startAngle <= 180 ? "0" : "1";
+  // Map score to a semicircle (0-50 out of 100 for stroke-dasharray)
+  const dashArray = `${(validScore / 100) * 50} 50`;
 
-    return `M ${startX} ${startY} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${scoreX} ${scoreY}`;
-  };
-
+  // Determine color based on score
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
-    if (score >= 60) return 'text-amber-500';
-    return 'text-red-500';
+    if (score >= 80) return "text-green-500 stroke-green-500";
+    if (score >= 60) return "text-amber-500 stroke-amber-500";
+    return "text-red-500 stroke-red-500";
   };
 
   return (
-    <div className="relative w-48 h-24 sm:w-64 sm:h-32 mx-auto">
-      <svg className="w-full h-full" viewBox="0 0 100 50">
-        <path
-          d="M 10 45 A 40 40 0 1 1 90 45"
+    <div className="relative size-56 m-auto">
+      <svg
+        className="size-full"
+        viewBox="0 0 36 36"  // Ensures a balanced semicircle
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Background semicircle */}
+        <circle
+          cx="18"
+          cy="18"
+          r="16"
           fill="none"
-          stroke="#E5E7EB"
-          strokeWidth="8"
+          className="stroke-gray-300 dark:stroke-neutral-700"
+          strokeWidth="3"
+          strokeDasharray="50 50"
           strokeLinecap="round"
-        />
-        <path
-          d={calculateArcPath(score)}
+          transform="rotate(180 18 18)"  // Ensures correct semicircle positioning
+        ></circle>
+
+        {/* Dynamic score arc */}
+        <circle
+          cx="18"
+          cy="18"
+          r="16"
           fill="none"
-          stroke={score >= 80 ? "#22C55E" : score >= 60 ? "#F59E0B" : "#EF4444"}
-          strokeWidth="8"
+          className={`stroke-current ${getScoreColor(validScore)}`}
+          strokeWidth="3.5"
+          strokeDasharray={dashArray}
           strokeLinecap="round"
-        />
+          transform="rotate(180 18 18)"  // Corrects the arc's alignment
+        ></circle>
       </svg>
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 translate-y-[-20%] text-center">
-        <div className={`text-3xl sm:text-4xl font-bold ${getScoreColor(score)}`}>
-          {score}
-        </div>
-        <div className="text-xs sm:text-sm text-gray-500 font-medium">/100</div>
+
+      {/* Score display (Adjusted position) */}
+      <div className="absolute top-14 start-1/2 transform -translate-x-1/2 text-center">
+        <span className={`text-4xl font-bold ${getScoreColor(validScore)}`}>
+          {validScore}
+        </span>
+        <span className={`text-lg block ${getScoreColor(validScore)}`}>
+          Score
+        </span>
       </div>
     </div>
   );

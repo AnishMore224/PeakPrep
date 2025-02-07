@@ -36,7 +36,7 @@ export const students = async (req: Request, res: Response): Promise<any> => {
 //Called by HR and admin
 export const student = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { regd_no, token } = req.body;
+    const { regd_no, token } = req.body;    
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!regd_no || !decoded) {
       return res

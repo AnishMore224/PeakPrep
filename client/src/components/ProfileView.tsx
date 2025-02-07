@@ -7,7 +7,6 @@ interface ProfileViewProps {
 }
 
 export const ProfileView = ({ user }: ProfileViewProps) => {
-  console.log(user);
   return (
     <div className="bg-gray-200 rounded-3xl p-8">
       <div className="flex items-center gap-4 mb-8">

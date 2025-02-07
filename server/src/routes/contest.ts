@@ -5,13 +5,13 @@ import { isStudent } from '../middlewares/authenticate';
 
 var router = express.Router();
 
-router.post('/join', isStudent,  joinContest);
 router.get('/', getContests);
+router.get('/:id/participants', getContestParticipants);
+router.get('/:id/results', getContestResults);
 router.get('/:id', getContest);
+router.post('/join', isStudent,  joinContest);
 router.post('/create', createContest);
 router.put('/update', updateContest);
 router.delete('/delete', deleteContest);
-router.get('/:id/participants', getContestParticipants);
-router.get('/:id/results', getContestResults);
-
+    
 export default router;
