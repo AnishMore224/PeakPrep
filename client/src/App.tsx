@@ -26,7 +26,7 @@ import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
-import { AllCompanies } from "./pages/admin/companies";
+import AllCompanies from "./pages/admin/Companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/atsScore"; // Import the AtsScore component
@@ -38,6 +38,9 @@ import WeeklyContest from "./pages/ContestMain/WeeklyContest";
 import ResumeForm from "./pages/resume-builder/ResumeForm";
 import { ScoreGauge } from "./components/atsScore/ScoreGauge";
 import { ContestProvider } from "./contexts/contest.context";
+import StudentFeedback from "./pages/Feedbackform";
+import { Candidate } from "./pages/Candidates";
+import ResourcesPage from "./pages/ResourcesPage";
 
 function MainLayout() {
   const location = useLocation();
@@ -136,7 +139,7 @@ function MainLayout() {
               path="/candidates"
               element={
                 isAuthenticated ? (
-                  <AllCandidate />
+                  <Candidate />
                 ) : (
                   <Navigate to="/login" state={{ from: location }} replace />
                 )
@@ -204,7 +207,21 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/feedbackform" element={<FeedbackForm />} />
+            
+            <Route
+              path="/feedbackform/:id"
+              element={
+                isAuthenticated ? (
+                  user?.role === "hr" ? (
+                    <FeedbackForm />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route
               path="/resume"
               element={
@@ -247,10 +264,25 @@ function MainLayout() {
                 )
               }
             />
+            <Route
+              path="/resources"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ResourcesPage />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/contest" element={<Home />} />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test" element={<ScoreGauge score={100} />} />
+            <Route path="/student-details" element={<StudentFeedback />} />
             <Route path="*" element={404} />
           </Routes>
         </main>

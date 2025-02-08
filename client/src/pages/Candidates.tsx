@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, GraduationCap, TrendingUp } from "lucide-react";
-// import { CandidateList } from "../components/CandidateList";
+import { CandidateList } from "../components/admin/CandidateList";
 import { useUIContext } from "../contexts/ui.context";
 import { StatCard } from "../components/StatCard";
 
@@ -8,7 +8,7 @@ export function Candidate() {
   const { isSidebarVisible } = useUIContext();
   const [filter, setFilter] = React.useState<string>("");
   const [majorFilter, setMajorFilter] = React.useState<string>("");
-  
+
   return (
     <div
       className={`flex-1 p-6 md:p-8 bg-gray-50 transition-all duration-300 ${
@@ -73,10 +73,7 @@ export function Candidate() {
         <h2 className="text-xl text-blue-600 font-semibold mb-4">
           Student List
         </h2>
-        {/* <CandidateList
-          filter={filter}
-          majorFilter={majorFilter}
-        /> */}
+        <CandidateList filter={filter} majorFilter={majorFilter} />
       </div>
     </div>
   );

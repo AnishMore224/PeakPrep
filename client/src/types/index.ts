@@ -129,6 +129,7 @@ export interface StatCardProps {
   icon: React.ReactNode;
 }
 export interface Candidate {
+  id: string;
   name: string;
   major: string;
   year: string;
@@ -144,8 +145,16 @@ export interface Feedback {
   createdAt: Date;
   updatedAt: Date;
 }
+export interface FeedbackAdd {
+  companyName: string;
+  type: string;
+  comment: string;
+  rating: number;
+  studentIds: string[];
+}
 
 export interface Student {
+  id : string;
   name: string;
   branch: string;
   admissionYear: number;
@@ -153,7 +162,7 @@ export interface Student {
 }
 
 export interface StudentData {
-  _id: string;
+  id: string;
   name: string;
   section: string;
   branch: string;
