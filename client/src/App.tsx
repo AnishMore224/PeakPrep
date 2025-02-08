@@ -212,7 +212,7 @@ function MainLayout() {
               path="/feedbackform/:id"
               element={
                 isAuthenticated ? (
-                  user?.role === "student" ? (
+                  user?.role === "hr" ? (
                     <FeedbackForm />
                   ) : (
                     <NotAuthorized />
@@ -282,8 +282,8 @@ function MainLayout() {
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test" element={<ScoreGauge score={100} />} />
-            <Route path="*" element={404} />
             <Route path="/student-details" element={<StudentFeedback />} />
+            <Route path="*" element={404} />
           </Routes>
         </main>
       </div>
