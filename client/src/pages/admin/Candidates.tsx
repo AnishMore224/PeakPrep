@@ -1,11 +1,10 @@
 import React from "react";
-import { Users, GraduationCap, TrendingUp } from "lucide-react";
+import { Users, GraduationCap, TrendingUp, Download } from "lucide-react";
 import { CandidateList } from "./../../components/admin/CandidateList";
 import { useUIContext } from "../../contexts/ui.context";
 import { StatCard } from "../../components/StatCard";
 import { useStudent } from "../../contexts/student.context";
-import { Student } from "../../types";
-
+import { Upload } from "lucide-react";
 
 export function AllCandidate() {
   const { students } = useStudent();
@@ -15,18 +14,21 @@ export function AllCandidate() {
 
   const filteredStudents = students.filter((student) => {
     return (
-      (filter === "" || student.name.toLowerCase().includes(filter.toLowerCase()) || student.status.toLowerCase().includes(filter.toLowerCase())) &&
-      (majorFilter === "" || student.branch.toLowerCase() === majorFilter.toLowerCase())
+      (filter === "" ||
+        student.name.toLowerCase().includes(filter.toLowerCase()) ||
+        student.status.toLowerCase().includes(filter.toLowerCase())) &&
+      (majorFilter === "" ||
+        student.branch.toLowerCase() === majorFilter.toLowerCase())
     );
   });
 
   const exportToCSV = () => {
     const csvRows = [];
     const headers = Object.keys(filteredStudents[0]);
-    csvRows.push(headers.join(","));
+    csvRows.push(headers.join(","));  
 
     for (const student of filteredStudents) {
-      const values = headers.map(header => {
+      const values = headers.map((header) => {
         const value = (student as any)[header];
         return Array.isArray(value) ? value.join(";") : value;
       });
@@ -79,12 +81,34 @@ export function AllCandidate() {
           <h2 className="text-xl text-blue-600 font-semibold">
             Student Filters
           </h2>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onClick={exportToCSV}
-          >
-            Export
-          </button>
+          <div>
+            <button
+              className="mx-2 bg-green-600 text-white text-lg px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = ".csv";
+                input.onchange = (e) => {
+                  const file = (e.target as HTMLInputElement).files?.[0];
+                  if (file) {
+                  // Handle file upload
+                  console.log(file);
+                  }
+                };
+                input.click();
+                }}
+            >
+              <Upload className="inline-block mr-2" />
+              Import
+            </button>
+            <button
+              className="mx-2 bg-blue-600 text-white text-lg px-4 py-2 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={exportToCSV}
+            >
+              <Download className="inline-block mr-2" />
+              Export
+            </button>
+          </div>
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <input
@@ -117,10 +141,7 @@ export function AllCandidate() {
         <h2 className="text-xl text-blue-600 font-semibold mb-4">
           Student List
         </h2>
-        <CandidateList
-          filter={filter}
-          majorFilter={majorFilter}
-        />
+        <CandidateList filter={filter} majorFilter={majorFilter} />
       </div>
     </div>
   );

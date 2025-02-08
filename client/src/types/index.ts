@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 export interface Company {
   name: string;
@@ -175,11 +176,11 @@ export interface StudentData {
 
 export interface Hr {
   _id: string;
-  companyId:{ id: ObjectId, name: string }
+  companyId: { id: ObjectId; name: string };
   name: string;
   email: string;
 }
-export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
+export type Difficulty = "beginner" | "intermediate" | "advanced";
 
 export interface Repository {
   id: number;
@@ -189,4 +190,20 @@ export interface Repository {
   difficulty: Difficulty;
   stars: number;
   html_url: string;
+}
+
+export interface Contest {
+  name: string;
+  description: string;
+  timeLimit: Number;
+  participants: string[];
+  maxParticipants: Number;
+  status: "upcoming" | "ongoing" | "completed";
+}
+
+export interface Result {
+  contestId: mongoose.Types.ObjectId;
+  studentId: string;
+  score: number;
+  position: number;
 }
