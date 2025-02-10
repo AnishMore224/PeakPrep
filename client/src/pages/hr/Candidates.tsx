@@ -1,8 +1,8 @@
 import React from "react";
 import { Users, GraduationCap, TrendingUp } from "lucide-react";
-import { CandidateList } from "../components/admin/CandidateList";
-import { useUIContext } from "../contexts/ui.context";
-import { StatCard } from "../components/StatCard";
+import { CandidateList } from "../../components/hr/CandidateList";
+import { useUIContext } from "../../contexts/ui.context";
+import { StatCard } from "../../components/student/StatCard";
 
 export function Candidate() {
   const { isSidebarVisible } = useUIContext();

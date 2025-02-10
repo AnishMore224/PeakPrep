@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
-import { Repository } from '../../types/index';
+import { Repository } from '../../../types/index';
 import { DifficultyBadge } from './DifficultyBadge';
 import { TagList } from './TagList';
 import { Pagination } from './Pagination';

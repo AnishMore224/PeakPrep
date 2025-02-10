@@ -7,7 +7,7 @@ import {
   Star,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useUIContext } from "../contexts/ui.context";
+import { useUIContext } from "../../contexts/ui.context";
 
 interface StatData {
   title: string;

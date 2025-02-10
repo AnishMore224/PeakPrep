@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Company } from '../types';
+import type { Company } from '../../types';
 
 interface CompanyCardProps {
   company: Company;

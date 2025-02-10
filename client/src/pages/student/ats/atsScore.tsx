@@ -1,10 +1,9 @@
 import React, { useState, useRef } from "react";
-import { FileUpload } from "../components/atsScore/Upload";
-import { LoadingState } from "../components/atsScore/LoadingState";
-import { AnalysisResults } from "../components/atsScore/AnalysisResults";
-import { useUIContext } from "../contexts/ui.context";
+import { FileUpload } from "../../../components/student/ats/Upload";
+import { LoadingState } from "../../../components/student/ats/LoadingState";
+import { AnalysisResults } from "../../../components/student/ats/AnalysisResults";
+import { useUIContext } from "../../../contexts/ui.context";
 import axios from "axios";
-import { set } from "mongoose";
 
 interface ButtonProps {
     onClick: () => void;

@@ -7,10 +7,9 @@ import {
   Briefcase,
   GraduationCap,
 } from "lucide-react";
-import { useUIContext } from "../contexts/ui.context";
+import { useUIContext } from "../../contexts/ui.context";
 import Papa from "papaparse";
-import { putRequest } from "../utils/services";
-import { useAuth, Hr } from "../contexts/auth.context";
+import { putRequest } from "../../utils/services";
 const BASE_URL = `http://localhost:3030/api/studentSelection`;
 interface EventProps {
   icon: React.ReactNode;

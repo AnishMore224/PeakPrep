@@ -1,9 +1,9 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useUIContext } from '../contexts/ui.context';
-import { useCompany } from '../contexts/company.context';
-import { SearchBar } from '../components/SearchBar';
-import { CompanyCard } from '../components/CompanyCard';
-import { Company} from '../types';
+import { useUIContext } from '../../contexts/ui.context';
+import { useCompany } from '../../contexts/company.context';
+import { SearchBar } from '../../components/SearchBar';
+import { CompanyCard } from '../../components/student/CompanyCard';
+import { Company} from '../../types';
 
 function ShortListedCompanies() {
   const { isSidebarVisible } = useUIContext();
@@ -46,7 +46,7 @@ function ShortListedCompanies() {
       <div className="flex h-full">
         {/* Main Content */}
         <div className="flex-1 flex flex-col h-full overflow-hidden">
-          <SearchBar onSearch={handleSearch} onSort={handleSort} />
+          <SearchBar onSearch={handleSearch} onSort={handleSort} onExport={() => {}} />
           <div className="flex-1 overflow-y-auto p-4">
             {filteredAndSortedCompanies.map((company) => (
               <CompanyCard key={company.name} company={company} />

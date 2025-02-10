@@ -1,6 +1,6 @@
 import React from 'react';
 import { Filter } from 'lucide-react';
-import { Difficulty } from '../../types/index';
+import { Difficulty } from '../../../types/index';
 
 interface DifficultyFilterProps {
   value: Difficulty | '';

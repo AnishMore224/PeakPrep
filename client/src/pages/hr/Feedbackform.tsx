@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { StudentProfile } from "../components/StudentProfile";
-import { FeedbackForm } from "../components/FeedbackForm";
-import { useUIContext } from "../contexts/ui.context";
+import { StudentProfile } from "../../components/student/StudentProfile";
+import { FeedbackForm } from "../../components/hr/FeedbackForm";
+import { useUIContext } from "../../contexts/ui.context";
 import { useParams } from "react-router-dom";
 
 const StudentFeedback: React.FC = () => {

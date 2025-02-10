@@ -1,5 +1,5 @@
 import React from 'react';
-import { Document,DocumentSectionProps }  from "../types/index"
+import { DocumentSectionProps }  from "../types/index"
 
 
 export const DocumentSection: React.FC<DocumentSectionProps> = ({ title, documents, showUpload }) => {

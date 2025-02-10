@@ -1,5 +1,4 @@
 import { useStudent } from "../../contexts/student.context";
-import StudentFeedback from "../../pages/Feedbackform";
 
 interface CandidateListProps {
   filter: string;
@@ -54,8 +53,8 @@ export function CandidateList({ filter, majorFilter }: CandidateListProps) {
               <td className="py-3 px-4">
                 <button
                   onClick={() => window.location.href = `/feedbackForm/:${student.id}`}
-                  className="bg-blue-500 text-white px-3 py-1 rounded"
-                >
+                  className="bg-blue-500 text-white px-3 py-1 rounded cursor-pointer"
+                > 
                   Feedback
                 </button>
               </td>

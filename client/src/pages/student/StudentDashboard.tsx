@@ -1,8 +1,8 @@
 import React from "react";
 import { Users, Plus, Calendar as CalendarIcon } from "lucide-react";
-import { DashboardMetric, ScheduleItem } from "../types";
-import { useUIContext } from "../contexts/ui.context";
-import Calendar from '../components/Calendar';
+import { DashboardMetric, ScheduleItem } from "../../types";
+import { useUIContext } from "../../contexts/ui.context";
+import Calendar from '../../components/Calendar';
 import { useNavigate } from "react-router-dom";
 
 const scheduleItems: ScheduleItem[] = [
