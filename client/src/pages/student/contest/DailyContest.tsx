@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Layout from '../../components/ContestCompo/Layout';
-import QuestionCard from '../../components/ContestCompo/QuestionCard';
-import ProgressBar from '../../components/ContestCompo/ProgressBar';
-import NavigationButtons from '../../components/ContestCompo/NavigationButtons';
-import { useUIContext } from '../../contexts/ui.context';
+import Layout from '../../../components/student/contest/Layout';
+import QuestionCard from '../../../components/student/contest/QuestionCard';
+import ProgressBar from '../../../components/student/contest/ProgressBar';
+import NavigationButtons from '../../../components/student/contest/NavigationButtons';
+import { useUIContext } from '../../../contexts/ui.context';
 
 import questions from './DailyQuestions';
 

@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Contest } from '../../types';
+import { Contest } from '../../../types';
 
 interface ContestCardProps {
   contest: Contest;

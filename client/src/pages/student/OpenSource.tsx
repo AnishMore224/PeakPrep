@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { SearchBar } from "../components/GitHubOpenSource/SearchBar";
-import { DifficultyFilter } from "../components/GitHubOpenSource/DifficultyFilter";
-import { RepositoryList } from "../components/GitHubOpenSource/RepositoryList";
-import { Repository, Difficulty } from "../types/index";
+import { useState } from "react";
+import { SearchBar } from "../../components/student/open-source/SearchBar";
+import { DifficultyFilter } from "../../components/student/open-source/DifficultyFilter";
+import { RepositoryList } from "../../components/student/open-source/RepositoryList";
+import { Repository, Difficulty } from "../../types/index";
 import axios from "axios";
 
 function OpenSource() {

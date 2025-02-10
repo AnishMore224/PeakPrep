@@ -1,5 +1,5 @@
 import React from 'react';
-import { Difficulty } from '../../types/index';
+import { Difficulty } from '../../../types/index';
 
 interface DifficultyBadgeProps {
   level: Difficulty;

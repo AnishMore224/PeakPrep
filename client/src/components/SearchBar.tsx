@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, Search, SortDesc } from 'lucide-react';
+import { Search, SortDesc } from 'lucide-react';
 
 interface SearchBarProps {
   onSearch: (value: string) => void;
@@ -7,7 +7,7 @@ interface SearchBarProps {
   onExport: () => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = React.memo(({ onSearch, onSort,onExport }) => {
+export const SearchBar: React.FC<SearchBarProps> = React.memo(({ onSearch, onSort, onExport }) => {
   return (
     <div className="bg-white rounded-xl p-6 sticky top-0 z-5 shadow-sm border border-slate-200">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useUIContext } from "../../contexts/ui.context";
 import { useCompany } from "../../contexts/company.context";
 import { SearchBar } from "../../components/SearchBar";

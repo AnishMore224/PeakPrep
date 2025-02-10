@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StarRating } from "./StarRating";
-import { useAuth } from "../contexts/auth.context";
-import { useFeedback } from "../contexts/feedback.context";
+import { useAuth } from "../../contexts/auth.context";
+import { useFeedback } from "../../contexts/feedback.context";
 import { ObjectId } from "mongoose";
 
 interface Student{

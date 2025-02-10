@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { GraduationCap, Mail, UserCircle, BookOpen, Users2 } from "lucide-react";
-import { useParams } from "react-router-dom";
 import { ObjectId } from "mongodb";
-import { getRequest } from "../utils/services";
 
 interface InfoItemProps {
   icon: React.ReactNode;

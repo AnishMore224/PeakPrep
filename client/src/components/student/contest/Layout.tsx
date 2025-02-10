@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { useUIContext } from '../../contexts/ui.context';
+import { useUIContext } from '../../../contexts/ui.context';
 
 interface LayoutProps {
   children: React.ReactNode;

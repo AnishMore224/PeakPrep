@@ -1,4 +1,4 @@
-import { StatCardProps } from '../types'; 
+import { StatCardProps } from '../../types'; 
 
 export function StatCard({ title, value, change, icon }: StatCardProps) {
   return (

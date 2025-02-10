@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Message } from "../types/index";
-import { MessageList } from "../components/MessageList";
-import { ActionButtons } from "../components/ActionButtons";
-import { ChatInput } from "../components/ChatInput";
-import { useUIContext } from "../contexts/ui.context";
+import { Message } from "../../types/index";
+import { MessageList } from "../../components/student/chatbot/MessageList";
+import { ActionButtons } from "../../components/student/chatbot/ActionButtons";
+import { ChatInput } from "../../components/student/chatbot/ChatInput";
+import { useUIContext } from "../../contexts/ui.context";
 import { ClipLoader } from "react-spinners";
 
 function ChatBot() {

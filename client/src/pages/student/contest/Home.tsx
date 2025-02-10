@@ -1,6 +1,6 @@
-import Layout from '../../components/ContestCompo/Layout';
-import ContestCard from '../../components/ContestCompo/ContestCard';
-import { useContest } from '../../contexts/contest.context';
+import Layout from '../../../components/student/contest/Layout';
+import ContestCard from '../../../components/student/contest/ContestCard';
+import { useContest } from '../../../contexts/contest.context';
 import { useEffect } from 'react';
 
 const Home = () => {

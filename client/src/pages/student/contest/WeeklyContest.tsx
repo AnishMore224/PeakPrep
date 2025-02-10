@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Layout from '../../components/ContestCompo/Layout';
-import ProblemCard from '../../components/ContestCompo/ProblemCard';
-import FileUpload from '../../components/ContestCompo/FileUpload';
-import ProgressBar from '../../components/ContestCompo/ProgressBar';
-import NavigationButtons from '../../components/ContestCompo/NavigationButtons';
+import Layout from '../../../components/student/contest/Layout';
+import ProblemCard from '../../../components/student/contest/ProblemCard';
+import FileUpload from '../../../components/student/contest/FileUpload';
+import ProgressBar from '../../../components/student/contest/ProgressBar';
+import NavigationButtons from '../../../components/student/contest/NavigationButtons';
 
 const mockProblems = [
   {

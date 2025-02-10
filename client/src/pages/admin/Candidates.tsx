@@ -1,8 +1,8 @@
 import React from "react";
 import { Users, GraduationCap, TrendingUp, Download } from "lucide-react";
-import { CandidateList } from "./../../components/admin/CandidateList";
+import { CandidateList } from "../../components/hr/CandidateList";
 import { useUIContext } from "../../contexts/ui.context";
-import { StatCard } from "../../components/StatCard";
+import { StatCard } from "../../components/student/StatCard";
 import { useStudent } from "../../contexts/student.context";
 import { Upload } from "lucide-react";
 

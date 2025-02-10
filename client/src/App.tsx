@@ -7,20 +7,20 @@ import {
 } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import Header from "./components/Header";
-import { StudentDashboard } from "./pages/StudentDashboard";
+import { StudentDashboard } from "./pages/student/StudentDashboard";
 import { UIProvider } from "./contexts/ui.context";
 import { Login } from "./pages/Login";
 import { SignUp } from "./pages/SignUp";
 import { Profile } from "./pages/Profile";
 import LoadingScreen from "./pages/LoadingScreen";
 import { AuthProvider, useAuth } from "./contexts/auth.context";
-import ShortListedCompanies from "./pages/ShortListedCompanies";
-import ChatBot from "./pages/ChatBot";
-import Feedbacks from "./pages/Feedbacks";
-import FeedbackForm from "./pages/Feedbackform";
-import AdminDashboard from "./pages/AdminDashBoard";
+import ShortListedCompanies from "./pages/student/ShortListedCompanies";
+import ChatBot from "./pages/student/ChatBot";
+import Feedbacks from "./pages/student/Feedbacks";
+import FeedbackForm from "./pages/hr/Feedbackform";
+import AdminDashboard from "./pages/admin/AdminDashBoard";
 // import { AdminDashboard } from "./pages/AdminDashboard";
-import { HRDashboard } from "./pages/HrDashboard";
+import { HRDashboard } from "./pages/hr/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
 import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
@@ -29,18 +29,19 @@ import { AllCandidate } from "./pages/admin/Candidates";
 import AllCompanies from "./pages/admin/Companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
-import ATS from "./pages/atsScore"; // Import the AtsScore component
-import OpenSource from "./pages/OpenSource";
+import ATS from "./pages/student/ats/atsScore"; // Import the AtsScore component
+import OpenSource from "./pages/student/OpenSource";
 // import Contest from "./pages/Contest";
-import Home from "./pages/ContestMain/Home";
-import DailyContest from "./pages/ContestMain/DailyContest";
-import WeeklyContest from "./pages/ContestMain/WeeklyContest";
-import ResumeForm from "./pages/resume-builder/ResumeForm";
-import { ScoreGauge } from "./components/atsScore/ScoreGauge";
+import Home from "./pages/student/contest/Home";
+import DailyContest from "./pages/student/contest/DailyContest";
+import WeeklyContest from "./pages/student/contest/WeeklyContest";
+import ResumeForm from "./pages/student/resume-builder/ResumeForm";
+import { ScoreGauge } from "./components/student/ats/ScoreGauge";
 import { ContestProvider } from "./contexts/contest.context";
-import StudentFeedback from "./pages/Feedbackform";
-import { Candidate } from "./pages/Candidates";
-import ResourcesPage from "./pages/ResourcesPage";
+import StudentFeedback from "./pages/hr/Feedbackform";
+import { Candidate } from "./pages/hr/Candidates";
+import ResourcesPage from "./pages/student/ResourcesPage";
+import NotFound from "./pages/NotFound";
 
 function MainLayout() {
   const location = useLocation();
@@ -283,7 +284,7 @@ function MainLayout() {
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test" element={<ScoreGauge score={100} />} />
             <Route path="/student-details" element={<StudentFeedback />} />
-            <Route path="*" element={404} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>

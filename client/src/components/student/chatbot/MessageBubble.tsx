@@ -1,5 +1,4 @@
-import React from 'react';
-import { Message } from '../types';
+import { Message } from '../../../types';
 import ReactMarkdown from 'react-markdown';
 
 interface MessageBubbleProps {

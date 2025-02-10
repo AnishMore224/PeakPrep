@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useFeedback } from "../contexts/feedback.context";
+import { useFeedback } from "../../contexts/feedback.context";
 import { Star } from "lucide-react";
-import { useUIContext } from "../contexts/ui.context";
+import { useUIContext } from "../../contexts/ui.context";
 
 export interface Feedback {
   companyName: string;
