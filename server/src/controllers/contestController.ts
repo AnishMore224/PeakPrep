@@ -48,7 +48,7 @@ export const getContests = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  try {1
+  try {
     console.log("getContests received");
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
