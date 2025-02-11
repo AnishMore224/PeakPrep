@@ -12,6 +12,8 @@ import {
   LogOut,
   UsersRound,
   FileUser,
+  Code,
+  Book,
 } from "lucide-react";
 import { NavItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
@@ -43,12 +45,27 @@ const studentNavItems: NavItem[] = [
     fun: () => {},
   },
   {
+    id: "Open Source",
+    label: "Open Source",
+    icon: Code,
+    href: "/openSource",
+    fun: () => {},
+  },
+  {
+    id: "Resorces",
+    label: "Resources",
+    icon: Book,
+    href: "/resources",
+    fun: () => {},
+  },
+  {
     id: "chatbot",
     label: "ChatBot",
     icon: Bot,
     href: "/chatbot",
     fun: () => {},
   },
+  
 ];
 
 const hrNavItems: NavItem[] = [

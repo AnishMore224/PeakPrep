@@ -4,6 +4,7 @@ import { DifficultyFilter } from "../../components/student/open-source/Difficult
 import { RepositoryList } from "../../components/student/open-source/RepositoryList";
 import { Repository, Difficulty } from "../../types/index";
 import axios from "axios";
+import { useUIContext } from "../../contexts/ui.context";
 
 function OpenSource() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +15,7 @@ function OpenSource() {
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
   const [error, setError] = useState("");
+  const { isSidebarVisible } = useUIContext();
 
   const fetchRepositories = async () => {
     if (searchTerm.length <= 2) {
@@ -69,7 +71,11 @@ function OpenSource() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div
+      className={`flex-1 transition-all duration-300 min-h-screen bg-gradient-to-b from-gray-50 to-white ${
+        isSidebarVisible ? "md:ml-64" : "md:ml-20"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 tracking-tight">
@@ -104,7 +110,7 @@ function OpenSource() {
           {loading ? (
             <p className="text-center text-gray-600">Loading repositories...</p>
           ) : (
-            repositories.length == 0  && (
+            repositories.length == 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-500 text-lg">
                   No repositories found matching your criteria.
