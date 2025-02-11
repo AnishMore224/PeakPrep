@@ -42,10 +42,11 @@ import StudentFeedback from "./pages/hr/Feedbackform";
 import { Candidate } from "./pages/hr/Candidates";
 import ResourcesPage from "./pages/student/ResourcesPage";
 import NotFound from "./pages/NotFound";
+import CodeEditor from "./pages/student/contest/CodeEditor";
 
 function MainLayout() {
   const location = useLocation();
-  const hideHeaderSidebarPaths = ["/login", "/signup"];
+  const hideHeaderSidebarPaths = ["/login", "/signup","/codeEditor"];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
   );
@@ -75,7 +76,7 @@ function MainLayout() {
           location.pathname === "/weekly-contest" ||
           location.pathname === "/daily-contest" ||
           location.pathname === "/contest"
-            ? "pt-1"
+            ? "pt-0"
             : "pt-15"
         }`}
       >
@@ -284,6 +285,7 @@ function MainLayout() {
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test" element={<ScoreGauge score={100} />} />
             <Route path="/student-details" element={<StudentFeedback />} />
+            <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

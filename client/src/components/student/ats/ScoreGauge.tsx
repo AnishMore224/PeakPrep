@@ -8,8 +8,12 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score }) => {
   // Ensure score stays within range (0-100)
   const validScore = Math.min(100, Math.max(0, score));
 
-  // Map score to a semicircle (0-50 out of 100 for stroke-dasharray)
-  const dashArray = `${(validScore / 100) * 50} 50`;
+  // Calculate circumference of the circle
+  const radius = 16;
+  const circumference = 2 * Math.PI * radius;
+
+  // Calculate stroke-dashoffset based on score
+  const dashOffset = circumference - (validScore / 100) * circumference;
 
   // Determine color based on score
   const getScoreColor = (score: number) => {
@@ -19,48 +23,37 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({ score }) => {
   };
 
   return (
-    <div className="relative size-56 m-auto">
-      <svg
-        className="size-full"
-        viewBox="0 0 36 36"  // Ensures a balanced semicircle
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Background semicircle */}
+    <div className="relative size-56 m-auto flex items-center justify-center">
+      <svg className="transform -rotate-90 w-72 h-72" viewBox="0 0 36 36">
+        {/* Background circle */}
         <circle
           cx="18"
           cy="18"
-          r="16"
-          fill="none"
-          className="stroke-gray-300 dark:stroke-neutral-700"
+          r={radius}
+          stroke="currentColor"
           strokeWidth="3"
-          strokeDasharray="50 50"
-          strokeLinecap="round"
-          transform="rotate(180 18 18)"  // Ensures correct semicircle positioning
-        ></circle>
+          fill="transparent"
+          className="text-gray-300 dark:text-neutral-700"
+        />
 
-        {/* Dynamic score arc */}
+        {/* Dynamic score circle */}
         <circle
           cx="18"
           cy="18"
-          r="16"
-          fill="none"
-          className={`stroke-current ${getScoreColor(validScore)}`}
+          r={radius}
+          stroke="currentColor"
           strokeWidth="3.5"
-          strokeDasharray={dashArray}
-          strokeLinecap="round"
-          transform="rotate(180 18 18)"  // Corrects the arc's alignment
-        ></circle>
+          fill="transparent"
+          strokeDasharray={circumference}
+          strokeDashoffset={dashOffset}
+          className={`stroke-current ${getScoreColor(validScore)}`}
+        />
       </svg>
 
-      {/* Score display (Adjusted position) */}
-      <div className="absolute top-14 start-1/2 transform -translate-x-1/2 text-center">
-        <span className={`text-4xl font-bold ${getScoreColor(validScore)}`}>
-          {validScore}
-        </span>
-        <span className={`text-lg block ${getScoreColor(validScore)}`}>
-          Score
-        </span>
-      </div>
+      {/* Score display */}
+      <span className="absolute text-5xl" style={{ color: getScoreColor(validScore) }}>
+        {validScore}%
+      </span>
     </div>
   );
 };
