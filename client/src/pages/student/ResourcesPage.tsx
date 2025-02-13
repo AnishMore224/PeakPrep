@@ -32,8 +32,9 @@ type Resource = {
     | "system-design"
     | "database"
     | "web-dev"
-    | "soft-skills";
-  type: "pdf" | "article" | "video" | "practice";
+    | "soft-skills"
+    | "Language";
+  type: "pdf" | "article" | "video" | "practice" | "Test";
   link: string;
   thumbnail?: string;
 };
@@ -46,19 +47,19 @@ const resources: Resource[] = [
     description:
       "Comprehensive guide to crack quantitative aptitude tests with practice problems and shortcuts.",
     category: "aptitude",
-    type: "pdf",
+    type: "Test",
     link: "https://aptitude-test.com/free-aptitude-test/mixed-aptitude-test/",
     thumbnail:
       "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=400",
   },
   {
     id: "2",
-    title: "Data Structures & Algorithms",
+    title: "Programming in C",
     description:
-      "In-depth tutorial covering essential DSA concepts for technical interviews with real interview questions.",
-    category: "algorithms",
+      "Learn C programming from scratch with hands-on coding exercises and projects.",
+    category: "Language",
     type: "video",
-    link: "https://www.youtube.com/embed/8hly31xKli0",
+    link: "https://www.youtube.com/embed/videoseries?si=ea7H6SHJoQa2wuKU&amp;list=PLu0W_9lII9aiXlHcLx-mDH1Qul38wD3aR",
     thumbnail:
       "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=400",
   },
@@ -85,6 +86,17 @@ const resources: Resource[] = [
       "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=400",
   },
   {
+    id: "13",
+    title: "Data Structures & Algorithms",
+    description:
+      "In-depth tutorial covering essential DSA concepts for technical interviews with real interview questions.",
+    category: "algorithms",
+    type: "video",
+    link: "https://www.youtube.com/embed/8hly31xKli0",
+    thumbnail:
+      "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=400",
+  },
+  {
     id: "5",
     title: "System Design Fundamentals",
     description:
@@ -102,7 +114,7 @@ const resources: Resource[] = [
       "Comprehensive guide to database concepts and SQL queries frequently asked in interviews.",
     category: "database",
     type: "practice",
-    link: "https://www.w3schools.com/quiztest/quiztest.asp?qtest=SQL",
+    link: "https://www.geeksforgeeks.org/sql-interview-questions/",
     thumbnail:
       "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?auto=format&fit=crop&q=80&w=400",
   },
@@ -113,7 +125,7 @@ const resources: Resource[] = [
       "Master modern web technologies including React, Node.js, and cloud services.",
     category: "web-dev",
     type: "article",
-    link: "https://example.com/web-dev-guide",
+    link: "https://enkonix.com/blog/web-development-stacks/",
     thumbnail:
       "https://images.unsplash.com/photo-1627398242454-45a1465c2479?auto=format&fit=crop&q=80&w=400",
   },
@@ -126,7 +138,7 @@ const resources: Resource[] = [
     type: "practice",
     link: "https://www.thinkinglsat.com/lsat/sample-questions",
     thumbnail:
-      "https://images.unsplash.com/photo-1616628188502-413f2fe78e27?auto=format&fit=crop&q=80&w=400",
+      "https://media.licdn.com/dms/image/v2/D4D12AQHqoAbRFfkP1w/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1713084181287?e=2147483647&v=beta&t=ZVs-wuBtolUjvV1Hz-wJr5TCxZuDklzKRI6NFlyWfa4",
   },
   {
     id: "9",
@@ -145,7 +157,7 @@ const resources: Resource[] = [
     description:
       "Master common algorithm patterns with practice problems from top tech companies.",
     category: "algorithms",
-    type: "pdf",
+    type: "article",
     link: "https://cs.lmu.edu/~ray/notes/algpatterns/",
     thumbnail:
       "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=400",
@@ -157,7 +169,7 @@ const resources: Resource[] = [
       "Real-world system design case studies from Netflix, Uber, and more.",
     category: "system-design",
     type: "article",
-    link: "https://emilycampbell.co/info/case-study-design-systems/",
+    link: "https://www.geeksforgeeks.org/case-studies-in-system-design/",
     thumbnail:
       "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=400",
   },
@@ -171,6 +183,17 @@ const resources: Resource[] = [
     link: "https://www.youtube.com/embed/1qw5ITr3k9E",
     thumbnail:
       "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?auto=format&fit=crop&q=80&w=400",
+  },
+  {
+    id: "14",
+    title: "Top 50 Programming Interview Questions",
+    description:
+      "Download a PDF guide with the top 50 programming interview questions and answers.",
+    category: "interview",
+    type: "pdf",
+    link: "https://simpleprogrammer.com/wp-content/uploads/2020/09/Top_50_Programming_Interview_Questions_simpleprogrammer.com.pdf",
+    thumbnail:
+      "https://www.springboard.com/blog/wp-content/uploads/2022/04/117-coding-programming-interview-questions-answers-2022-prep-guide.png",
   },
 ];
 
@@ -194,6 +217,8 @@ const CategoryIcon = ({ category }: { category: string }) => {
       return <Globe className="w-5 h-5" />;
     case "soft-skills":
       return <Briefcase className="w-5 h-5" />;
+    case "Language":
+      return <Code className="w-5 h-5" />;
     default:
       return null;
   }
@@ -205,6 +230,7 @@ const TypeBadge = ({ type }: { type: string }) => {
     article: "bg-blue-100 text-blue-800",
     video: "bg-green-100 text-green-800",
     practice: "bg-purple-100 text-purple-800",
+    Test: "bg-yellow-100 text-yellow-800",
   };
 
   return (

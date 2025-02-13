@@ -14,6 +14,9 @@ export function Profile() {
         <h1 className="text-4xl font-bold mb-8">Profile</h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <ProfileView user={user}/>
+          {
+            user?.role === 'student' ? (
+          
           <div className="space-y-8">
             <DocumentSection 
               title="Resume" 
@@ -33,7 +36,33 @@ export function Profile() {
               ]}
               showUpload
             />
-          </div>
+          </div>)
+          : user?.role === 'admin' ? (
+            <div className="space-y-8">
+              <DocumentSection 
+                title="Company Documents" 
+                documents={[
+                  { name: 'Business License', type: 'license', editable: true },
+                  { name: 'Tax Certificate', type: 'tax', editable: true },
+                  { name: 'Company Profile', type: 'profile', editable: true }
+                ]}
+                showUpload
+              />
+            </div>)
+          : user?.role === 'hr' ? (
+            <div className="space-y-8">
+              <DocumentSection 
+                title="Company Documents" 
+                documents={[
+                  { name: 'Business License', type: 'license', editable: true },
+                  { name: 'Tax Certificate', type: 'tax', editable: true },
+                  { name: 'Company Profile', type: 'profile', editable: true }
+                ]}
+                showUpload
+              />
+            </div>)
+          : null
+          }
         </div>
       </main>
     </div>
