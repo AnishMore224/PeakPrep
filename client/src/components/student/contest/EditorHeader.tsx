@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Maximize2, RefreshCw, Play } from "react-feather";
 import { InitialCode } from "../../../pages/student/contest/questions";
 

@@ -180,7 +180,7 @@ export interface Hr {
   name: string;
   email: string;
 }
-export type Difficulty = "beginner" | "intermediate" | "advanced";
+export type Difficulty = "beginner" | "intermediate" | "advanced" | "unknown";
 
 export interface Repository {
   id: number;
@@ -206,4 +206,64 @@ export interface Result {
   studentId: string;
   score: number;
   position: number;
+}
+
+export interface DailyContestType {
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  rules?: string;
+  participants: {
+    studentId: mongoose.Types.ObjectId;
+    score: number;
+    status: "Registered" | "Completed";
+  }[];
+  questions: {
+    questionId: mongoose.Types.ObjectId;
+    questionText: string;
+    options?: string[];
+    correctAnswer?: string;
+  }[];
+  submissions: {
+    studentId: string;
+    questionId: mongoose.Types.ObjectId;
+    answer: string;
+    score: number;
+  }[];
+}
+
+export interface CodingContestType {
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  rules?: string;
+  participants: {
+    studentId: mongoose.Types.ObjectId;
+    score: number;
+    status: "Registered" | "Completed";
+  }[];
+  questions: {
+    questionId: mongoose.Types.ObjectId;
+    title: string;
+    description?: string;
+    inputInstructions?: string;
+    outputInstructions?: string;
+    example: {
+      input: string;
+      output: string;
+      explanation?: string;
+    };
+    testCases: {
+      input: string;
+      expectedOutput: string;
+    }[];
+  }[];
+  submissions: {
+    studentId: mongoose.Types.ObjectId;
+    questionId: mongoose.Types.ObjectId;
+    answer: string;
+    score: number;
+  }[];
 }

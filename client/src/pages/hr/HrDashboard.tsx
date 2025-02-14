@@ -144,7 +144,6 @@ async function handleFileUpload(file: File) {
               }),
               token
             );
-            console.log("File uploaded Complete !");
           } catch (error) {
             console.error("Error uploading file:", error);
           }

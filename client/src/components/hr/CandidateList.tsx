@@ -7,7 +7,6 @@ interface CandidateListProps {
 
 export function CandidateList({ filter, majorFilter }: CandidateListProps) {
   const { students } = useStudent();
-  console.log("ahjsbhj",students);
   const filteredStudents = students.filter(
     (student) =>
       (student.name.toLowerCase().includes(filter.toLowerCase()) ||

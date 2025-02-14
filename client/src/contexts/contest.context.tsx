@@ -1,7 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { Contest, Result } from "../types";
+import { createContext, useCallback, useContext, useState } from "react";
+import { Contest } from "../types";
 import { getRequest } from "../utils/services";
-import { useAuth } from "./auth.context";
 
 interface ContestContextProps {
     contests: Contest[];
@@ -24,8 +23,6 @@ export const ContestProvider = ({
     const getContests = useCallback(async () => {
         const token = localStorage.getItem("token");
         const response = await getRequest(`${BASE_URL}`, token);
-        console.log("token: ", token);
-        console.log("response: ", response);
         if (response.success) {
             setContests(response.data); 
         } else {

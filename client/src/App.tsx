@@ -43,10 +43,17 @@ import NotFound from "./pages/NotFound";
 import CodeEditor from "./pages/student/contest/CodeEditor";
 import { Interview } from "./pages/admin/Interview";
 import { InterviewResults } from "./pages/admin/InterviewResults";
+import CreateContest from "./pages/admin/contest/CreateContest";
 
 function MainLayout() {
   const location = useLocation();
-  const hideHeaderSidebarPaths = ["/login", "/signup","/codeEditor","/interview", "/interview-result"];
+  const hideHeaderSidebarPaths = [
+    "/login",
+    "/signup",
+    "/codeEditor",
+    "/interview",
+    "/interview-result",
+  ];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
   );
@@ -209,7 +216,7 @@ function MainLayout() {
                 )
               }
             />
-            
+
             <Route
               path="/feedbackform/:id"
               element={
@@ -281,6 +288,20 @@ function MainLayout() {
               }
             />
             <Route path="/contest" element={<Home />} />
+            <Route
+              path="/contest/create"
+              element={
+                isAuthenticated ? (
+                  user?.role === "admin" ? (
+                    <CreateContest />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test" element={<ScoreGauge score={100} />} />
