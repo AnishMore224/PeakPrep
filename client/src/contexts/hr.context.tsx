@@ -29,7 +29,6 @@ export const HrProvider = ({ children }: { children: ReactNode }) => {
   const getHrMembers = useCallback(async () => {
     const response = await getRequest(`${ADMIN_BASE_URL}/hrs`, token);
     if (response.success) {
-        console.log("getHrMembers response: ", response);
       setHrMembers(response.data.hrsData);
     } else {
       console.error(response.error);

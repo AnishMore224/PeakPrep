@@ -3,8 +3,8 @@ import { response } from "../types/response";
 import Student from "../models/Student";
 import HR from "../models/HR";
 import Company from "../models/Company";
-import Feedback from "../models/Feedback";
 import jwt from "jsonwebtoken";
+import CryptoJS from "crypto-js";
 
 //Called by only admin
 export const students = async (req: Request, res: Response): Promise<any> => {
@@ -22,7 +22,7 @@ export const students = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: {studentsData},
+      data: { studentsData },
       message: "Successfully fetched students",
     });
   } catch (error) {
@@ -35,11 +35,28 @@ export const students = async (req: Request, res: Response): Promise<any> => {
 
 //Called by HR and admin
 export const student = async (req: Request, res: Response): Promise<any> => {
+  const decryptStudentId = (encryptedId: string, secretKey: string): string => {
+    // Convert URL-safe Base64 back to original format
+    const base64EncryptedId = encryptedId
+      .replace(/-/g, "+") // Convert '-' back to '+'
+      .replace(/_/g, "/"); // Convert '_' back to '/'
+      const IV = CryptoJS.enc.Utf8.parse("1234567890123456");
+      const decryptedBytes = CryptoJS.AES.decrypt(base64EncryptedId, CryptoJS.enc.Utf8.parse(secretKey), {
+        iv: IV, 
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+    const decryptedId = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    return decryptedId;
+  };
+
   try {
-    const {id} = req.params;
-    const regd_no = id.slice(1);
+    const { studentId } = req.query;
+    const secretKey = process.env.SECRET_KEY as string;
+    const decryptedStudentId = decryptStudentId(studentId as string, secretKey);
+    const regd_no = decryptedStudentId;
     const token = req.headers.authorization?.split(" ")[1];
-    if(!token) {
+    if (!token) {
       return res.status(400).json({ ...response, error: "Unauthorized !" });
     }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
@@ -92,7 +109,7 @@ export const companies = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: {companies},
+      data: { companies },
       message: "Successfully fetched companies",
     });
   } catch (error) {
@@ -125,9 +142,13 @@ export const company = async (req: Request, res: Response): Promise<any> => {
     }
 
     if (decoded.role === "student") {
-      const { shortlistedStudents, selectedStudents,completedStudents, ...companyData } =
-        company.toObject();
-      if(!shortlistedStudents.includes(decoded.username)){
+      const {
+        shortlistedStudents,
+        selectedStudents,
+        completedStudents,
+        ...companyData
+      } = company.toObject();
+      if (!shortlistedStudents.includes(decoded.username)) {
         return res.status(403).json({ ...response, error: "Access denied" });
       }
       return res.status(200).json({
@@ -158,7 +179,7 @@ export const company = async (req: Request, res: Response): Promise<any> => {
 //Called by Admin
 export const hrs = async (req: Request, res: Response): Promise<any> => {
   try {
-    const hrs = await HR.find().populate({ path: 'companyId', select: 'name' });
+    const hrs = await HR.find().populate({ path: "companyId", select: "name" });
     if (!hrs || hrs.length === 0) {
       return res.status(404).json({ ...response, error: "No HRs found" });
     }
@@ -171,7 +192,7 @@ export const hrs = async (req: Request, res: Response): Promise<any> => {
     return res.status(200).json({
       ...response,
       success: true,
-      data: {hrsData},
+      data: { hrsData },
       message: "Successfully fetched HRs",
     });
   } catch (error) {
@@ -202,7 +223,9 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
       const { userId, companyId, ...hrData } = hr.toObject();
       const company = await Company.findById(companyId);
       if (!company) {
-        return res.status(404).json({ ...response, error: "Company not found" });
+        return res
+          .status(404)
+          .json({ ...response, error: "Company not found" });
       }
 
       if (
@@ -233,10 +256,13 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export const getStudentSelections = async (req: Request, res: Response): Promise<any> => {
+export const getStudentSelections = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    if( !token ) {
+    if (!token) {
       return res.status(400).json({ ...response, error: "Unauthorized !" });
     }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
@@ -250,10 +276,16 @@ export const getStudentSelections = async (req: Request, res: Response): Promise
     if (!student) {
       return res.status(404).json({ ...response, error: "Student not found" });
     }
-    
-    const companies= await Company.find({ _id: { $in: student.companies } }).populate({ path: 'hr', select: 'name' });
-    const completedCompanies = await Company.find({ _id: { $in: student.completedCompanies } }).populate({ path: 'hr', select: 'name' });
-    const placedAt = await Company.find({ _id: { $in: student.placedAt } }).populate({ path: 'hr', select: 'name' });
+
+    const companies = await Company.find({
+      _id: { $in: student.companies },
+    }).populate({ path: "hr", select: "name" });
+    const completedCompanies = await Company.find({
+      _id: { $in: student.completedCompanies },
+    }).populate({ path: "hr", select: "name" });
+    const placedAt = await Company.find({
+      _id: { $in: student.placedAt },
+    }).populate({ path: "hr", select: "name" });
 
     class CompanyData {
       name: string | undefined;
@@ -270,14 +302,16 @@ export const getStudentSelections = async (req: Request, res: Response): Promise
       data.tags = company.tags;
       data.hr = company.hr.map((hr: any) => hr.name);
       data.placed = placedAt.some((placed) => placed.name === company.name);
-      data.completed = completedCompanies.some((completed) => completed.name === company.name);
+      data.completed = completedCompanies.some(
+        (completed) => completed.name === company.name
+      );
       companyData.push(data);
-    }); 
+    });
 
     return res.status(200).json({
       ...response,
       success: true,
-      data: {companies: companyData},
+      data: { companies: companyData },
       message: "Successfully fetched companies",
     });
   } catch (error) {

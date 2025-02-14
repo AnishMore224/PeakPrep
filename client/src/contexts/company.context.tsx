@@ -34,7 +34,6 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
 
   const getAllCompanies = useCallback(async () => {
     const response = await getRequest(`${ADMIN_BASE_URL}/companies`, token);
-    console.log("getAllCompanies response: ", response);
     if (response.success) {
       setCompanies(response.data.companies);
     } else {

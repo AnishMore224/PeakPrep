@@ -7,12 +7,17 @@ interface StarRatingProps {
 }
 
 export const StarRating: React.FC<StarRatingProps> = ({ rating, onRatingChange }) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, star: number) => {
+    event.preventDefault();
+    onRatingChange(star);
+  };
+
   return (
     <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
-          onClick={() => onRatingChange(star)}
+          onClick={(event) => handleClick(event, star)}
           className="focus:outline-none"
         >
           <Star

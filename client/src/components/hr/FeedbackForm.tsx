@@ -22,7 +22,7 @@ student: Student;
 
 export const FeedbackForm: React.FC<FeedbackFormProps> = ({student}) => {
   const {user} = useAuth();
-  const { addFeedback } = useFeedback();
+  const { addFeedback} = useFeedback();
   const [formData, setFormData] = useState<{
       companyName: string;
       comment: string;
@@ -48,8 +48,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({student}) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    
-
     addFeedback(formData);
     setFormData({
       companyName: user && 'companyName' in user ? user.companyName : "",
@@ -58,7 +56,6 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({student}) => {
       type: "",
       rating: 0
     });
-    alert ("Feedback added successfully");
   };
 
   return (
