@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { useAuth } from "../../../contexts/auth.context";
-import { postRequest } from "../../../utils/services";
-import Error from "../../error";
+import { useContest } from "../../../contexts/contest.context";
+import Error from "../../Error";
 
 interface CodingQuestion {
   title: string;
@@ -54,10 +53,7 @@ export const CodingContestForm = () => {
     },
   ]);
 
-  const { jwtToken } = useAuth();
-  const [error, setError] = useState<string | null>(null);
-
-  const URL = "http://localhost:3030/api/contest/create";
+  const { createContest, error, updateError } = useContest();
 
   const addQuestion = () => {
     setQuestions([
@@ -135,26 +131,17 @@ export const CodingContestForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    const response = await postRequest(
-      URL,
-      JSON.stringify({
-        title,
-        description,
-        startTime,
-        endTime,
-        rules,
-        questions,
-        type: "CodingContest",
-      }),
-      jwtToken
-    );
-
-    if (response.ok) {
-      window.location.href = "/contest";
-    } else {
-      setError(response.error);
-    }
+    const contestData = {
+      title,
+      description,
+      startTime,
+      endTime,
+      rules,
+      questions,
+      type: "CodingContest",
+    };
+    await createContest(contestData);
+    window.location.href = "/contest";
   };
 
   return (
@@ -163,7 +150,7 @@ export const CodingContestForm = () => {
         <div className="p-4 bg-red-100 border border-red-200 rounded">
           <Error message={error} onClose={() => {
             window.location.href = "/contest";
-            setError(null);
+            updateError(null);
           }} />
         </div>
       )}
@@ -184,18 +171,24 @@ export const CodingContestForm = () => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <input
-            type="datetime-local"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type="datetime-local"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
-          />
+          <label className="block">
+            <span className="text-gray-700">Start Time:</span>
+            <input
+              type="datetime-local"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+            />
+          </label>
+          <label className="block">
+            <span className="text-gray-700">End Time:</span>
+            <input
+              type="datetime-local"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+            />
+          </label>
         </div>
 
         <textarea

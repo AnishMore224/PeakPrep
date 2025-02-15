@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { DailyContestForm } from '../../../components/admin/contest/DailyContest';
-import { CodingContestForm } from '../../../components/admin/contest/CodingContest';
+import { DailyContestForm } from '../../../components/admin/contest/CreateDailyContest';
+import { CodingContestForm } from '../../../components/admin/contest/CreateCodingContest';
 
 const CreateContest = () => {
     const [activeTab, setActiveTab] = useState<'daily' | 'coding'>('daily');

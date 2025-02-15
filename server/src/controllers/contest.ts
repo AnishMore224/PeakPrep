@@ -128,11 +128,9 @@ export const createContest = async (
   res: Response
 ): Promise<any> => {
   try {
-    console.log("Creating contest with body: ", req.body);
     const { type, title, description, startTime, endTime, rules, questions } =
       req.body;
     if (!type || !title || !startTime || !endTime) {
-      console.log("Missing required fields");
       return res.status(400).json({
         success: false,
         message: "Type, Title, Start Time, and End Time are required",
@@ -150,7 +148,6 @@ export const createContest = async (
       questions,
     });
     await contest.save();
-    console.log("created contest", contest);
     res.status(200).json({
       success: true,
       message: "Contest created successfully",
@@ -158,7 +155,6 @@ export const createContest = async (
       error: null,
     });
   } catch (error) {
-    console.log("Caught err: ", error);
     res.status(500).json({ success: false, message: "Server error", error });
   }
 };
@@ -217,6 +213,7 @@ export const deleteContest = async (
   res: Response
 ): Promise<any> => {
   try {
+    console.log(req.body);
     const { contestId, type } = req.body;
     if (!contestId || !type) {
       return res.status(400).json({

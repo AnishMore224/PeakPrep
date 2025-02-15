@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { postRequest } from "../../../utils/services";
-import { useAuth } from "../../../contexts/auth.context";
-import Error from "../../error";
+import { useContest } from "../../../contexts/contest.context";
+import Error from "../../Error";
 
 interface Question {
   questionText: string;
@@ -10,14 +9,6 @@ interface Question {
 }
 
 export const DailyContestForm = () => {
-  //   const [title, setTitle] = useState('');
-  //   const [description, setDescription] = useState('');
-  //   const [startTime, setStartTime] = useState('');
-  //   const [endTime, setEndTime] = useState('');
-  //   const [rules, setRules] = useState('');
-  //   const [questions, setQuestions] = useState<Question[]>([]);
-  
-  // dummy data
   const [title, setTitle] = useState("Daily Contest 0");
   const [description, setDescription] = useState("test contest");
   const [startTime, setStartTime] = useState(
@@ -31,12 +22,9 @@ export const DailyContestForm = () => {
     {
       questionText: "Who's who?",
       options: ["1", "2", "3", "4"],
-    }
+    },
   ]);
-  const { jwtToken } = useAuth();
-  const [error, setError] = useState<string | null>(null);
-
-  const URL = "http://localhost:3030/api/contest/create";
+  const { createContest, error, updateError } = useContest();
 
   const addQuestion = () => {
     setQuestions([
@@ -77,29 +65,20 @@ export const DailyContestForm = () => {
     setQuestions(newQuestions);
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    const response = await postRequest(
-        URL,
-        JSON.stringify({
-            title,
-            description,
-            startTime,
-            endTime,
-            rules,
-            questions: questions,
-            type: "DailyContest",
-        }),
-        jwtToken
-    );
-    if (response.ok) {
-        window.location.href = "/contest";
-    } else {
-        setError(response.error);
-        console.log(error)
-    }
-};
+    const contestData = {
+      title,
+      description,
+      startTime,
+      endTime,
+      rules,
+      questions,
+      type: "DailyContest",
+    };
+    await createContest(contestData);
+    window.location.href = "/contest";
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -107,7 +86,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         <div className="text-red-500">
           <Error message={error} onClose={() => {
             window.location.href = "/contest";
-            setError(null)
+            updateError(null);
           }} />
         </div>
       )}
@@ -129,18 +108,24 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
 
         <div className="grid grid-cols-2 gap-4">
-          <input
-            type="datetime-local"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-            className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type="datetime-local"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-            className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
-          />
+          <div>
+            <label className="block mb-1">Start Time:</label>
+            <input
+              type="datetime-local"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">End Time:</label>
+            <input
+              type="datetime-local"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
         </div>
 
         <textarea
@@ -168,7 +153,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <button
                 type="button"
                 onClick={() => removeQuestion(qIndex)}
-                className="ml-2 text-red-500 hover:text-red-700"
+                className="ml-2 text-red-500 hover:text-red-700 cursor-pointer"
               >
                 <Trash2 size={20} />
               </button>
@@ -189,7 +174,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <button
                     type="button"
                     onClick={() => removeOption(qIndex, oIndex)}
-                    className="ml-2 text-red-500 hover:text-red-700"
+                    className="ml-2 text-red-500 hover:text-red-700 cursor-pointer"
                   >
                     <Trash2 size={16} />
                   </button>
@@ -198,7 +183,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <button
                 type="button"
                 onClick={() => addOption(qIndex)}
-                className="text-blue-500 hover:text-blue-700 flex items-center"
+                className="text-blue-500 hover:text-blue-700 flex items-center cursor-pointer"
               >
                 <PlusCircle size={16} className="mr-1" /> Add Option
               </button>
@@ -209,7 +194,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         <button
           type="button"
           onClick={addQuestion}
-          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center justify-center"
+          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center justify-center cursor-pointer"
         >
           <PlusCircle size={20} className="mr-2" /> Add Question
         </button>
@@ -217,7 +202,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       <button
         type="submit"
-        className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
       >
         Create Daily Contest
       </button>

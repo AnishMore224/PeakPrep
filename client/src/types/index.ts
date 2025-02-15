@@ -192,23 +192,8 @@ export interface Repository {
   html_url: string;
 }
 
-export interface Contest {
-  name: string;
-  description: string;
-  timeLimit: Number;
-  participants: string[];
-  maxParticipants: Number;
-  status: "upcoming" | "ongoing" | "completed";
-}
-
-export interface Result {
-  contestId: mongoose.Types.ObjectId;
-  studentId: string;
-  score: number;
-  position: number;
-}
-
 export interface DailyContestType {
+  _id: string;
   title: string;
   description?: string;
   startTime: Date;
@@ -234,6 +219,7 @@ export interface DailyContestType {
 }
 
 export interface CodingContestType {
+  _id: string;
   title: string;
   description?: string;
   startTime: Date;
