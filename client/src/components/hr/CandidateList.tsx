@@ -10,8 +10,6 @@ export function CandidateList({ filter, majorFilter }: CandidateListProps) {
   const secretKey = import.meta.env.VITE_SECRET_KEY;
   const IV = CryptoJS.enc.Utf8.parse(import.meta.env.SECRET_IV); // 16-byte IV (fixed) // Ensure your secret key is securely stored
   const { students } = useStudent();
-  console.log("ahjsbhj", students);
-
   const filteredStudents = students.filter(
     (student) =>
       (student.name.toLowerCase().includes(filter.toLowerCase()) ||

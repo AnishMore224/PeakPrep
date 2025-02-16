@@ -5,6 +5,9 @@ import { RepositoryList } from "../../components/student/open-source/RepositoryL
 import { Repository, Difficulty } from "../../types/index";
 import axios from "axios";
 import { useUIContext } from "../../contexts/ui.context";
+const GITHUB_ACCESS_TOKEN = import.meta.env.VITE_GITHUB_ACCESS_TOKEN as string;
+
+axios.defaults.headers.common["Authorization"] = `token ${GITHUB_ACCESS_TOKEN}`;
 
 function OpenSource() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,28 +42,50 @@ function OpenSource() {
         }
       );
 
-      const repos = response.data.items.map((repo: any) => ({
-        id: repo.id,
-        title: repo.name,
-        description: repo.description,
-        tags: repo.topics || [],
-        difficulty: repo.topics.includes("beginner")
-          ? "beginner"
-          : repo.topics.includes("intermediate")
-          ? "intermediate"
-          : repo.topics.includes("advanced")
-          ? "advanced"
-          : "unknown",
-        stars: repo.stargazers_count,
-        html_url: repo.html_url,
-      }));
+      const nonAppTopics = ["cheatsheet", "roadmap", "awesome-list", "tutorial"];
 
-      setRepositories(repos);
+      const repos = await Promise.all(
+        response.data.items.map(async (repo: any) => {
+          const repoDetails = await axios.get(repo.url);
+          const issues = await axios.get(`${repo.url}/issues`, {
+            params: { state: "open" },
+          });
+
+          const size = repoDetails.data.size;
+          const topics = repo.topics || [];
+          let difficulty: Difficulty = "unknown";
+
+          if (size < 1000 && issues.data.length < 10) {
+            difficulty = "beginner";
+          } else if (size >= 1000 && size < 5000 && issues.data.length < 20) {
+            difficulty = "intermediate";
+          } else if (size >= 5000 || issues.data.length >= 20) {
+            difficulty = "advanced";
+          }
+
+            const isNonApp: boolean = topics.some((topic: string) => nonAppTopics.includes(topic));
+
+          if (isNonApp) {
+            return null;
+          }
+
+          return {
+            id: repo.id,
+            title: repo.name,
+            description: repo.description,
+            tags: topics,
+            difficulty: difficulty,
+            stars: repo.stargazers_count,
+            html_url: repo.html_url,
+          };
+        })
+      );
+
+      setRepositories(repos.filter(repo => repo !== null));
     } catch (error) {
-      setError("Failed to fetch repositories. Please try again later.");
+      setError(`Failed to fetch repositories. Please try again later.\n${error}`);
     } finally {
       setLoading(false);
-      // setSearched(false);
     }
   };
 

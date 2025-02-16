@@ -30,7 +30,8 @@ import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/student/ats/atsScore"; // Import the AtsScore component
 import OpenSource from "./pages/student/OpenSource";
-import Home from "./pages/student/contest/Home";
+import StudentContestHome from "./pages/student/contest/Home";
+import AdminContestHome from "./pages/admin/contest/Home";
 import DailyContest from "./pages/student/contest/DailyContest";
 import WeeklyContest from "./pages/student/contest/WeeklyContest";
 import ResumeForm from "./pages/student/resume-builder/ResumeForm";
@@ -42,10 +43,17 @@ import NotFound from "./pages/NotFound";
 import CodeEditor from "./pages/student/contest/CodeEditor";
 import { Interview } from "./pages/admin/Interview";
 import { InterviewResults } from "./pages/admin/InterviewResults";
+import CreateContest from "./pages/admin/contest/CreateContest";
 
 function MainLayout() {
   const location = useLocation();
-  const hideHeaderSidebarPaths = ["/login", "/signup","/codeEditor","/interview", "/interview-result"];
+  const hideHeaderSidebarPaths = [
+    "/login",
+    "/signup",
+    "/codeEditor",
+    "/interview",
+    "/interview-result",
+  ];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
   );
@@ -208,7 +216,7 @@ function MainLayout() {
                 )
               }
             />
-            
+
             <Route
               path="/feedbackform"
               element={
@@ -279,7 +287,36 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/contest" element={<Home />} />
+            <Route
+              path="/contest"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <StudentContestHome />
+                  ) : user?.role === "admin" ? (
+                    <AdminContestHome />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/contest/create"
+              element={
+                isAuthenticated ? (
+                  user?.role === "admin" ? (
+                    <CreateContest />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
             <Route path="/test1" element={<ScoreGauge score={100} />} />

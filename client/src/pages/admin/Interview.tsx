@@ -57,7 +57,6 @@ export function Interview() {
           .then((response) => response.json())
           .then((data) => {
             setQuestions(data.questions);
-            console.log("Questions generated:", data);
           })
           .catch((error) => {
             console.error("Error generating questions:", error);
@@ -109,11 +108,9 @@ export function Interview() {
   };
 
   const stopRecording = () => {
-    console.log("Stopping recording...");
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      console.log("Stopped recording...");
       mediaRecorderRef.current.onstop = uploadRecording;
     }
     if (stream) {
@@ -136,7 +133,6 @@ export function Interview() {
   };
 
   const uploadRecording = async () => {
-    console.log("Uploading recording...");
     if (recordedChunksRef.current.length === 0) {
       console.warn("No recorded chunks found.");
       return;
@@ -161,7 +157,6 @@ export function Interview() {
         body: formData,
       });
       const data = await response.json();
-      console.log("Suspicious activity analysis:", data);
       // Navigate to the results page with the data
       navigate("/interview-result", { state: data });
     } catch (error) {

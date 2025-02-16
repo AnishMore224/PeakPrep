@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface ProblemCardProps {
   title: string;
   difficulty: string;

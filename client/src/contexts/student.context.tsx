@@ -64,7 +64,6 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
             };
           })
         : [];
-      console.log(student);
       setStudents(student);
     }
   }, [token]);

@@ -53,7 +53,6 @@ export const StudentFeedback: React.FC = () => {
           );
           const { data } = response;
           setStudent(data);
-          console.log("Fetched Student Data:", data);
         } catch (error) {
           console.error("Error fetching student data:", error);
         }

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useUIContext } from "../../contexts/ui.context";
 import { useCompany } from "../../contexts/company.context";
 import { SearchBar } from "../../components/SearchBar";
@@ -9,7 +9,7 @@ function AllCompanies() {
   const { isSidebarVisible } = useUIContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const { companies } = useCompany();
+  const { getAllCompanies, companies } = useCompany();
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
@@ -18,6 +18,9 @@ function AllCompanies() {
   const handleSort = useCallback((order: "asc" | "desc") => {
     setSortOrder(order);
   }, []);
+  useEffect(() => {
+    getAllCompanies();
+  }, [getAllCompanies]);
 
   const filteredAndSortedCompanies = useMemo(() => {
     let filteredCompanies = companies as CompanyData[];
