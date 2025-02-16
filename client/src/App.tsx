@@ -17,7 +17,7 @@ import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/student/ShortListedCompanies";
 import ChatBot from "./pages/student/ChatBot";
 import Feedbacks from "./pages/student/Feedbacks";
-import FeedbackForm from "./pages/hr/Feedbackform";
+import {StudentFeedback} from "./pages/hr/Feedbackform";
 import AdminDashboard from "./pages/admin/AdminDashBoard";
 import { HRDashboard } from "./pages/hr/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
@@ -37,7 +37,6 @@ import WeeklyContest from "./pages/student/contest/WeeklyContest";
 import ResumeForm from "./pages/student/resume-builder/ResumeForm";
 import { ScoreGauge } from "./components/student/ats/ScoreGauge";
 import { ContestProvider } from "./contexts/contest.context";
-import StudentFeedback from "./pages/hr/Feedbackform";
 import { Candidate } from "./pages/hr/Candidates";
 import ResourcesPage from "./pages/student/ResourcesPage";
 import NotFound from "./pages/NotFound";
@@ -219,11 +218,11 @@ function MainLayout() {
             />
 
             <Route
-              path="/feedbackform/:id"
+              path="/feedbackform"
               element={
                 isAuthenticated ? (
-                  user?.role === "hr" ? (
-                    <FeedbackForm />
+                  user?.role === "hr" || user?.role === "admin" ? (
+                    <StudentFeedback />
                   ) : (
                     <NotAuthorized />
                   )
@@ -320,8 +319,7 @@ function MainLayout() {
             />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
-            <Route path="/test" element={<ScoreGauge score={100} />} />
-            <Route path="/student-details" element={<StudentFeedback />} />
+            <Route path="/test1" element={<ScoreGauge score={100} />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />

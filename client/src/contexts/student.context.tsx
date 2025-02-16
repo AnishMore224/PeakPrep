@@ -51,7 +51,7 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
       const student = Array.isArray(response.data.studentsData)
       ? response.data.studentsData.map((student: any) => {
             return {
-              _id: student._id,
+              id: student._id,
               name: student.name,
               section: student.section,
               branch: student.branch,

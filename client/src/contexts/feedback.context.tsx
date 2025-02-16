@@ -27,10 +27,10 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
 
-  const getFeedback = useCallback(async () => {
-    const response = await getRequest(`${BASE_URL}/feedback`, token);
+  const getFeedback = useCallback(async (studentId:string) => {
+    const response = await getRequest(`${BASE_URL}/feedback?studentId=${studentId}`, token);
     if (response.success) {
-      setFeedbacks(response.data);
+      return response.data;
     }
   }, [token]);
   
@@ -59,7 +59,7 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
     getFeedbacks();
   }, [getFeedbacks, user]);
   return (
-    <FeedbackContext.Provider value={{ feedbacks, getFeedbacks, addFeedback, updateFeedback, getFeedback }}>
+    <FeedbackContext.Provider value={{ feedbacks, getFeedbacks, addFeedback, updateFeedback, getFeedback, feedback}}>
       {children}
     </FeedbackContext.Provider>
   );
@@ -70,7 +70,8 @@ export interface FeedbackContextProps {
   getFeedbacks: () => void;
   addFeedback: (feedback: FeedbackAdd) => void;
   updateFeedback: (feedback: FeedbackAdd) => void;
-  getFeedback: () => void;
+  getFeedback: (studentId: string) => Promise<FeedbackAdd | undefined>;
+  feedback: FeedbackAdd | null;
 }
 
 export const useFeedback = () => {

@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get('/students',isAdmin, students);
 
-router.get('/student/:id',isHrOrAdmin, student);
+router.get('/student',isHrOrAdmin, student);
 
 router.get('/companies', isAdmin, companies);
 
