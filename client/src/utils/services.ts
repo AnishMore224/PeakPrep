@@ -65,7 +65,11 @@ export const putRequest = async (
   }
 };
 
-export const deleteRequest = async (url: string, token?: string | null) => {
+export const deleteRequest = async (
+  url: string,
+  body: BodyInit | null | undefined,
+  token?: string | null
+) => {
   try {
     const response = await fetch(url, {
       method: "DELETE",
@@ -73,6 +77,7 @@ export const deleteRequest = async (url: string, token?: string | null) => {
         "Content-Type": "application/json",
         ...(token && { Authorization: `Bearer ${token}` }),
       },
+      body,
     });
 
     const result = await response.json();

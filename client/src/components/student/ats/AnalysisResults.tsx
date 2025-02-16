@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CheckCircle, AlertCircle, FileUp } from "lucide-react";
+import { FileUp } from "lucide-react";
 import { ScoreGauge } from "./ScoreGauge";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -25,7 +25,6 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
     }
   }, [response]);
 
-  console.log("response:", response);
   return (
     <div className="bg-white rounded-xl shadow-xl p-4 sm:p-8 max-w-3xl mx-auto">
       {btn === "btn3" && (

@@ -21,12 +21,10 @@ const StudentFeedback: React.FC = () => {
         },
       });
       if (!response.ok) {
-        console.log("Error fetching student data");
         return;
       }
       const { data } = await response.json();
       setStudent(data);
-      console.log(response);
     };
 
     fetchStudent();

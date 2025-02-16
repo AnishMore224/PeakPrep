@@ -21,7 +21,7 @@ const CompanyContext = createContext<CompanyContextProps | undefined>(
 export const CompanyProvider = ({ children }: { children: ReactNode }) => {
   const [companies, setCompanies] = useState<Company[] | CompanyData[]>([]);
   const token = localStorage.getItem("token");
-  const { user,isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const getCompanies = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/companies`, token);
@@ -30,34 +30,35 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
     } else {
       console.error(response.error);
     }
-  }, []);
+  }, [token]);
 
   const getAllCompanies = useCallback(async () => {
     const response = await getRequest(`${ADMIN_BASE_URL}/companies`, token);
-    console.log("getAllCompanies response: ", response);
     if (response.success) {
       setCompanies(response.data.companies);
     } else {
       console.error(response.error);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setCompanies([]);
-      return;
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setCompanies([]);
+        return;
+      }
+      const decoded: any = jwtDecode(token);
+      if (decoded.role === "admin") {
+        getAllCompanies();
+      } else if (decoded.role === "student") {
+        getCompanies();
+      } else {
+        setCompanies([]);
+        return;
+      }
     }
-    const decoded: any = jwtDecode(token);
-    if (decoded.role === "admin") {
-      getAllCompanies();
-    } else if (decoded.role === "student") {
-      getCompanies();
-    } else {
-      setCompanies([]);
-      return;
-    }
-  }, [getCompanies, getAllCompanies, user, isAuthenticated]);
+  }, [isAuthenticated, getCompanies, getAllCompanies]);
 
   return (
     <CompanyContext.Provider value={{ companies, getCompanies, getAllCompanies }}>

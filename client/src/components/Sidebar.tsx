@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Building2,
-  History,
   MessageSquare,
   Bot,
+  History,
   ChevronLeft,
   ChevronRight,
   LogOut,
@@ -14,15 +14,20 @@ import {
   FileUser,
   Code,
   Book,
+  Brain,
 } from "lucide-react";
 import { NavItem } from "../types";
 import { useUIContext } from "../contexts/ui.context";
 import { useAuth } from "../contexts/auth.context";
 
-// const { getAllCompanies } = useCompany();
-
 const studentNavItems: NavItem[] = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, href: "/", fun: () => {} },
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    href: "/",
+    fun: () => {},
+  },
   {
     id: "companies",
     label: "Companies",
@@ -38,10 +43,10 @@ const studentNavItems: NavItem[] = [
     fun: () => {},
   },
   {
-    id:"atschecker",
-    label:"ATS Checker",
+    id: "atschecker",
+    label: "ATS Checker",
     icon: FileUser,
-    href:"/atschecker",
+    href: "/atschecker",
     fun: () => {},
   },
   {
@@ -65,7 +70,6 @@ const studentNavItems: NavItem[] = [
     href: "/chatbot",
     fun: () => {},
   },
-  
 ];
 
 const hrNavItems: NavItem[] = [
@@ -116,6 +120,13 @@ const adminNavItems: NavItem[] = [
     fun: () => {},
   },
   { id: "hrs", label: "HRs", icon: UsersRound, href: "/hrs", fun: () => {} },
+  {
+    id: "contests",
+    label: "Contests",
+    icon: Brain,
+    href: "/contest",
+    fun: () => {},
+  } 
 ];
 
 export const Sidebar: React.FC = () => {

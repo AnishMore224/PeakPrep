@@ -1,11 +1,6 @@
-import React from 'react';
-import { Difficulty } from '../../../types/index';
+import { Difficulty } from "../../../types";
 
-interface DifficultyBadgeProps {
-  level: Difficulty;
-}
-
-export function DifficultyBadge({ level }: DifficultyBadgeProps) {
+export function DifficultyBadge({ level }: {level: Difficulty}) {
   const colors = {
     beginner: 'bg-green-100 text-green-700 border-green-200',
     intermediate: 'bg-yellow-100 text-yellow-700 border-yellow-200',
@@ -13,7 +8,7 @@ export function DifficultyBadge({ level }: DifficultyBadgeProps) {
   };
 
   return (
-    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${colors[level]}`}>
+    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${colors[level as keyof typeof colors]}`}>
       {level.charAt(0).toUpperCase() + level.slice(1)}
     </span>
   );
