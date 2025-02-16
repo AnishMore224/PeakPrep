@@ -115,7 +115,6 @@ PeakPrep/
 │   └── ...                 # Other Flask API files
 └── README.md               # Project README file
 ```
-<<<<<<< HEAD
 
 ## Contributing
 
@@ -130,8 +129,3 @@ Contributions are welcome! Please follow these steps to contribute:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-=======
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
->>>>>>> d86fdb8bb18d2541a2093b1cbd066a22ea8d0f8d
