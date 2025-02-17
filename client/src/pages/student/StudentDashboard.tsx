@@ -12,18 +12,21 @@ const scheduleItems: ScheduleItem[] = [
     title: "Mock Interview",
     time: "11:00 - 12:00",
     type: "interview",
+    url: "/interview",
   },
   {
     id: "3",
-    title: "Practice session",
+    title: "Daily Challenge",
     time: "13:30 - 14:45",
     type: "practice",
+    url: "/daily-contest",
   },
   {
     id: "4",
-    title: "Analytics Review",
+    title: "Weekly Contest",
     time: "15:00 - 15:30",
     type: "analytics",
+    url: "/weekly-contest",
   },
 ];
 
@@ -66,12 +69,14 @@ export const StudentDashboard: React.FC = () => {
                   <p className="text-gray-500">{item.time}</p>
                 </div>
                 <div className="space-x-2">
-                  <button className="cursor-pointer px-4 py-1 text-sm bg-blue-500 text-white rounded-full">
-                    Reschedule
-                  </button>
-                  <button className="cursor-pointer px-4 py-1 text-sm border border-gray-300 rounded-full">
-                    Feedback
-                  </button>
+                    {item.url && (
+                    <button
+                      className="cursor-pointer px-4 py-1 text-sm bg-blue-500 text-white rounded-full"
+                      onClick={() => item.url && navigate(item.url)}
+                    >
+                      Go
+                    </button>
+                    )}
                 </div>
               </div>
             ))}
