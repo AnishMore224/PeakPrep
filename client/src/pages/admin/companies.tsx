@@ -1,14 +1,28 @@
+<<<<<<< HEAD
 import React, { useState, useCallback, useMemo } from 'react';
 import { useUIContext } from '../../contexts/ui.context';
 import { useCompany } from '../../contexts/company.context';
 import { SearchBar } from '../../components/SearchBar';
 import { CompanyCard } from '../../components/admin/CompanyCard';
+=======
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useUIContext } from "../../contexts/ui.context";
+import { useCompany } from "../../contexts/company.context";
+import { SearchBar } from "../../components/SearchBar";
+import { CompanyCard } from "../../components/admin/CompanyCard";
+import { CompanyData } from "../../types";
+>>>>>>> 9b120562b97a2d4746607cae0f1638f795c30127
 
 function ShortListedCompanies() {
   const { isSidebarVisible } = useUIContext();
   const [searchTerm, setSearchTerm] = useState("");
+<<<<<<< HEAD
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const { companies } = useCompany();
+=======
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const { getAllCompanies, companies } = useCompany();
+>>>>>>> 9b120562b97a2d4746607cae0f1638f795c30127
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
@@ -17,6 +31,9 @@ function ShortListedCompanies() {
   const handleSort = useCallback((order: 'asc' | 'desc') => {
     setSortOrder(order);
   }, []);
+  useEffect(() => {
+    getAllCompanies();
+  }, [getAllCompanies]);
 
   const filteredAndSortedCompanies = useMemo(() => {
     let filteredCompanies = companies;

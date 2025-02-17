@@ -17,7 +17,7 @@ import { AuthProvider, useAuth } from "./contexts/auth.context";
 import ShortListedCompanies from "./pages/student/ShortListedCompanies";
 import ChatBot from "./pages/student/ChatBot";
 import Feedbacks from "./pages/student/Feedbacks";
-import FeedbackForm from "./pages/hr/Feedbackform";
+import {StudentFeedback} from "./pages/hr/Feedbackform";
 import AdminDashboard from "./pages/admin/AdminDashBoard";
 import { HRDashboard } from "./pages/hr/HrDashboard";
 import { FeedbackProvider } from "./contexts/feedback.context";
@@ -30,23 +30,30 @@ import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/student/ats/atsScore"; // Import the AtsScore component
 import OpenSource from "./pages/student/OpenSource";
-import Home from "./pages/student/contest/Home";
+import StudentContestHome from "./pages/student/contest/Home";
+import AdminContestHome from "./pages/admin/contest/Home";
 import DailyContest from "./pages/student/contest/DailyContest";
 import WeeklyContest from "./pages/student/contest/WeeklyContest";
 import ResumeForm from "./pages/student/resume-builder/ResumeForm";
 import { ScoreGauge } from "./components/student/ats/ScoreGauge";
 import { ContestProvider } from "./contexts/contest.context";
-import StudentFeedback from "./pages/hr/Feedbackform";
 import { Candidate } from "./pages/hr/Candidates";
 import ResourcesPage from "./pages/student/ResourcesPage";
 import NotFound from "./pages/NotFound";
 import CodeEditor from "./pages/student/contest/CodeEditor";
 import { Interview } from "./pages/admin/Interview";
 import { InterviewResults } from "./pages/admin/InterviewResults";
+import CreateContest from "./pages/admin/contest/CreateContest";
 
 function MainLayout() {
   const location = useLocation();
-  const hideHeaderSidebarPaths = ["/login", "/signup","/codeEditor","/interview", "/interview-result"];
+  const hideHeaderSidebarPaths = [
+    "/login",
+    "/signup",
+    "/codeEditor",
+    "/interview",
+    "/interview-result",
+  ];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
   );
@@ -209,13 +216,13 @@ function MainLayout() {
                 )
               }
             />
-            
+
             <Route
-              path="/feedbackform/:id"
+              path="/feedbackform"
               element={
                 isAuthenticated ? (
-                  user?.role === "hr" ? (
-                    <FeedbackForm />
+                  user?.role === "hr" || user?.role === "admin" ? (
+                    <StudentFeedback />
                   ) : (
                     <NotAuthorized />
                   )
@@ -280,11 +287,39 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/contest" element={<Home />} />
+            <Route
+              path="/contest"
+              element={
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <StudentContestHome />
+                  ) : user?.role === "admin" ? (
+                    <AdminContestHome />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
+            <Route
+              path="/contest/create"
+              element={
+                isAuthenticated ? (
+                  user?.role === "admin" ? (
+                    <CreateContest />
+                  ) : (
+                    <NotAuthorized />
+                  )
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
+              }
+            />
             <Route path="/daily-contest" element={<DailyContest />} />
             <Route path="/weekly-contest" element={<WeeklyContest />} />
-            <Route path="/test" element={<ScoreGauge score={100} />} />
-            <Route path="/student-details" element={<StudentFeedback />} />
+            <Route path="/test1" element={<ScoreGauge score={100} />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />

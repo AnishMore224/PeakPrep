@@ -41,7 +41,6 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
             };
           })
         : [];
-      console.log(student);
       setStudents(student);
     }
   }, [token]);
@@ -49,13 +48,10 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
   const getAllStudents = useCallback(async () => {
     const response = await getRequest(`${ADMIN_BASE_URL}/students`, token);
     if (response.success) {
-      console.log(response.data.studentsData);
       const student = Array.isArray(response.data.studentsData)
       ? response.data.studentsData.map((student: any) => {
-        
-        console.log("shcvshcvsdh", student);
             return {
-              _id: student._id,
+              id: student._id,
               name: student.name,
               section: student.section,
               branch: student.branch,
@@ -68,7 +64,6 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
             };
           })
         : [];
-      console.log(student);
       setStudents(student);
     }
   }, [token]);

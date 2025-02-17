@@ -180,7 +180,7 @@ export interface Hr {
   name: string;
   email: string;
 }
-export type Difficulty = "beginner" | "intermediate" | "advanced";
+export type Difficulty = "beginner" | "intermediate" | "advanced" | "unknown";
 
 export interface Repository {
   id: number;
@@ -192,18 +192,64 @@ export interface Repository {
   html_url: string;
 }
 
-export interface Contest {
-  name: string;
-  description: string;
-  timeLimit: Number;
-  participants: string[];
-  maxParticipants: Number;
-  status: "upcoming" | "ongoing" | "completed";
+export interface DailyContestType {
+  _id: string;
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  rules?: string;
+  participants: {
+    studentId: mongoose.Types.ObjectId;
+    score: number;
+    status: "Registered" | "Completed";
+  }[];
+  questions: {
+    questionId: mongoose.Types.ObjectId;
+    questionText: string;
+    options?: string[];
+    correctAnswer?: string;
+  }[];
+  submissions: {
+    studentId: string;
+    questionId: mongoose.Types.ObjectId;
+    answer: string;
+    score: number;
+  }[];
 }
 
-export interface Result {
-  contestId: mongoose.Types.ObjectId;
-  studentId: string;
-  score: number;
-  position: number;
+export interface CodingContestType {
+  _id: string;
+  title: string;
+  description?: string;
+  startTime: Date;
+  endTime: Date;
+  rules?: string;
+  participants: {
+    studentId: mongoose.Types.ObjectId;
+    score: number;
+    status: "Registered" | "Completed";
+  }[];
+  questions: {
+    questionId: mongoose.Types.ObjectId;
+    title: string;
+    description?: string;
+    inputInstructions?: string;
+    outputInstructions?: string;
+    example: {
+      input: string;
+      output: string;
+      explanation?: string;
+    };
+    testCases: {
+      input: string;
+      expectedOutput: string;
+    }[];
+  }[];
+  submissions: {
+    studentId: mongoose.Types.ObjectId;
+    questionId: mongoose.Types.ObjectId;
+    answer: string;
+    score: number;
+  }[];
 }
