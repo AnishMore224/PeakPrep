@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, Search, SortDesc } from 'lucide-react';
+import { Search, SortDesc } from 'lucide-react';
 
 interface SearchBarProps {
   onSearch: (value: string) => void;

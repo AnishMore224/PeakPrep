@@ -4,3 +4,5 @@ Flask-API/.env
 
 server/node_modules
 client/node_modules
+
+.VSCodeCounter

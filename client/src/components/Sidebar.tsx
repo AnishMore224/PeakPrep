@@ -70,6 +70,13 @@ const studentNavItems: NavItem[] = [
     href: "/chatbot",
     fun: () => {},
   },
+  {
+    id: "contests",
+    label: "Contests",
+    icon: Brain,
+    href: "/contest",
+    fun: () => {},
+  } 
 ];
 
 const hrNavItems: NavItem[] = [
@@ -128,8 +135,7 @@ const adminNavItems: NavItem[] = [
     fun: () => {},
   } 
 ];
-
-export const Sidebar: React.FC = () => {
+const Sidebar: React.FC = () => {
   const { isSidebarVisible, toggleSidebar } = useUIContext();
   const { logout, user } = useAuth();
   const navigate = useNavigate();
@@ -218,3 +224,5 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
+
+export default Sidebar;

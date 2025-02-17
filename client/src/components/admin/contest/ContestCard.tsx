@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calendar, Clock, Users, Edit, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { DailyContestType, CodingContestType } from '../../../types/index';
 
 interface ContestCardProps {
@@ -10,6 +11,7 @@ interface ContestCardProps {
 }
 
 const ContestCard: React.FC<ContestCardProps> = ({ contest, type, onEdit, onDelete }) => {
+    const navigate = useNavigate();
 
     const formatDate = (date: Date) => {
         return new Date(date).toLocaleDateString('en-US', {
@@ -67,10 +69,16 @@ const ContestCard: React.FC<ContestCardProps> = ({ contest, type, onEdit, onDele
                 </div>
             </div>
             
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
                 <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium cursor-pointer">
                     {type === 'daily' ? 'Daily Contest' : 'Coding Contest'}
                 </span>
+                <button
+                    className="btn cursor-pointer px-4 py-2 text-blue-700 border border-blue-700 rounded-full transition-colors duration-300 transform hover:scale-105"
+                    onClick={() => navigate(type === 'daily' ? `/contest/daily/${contest._id}` : `/contest/coding/${contest._id}`)}
+                >
+                    View Details
+                </button>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { getUser, login, register, registerHr } from '../controllers/auth';
-
+// Base URL: http://localhost:3030/api/auth
 var router = express.Router();
 
 router.post('/register', register);

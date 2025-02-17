@@ -200,7 +200,7 @@ export interface DailyContestType {
   endTime: Date;
   rules?: string;
   participants: {
-    studentId: mongoose.Types.ObjectId;
+    studentId: string;
     score: number;
     status: "Registered" | "Completed";
   }[];
@@ -226,7 +226,7 @@ export interface CodingContestType {
   endTime: Date;
   rules?: string;
   participants: {
-    studentId: mongoose.Types.ObjectId;
+    studentId: string;
     score: number;
     status: "Registered" | "Completed";
   }[];

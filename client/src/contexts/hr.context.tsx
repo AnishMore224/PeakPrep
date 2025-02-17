@@ -24,7 +24,7 @@ export interface HrContextProps {
 export const HrProvider = ({ children }: { children: ReactNode }) => {
   const [hrmembers, setHrMembers] = useState<Hr[]>([]);
   const token = localStorage.getItem("token");
-  const { user, isAuthenticated } = useAuth();
+  const { jwtToken } = useAuth();
 
   const getHrMembers = useCallback(async () => {
     const response = await getRequest(`${ADMIN_BASE_URL}/hrs`, token);
@@ -48,7 +48,7 @@ export const HrProvider = ({ children }: { children: ReactNode }) => {
       setHrMembers([]);
       return;
     }
-  }, [getHrMembers, user, isAuthenticated]);
+  }, [getHrMembers, jwtToken]);
 
   return (
     <HrContext.Provider value={{ hrmembers, getHrMembers }}>

@@ -1,7 +1,7 @@
 import express from 'express';
 import { isHr, isHrOrAdmin, isHrOrStudentOrAdmin, isStudent } from '../middlewares/authenticate';
 import { addFeedback, deleteFeedback, getFeedback, getFeedbacks, updateFeedback } from '../controllers/feedback';
-
+// Base URL: http://localhost:3030/api/feedback
 var router = express.Router();
 
 router.post('/addFeedback', isHrOrAdmin, addFeedback);

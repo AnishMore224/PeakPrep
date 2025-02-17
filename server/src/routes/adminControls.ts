@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { addHr, deleteHr, addStudent, deleteStudent, addAdmin, deleteAdmin, addCompany, deleteCompany } from '../controllers/adminControls';
 import { isAdmin } from '../middlewares/authenticate';
-
+// Base URL: http://localhost:3030/api/admin
 var router = express.Router();
 
 router.post('/addhr', isAdmin, addHr);
