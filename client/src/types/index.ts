@@ -53,6 +53,7 @@ export interface ScheduleItem {
   title: string;
   time: string;
   type: "interview" | "review" | "practice" | "analytics";
+  url?: string;
 }
 
 export interface SidebarProps {
@@ -125,7 +126,6 @@ export interface Message {
 export interface StatCardProps {
   title: string;
   value: string;
-  change: string;
   icon: React.ReactNode;
 }
 export interface Candidate {

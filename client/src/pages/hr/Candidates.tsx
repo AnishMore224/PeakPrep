@@ -3,9 +3,11 @@ import { Users, GraduationCap, TrendingUp } from "lucide-react";
 import { CandidateList } from "../../components/hr/CandidateList";
 import { useUIContext } from "../../contexts/ui.context";
 import { StatCard } from "../../components/student/StatCard";
+import { useStudent } from "../../contexts/student.context"; 
 
 export function Candidate() {
   const { isSidebarVisible } = useUIContext();
+  const { students } = useStudent(); 
   const [filter, setFilter] = React.useState<string>("");
   const [majorFilter, setMajorFilter] = React.useState<string>("");
 
@@ -19,20 +21,17 @@ export function Candidate() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <StatCard
           title="Total Students"
-          value="1,234"
-          change="+10% from last month"
+          value={students.length.toString()} 
           icon={<Users className="text-blue-600" />}
         />
         <StatCard
           title="Average GPA"
           value="3.7"
-          change="+0.1 from last semester"
           icon={<GraduationCap className="text-blue-600" />}
         />
         <StatCard
           title="Graduation Rate"
           value="92%"
-          change="+2% from last year"
           icon={<TrendingUp className="text-blue-600" />}
         />
       </div>

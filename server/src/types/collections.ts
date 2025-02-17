@@ -146,4 +146,23 @@ interface CodingContestType extends Contest {
   }[];
 }
 
-export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType };
+interface ApiResponse {
+  success: boolean;
+  data: {
+    _id: string;
+    studentId: {
+      _id: string;
+      name: string;
+      regd_no: string;
+    }[];
+    companyName: string;
+    type: string;
+    rating: number;
+    comment: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+  message: string;
+}
+
+export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType, ApiResponse, Contest };

@@ -10,6 +10,8 @@ import {
 import { useUIContext } from "../../contexts/ui.context";
 import Papa from "papaparse";
 import { putRequest } from "../../utils/services";
+import { useStudent } from "../../contexts/student.context";
+import { useCompany } from "../../contexts/company.context";
 const BASE_URL = `http://localhost:3030/api/studentSelection`;
 interface EventProps {
   icon: React.ReactNode;
@@ -31,11 +33,10 @@ interface QuickActionButtonProps {
 interface StatCardProps {
   title: string;
   value: string;
-  change: string;
   icon: React.ReactNode;
 }
 
-export function StatCard({ title, value, change, icon }: StatCardProps) {
+export function StatCard({ title, value, icon }: StatCardProps) {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <div className="flex justify-between items-start mb-4">
@@ -43,7 +44,7 @@ export function StatCard({ title, value, change, icon }: StatCardProps) {
         {icon}
       </div>
       <div className="text-3xl font-bold mb-2">{value}</div>
-      <div className="text-sm text-gray-500">{change}</div>
+      {/* <div className="text-sm text-gray-500">{change}</div> */}
     </div>
   );
 }
@@ -156,6 +157,9 @@ async function handleFileUpload(file: File) {
 
 export function HRDashboard() {
   const { isSidebarVisible } = useUIContext();
+  const { students } = useStudent();
+  const { companies } = useCompany();
+
   return (
     <div
       className={`flex-1 p-6 md:p-8 bg-gray-50 transition-all duration-300 ${
@@ -166,27 +170,18 @@ export function HRDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <StatCard
           title="Total Students"
-          value="1,234"
-          change="+10% from last month"
+          value={students.length.toString()}
           icon={<Users className="text-blue-600" />}
         />
         <StatCard
-          title="Resumes Reviewed"
-          value="789"
-          change="+5% from last month"
+          title="Total Companies"
+          value={companies.length.toString()}
           icon={<FileText className="text-blue-600" />}
         />
         <StatCard
-          title="Interviews Scheduled"
+          title="Total AI Interviews"
           value="156"
-          change="+20% from last month"
           icon={<Calendar className="text-blue-600" />}
-        />
-        <StatCard
-          title="Placement Rate"
-          value="75%"
-          change="+2% from last month"
-          icon={<TrendingUp className="text-blue-600" />}
         />
       </div>
 

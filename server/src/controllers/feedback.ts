@@ -210,3 +210,48 @@ export const getFeedback = async (req: Request, res: Response): Promise<any> => 
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// Add this new controller function with the existing exports
+export const getRecentFeedback = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(400).json({ error: "Authorization token is required" });
+    }
+
+    const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    if (!decoded) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+
+    const recentFeedback = await Feedback.find()
+      .sort({ createdAt: -1 })
+      .limit(2)
+      .populate({
+        path: 'studentId',
+        select: 'name regd_no'
+      })
+      .select('studentId companyName type rating comment createdAt updatedAt');
+
+    if (!recentFeedback) {
+      return res.status(404).json({
+        success: false,
+        message: "No feedback found"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: recentFeedback,
+      message: "Successfully fetched recent feedback"
+    });
+  } catch (error: any) {
+    console.error("Error in getRecentFeedback:", error);
+    return res.status(500).json({ 
+      ...response, 
+      error: "Internal Server Error",
+      message: error.message 
+    });
+  }
+};
+
