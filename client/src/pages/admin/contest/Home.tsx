@@ -6,6 +6,7 @@ import DeleteConfirmation from "../../../components/admin/contest/DeleteConfirma
 import { useContest } from "../../../contexts/contest.context";
 import { DailyContestType, CodingContestType } from "../../../types/index";
 import { useUIContext } from "../../../contexts/ui.context";
+import Layout from "../../../components/student/contest/Layout";
 
 const Home = () => {
     const { dailyContests, codingContests, deleteContest } = useContest();
@@ -66,14 +67,8 @@ const Home = () => {
     );
 
     return (
-        <div
-            className={`flex-1 bg-gray-50 transition-all duration-300 ${
-                isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
-            }`}
-        >
-            {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-16">
-                {/* Tabs */}
+        <Layout>
+            <div className="max-w-6xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <div className="flex space-x-1 rounded-xl bg-blue-100 p-1">
                         <button
@@ -165,7 +160,7 @@ const Home = () => {
                         </div>
                     </section>
                 )}
-            </main>
+            </div>
 
             {/* Delete Confirmation Modal */}
             <DeleteConfirmation
@@ -174,7 +169,7 @@ const Home = () => {
                 onClose={() => setContestToDelete(null)}
                 onConfirm={confirmDelete}
             />
-        </div>
+        </Layout>
     );
 };
 

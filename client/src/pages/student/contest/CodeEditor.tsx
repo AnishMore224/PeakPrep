@@ -73,7 +73,7 @@ function CodeEditor() {
     const currentCase = testCases.find((c) => c.id === activeTestCase);
     if (!currentCase) return;
     console.log(code);
-    const apiKey = "be419a058emsh1b88bb624d81732p1a6e4ajsnb1a0cdda705c"; // Replace with your RapidAPI Key
+    const apiKey = import.meta.env.VITE_RAPID_API_KEY as string; // Replace with your RapidAPI Key
 
     const options = {
       method: "POST",

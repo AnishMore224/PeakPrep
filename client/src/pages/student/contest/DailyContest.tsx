@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Layout from '../../../components/student/contest/Layout';
 import QuestionCard from '../../../components/student/contest/QuestionCard';
 import ProgressBar from '../../../components/student/contest/ProgressBar';

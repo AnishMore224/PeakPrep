@@ -1,7 +1,7 @@
 import express from 'express';
 import { companies, company, hr, hrs, student, students } from '../controllers/details';
 import { isAdmin, isHrOrAdmin, isHrOrStudentOrAdmin, isStudent } from '../middlewares/authenticate';
-
+// Base URL: http://localhost:3030/api/details
 var router = express.Router();
 
 router.get('/students',isAdmin, students);

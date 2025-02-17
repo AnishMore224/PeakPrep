@@ -2,8 +2,7 @@ import express from 'express';
 import { isHr, isHrOrAdmin, isStudentOrAdmin } from '../middlewares/authenticate';
 import { addSelectedStudent, addShortlistStudent, getSelectedStudents, getShortlistedStudents, removeSelectedStudent, removeShortlistStudent, students, updateCompletedStudent, updateSelectedStudent, updateShortlistStudent } from '../controllers/studentSelection';
 import { getStudentSelections } from '../controllers/details';
-
-
+// Base URL: http://localhost:3030/api/studentSelection
 var router = express.Router();
 
 router.get('/getSelectedStudents', isHrOrAdmin, getSelectedStudents);

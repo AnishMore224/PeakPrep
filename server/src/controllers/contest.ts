@@ -213,7 +213,6 @@ export const deleteContest = async (
   res: Response
 ): Promise<any> => {
   try {
-    console.log(req.body);
     const { contestId, type } = req.body;
     if (!contestId || !type) {
       return res.status(400).json({

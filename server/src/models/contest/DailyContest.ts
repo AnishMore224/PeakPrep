@@ -8,7 +8,7 @@ const DailyContestSchema = new mongoose.Schema({
     rules: { type: String },
 
     participants: [{ 
-        studentId: { type: mongoose.Schema.Types.ObjectId, ref: "Student" }, 
+        studentId: { type: String, ref: "Student" }, 
         score: { type: Number, default: 0 }, 
         status: { type: String, enum: ["Registered", "Completed"], default: "Registered" }
     }],

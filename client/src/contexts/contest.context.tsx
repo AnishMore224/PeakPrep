@@ -11,6 +11,7 @@ interface ContestContextProps {
     error: string | null;
     updateError: (message: string | null) => void;
     createContest: (contestData: any) => Promise<void>;
+    getContest: (contestId: string | undefined, type: string) => Promise<any>;
     deleteContest: (contestId: string, type: string) => Promise<void>;
 }
 
@@ -50,6 +51,24 @@ export const ContestProvider = ({ children }: { children: React.ReactNode }) => 
             setError("Failed to fetch coding contests");
         }
     }, []);
+
+    const getContest = useCallback(async (contestId: string | undefined, type: string) => {
+        // type: DailyContest or CodingContest
+        try {
+            if (!contestId) {
+                setError("Contest ID is required");
+                return;
+            }
+            const response = await getRequest(`${BASE_URL}/${type}/${contestId}`);
+            if (response?.data?.contest) {
+                return response.data.contest;
+            } else {
+                setError(response?.error || "Failed to fetch contest");
+            }
+        } catch {
+            setError("Failed to fetch contest");
+        }
+    }, [jwtToken]);
 
     const createContest = useCallback(async (contestData: any) => {
         try {
@@ -104,9 +123,10 @@ export const ContestProvider = ({ children }: { children: React.ReactNode }) => 
             getDailyContests,
             getCodingContests,
             createContest,
+            getContest,
             deleteContest,
         }}>
-            {children}
+            {children}  
         </ContestContext.Provider>
     );
 };
