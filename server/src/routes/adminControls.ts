@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
 import { addHr, deleteHr, addStudent, deleteStudent, addAdmin, deleteAdmin, addCompany, deleteCompany } from '../controllers/adminControls';
 import { isAdmin } from '../middlewares/authenticate';
 // Base URL: http://localhost:3030/api/admin

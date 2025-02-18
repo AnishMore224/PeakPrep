@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ResumeData, dummyData, initialResumeData } from "./data";
+import { ResumeData, initialResumeData } from "./data";
 import {
   Briefcase,
   GraduationCap,
@@ -20,11 +20,12 @@ import {
 const ResumeForm: React.FC = () => {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
   const [latexOutput, setLatexOutput] = useState<React.ReactNode>(null);
+  const RESUME_API_URL = import.meta.env.VITE_RESUME_API_URL as string;
 
   useEffect(() => {
     const fetchResume = async () => {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:3030/api/genResume/get", {
+      const response = await fetch(`${RESUME_API_URL}/get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -179,7 +180,7 @@ const ResumeForm: React.FC = () => {
 
   const generatePDF = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:3030/api/genResume/download", {
+    const response = await fetch(`${RESUME_API_URL}/download`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -200,7 +201,7 @@ const ResumeForm: React.FC = () => {
   const saveResume = async () => {
     console.log("saving: ", resumeData);
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:3030/api/genResume/save", {
+    const response = await fetch(`${RESUME_API_URL}/save`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

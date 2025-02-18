@@ -12,7 +12,7 @@ import Papa from "papaparse";
 import { putRequest } from "../../utils/services";
 import { useStudent } from "../../contexts/student.context";
 import { useCompany } from "../../contexts/company.context";
-const BASE_URL = `http://localhost:3030/api/studentSelection`;
+const BASE_URL = import.meta.env.VITE_STUDENT_SELECTION_API_URL;
 interface EventProps {
   icon: React.ReactNode;
   title: string;

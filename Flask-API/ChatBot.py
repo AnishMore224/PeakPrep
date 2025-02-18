@@ -23,6 +23,7 @@ load_dotenv()
 # Configure Gemini AI
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 dg_client = Deepgram(os.getenv("DEEPGRAM_API_KEY"))
+PORT=os.getenv("PORT")
 
 # Load the OpenVINO face detector model
 model_xml = "models/face-detection-adas-0001.xml"
@@ -210,7 +211,7 @@ def convert_webm_to_mp4(input_file_path):
         print(f"Error converting WebM to MP4: {e}")
         return None
             
-@app.route("/complete_interview", methods=["POST"])
+@app.route("/api/complete_interview", methods=["POST"])
 def complete():
     ''' Detects the completion of the interview and returns the completion status. like the suspicious activities summary from audio and feedback'''
     if "video" not in request.files:
@@ -240,7 +241,7 @@ def complete():
     return jsonify({"suspicious_activity": response_video["suspicious_activity"], "frames": response_video["frames"],"audio":response_audio})    
     
 
-@app.route("/generate_questions", methods=["POST"])
+@app.route("/api/generate_questions", methods=["POST"])
 def generate_questions():
     """Generates interview questions based on resume PDF and job description using Gemini-1.5-Flash."""
     if "resume" not in request.files:
@@ -314,4 +315,4 @@ def gemini_response_resume():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=PORT)

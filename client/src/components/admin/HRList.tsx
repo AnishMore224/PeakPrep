@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useHr } from "../../contexts/hr.context";
 import { Hr } from "../../types";
 

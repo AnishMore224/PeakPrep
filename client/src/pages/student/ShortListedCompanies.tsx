@@ -9,7 +9,7 @@ function ShortListedCompanies() {
   const { isSidebarVisible } = useUIContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const { getAllCompanies, companies } = useCompany();
+  const { getCompanies, companies } = useCompany();
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value.toLowerCase());
@@ -20,7 +20,7 @@ function ShortListedCompanies() {
   }, []);
 
   useEffect(() => {
-    getAllCompanies();
+    getCompanies();
   }, [companies]);
 
   const filteredAndSortedCompanies = useMemo(() => {

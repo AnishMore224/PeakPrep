@@ -11,8 +11,8 @@ import { Company, CompanyData } from "../types";
 import { useAuth } from "./auth.context";
 import { jwtDecode } from "jwt-decode";
 
-const BASE_URL = "http://localhost:3030/api/studentSelection";
-const ADMIN_BASE_URL = "http://localhost:3030/api/details";
+const BASE_URL = import.meta.env.VITE_STUDENT_SELECTION_API_URL as string;
+const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL as string;
 
 const CompanyContext = createContext<CompanyContextProps | undefined>(
   undefined
