@@ -4,7 +4,6 @@ import { DailyContestType } from "../../../../types";
 import { useContest } from "../../../../contexts/contest.context";
 import LoadingScreen from "../../../LoadingScreen";
 import { useParams } from "react-router-dom";
-import { useUIContext } from "../../../../contexts/ui.context";
 import Layout from "../../../../components/student/contest/Layout";
 
 const DailyContestDetails: React.FC = () => {
@@ -13,7 +12,6 @@ const DailyContestDetails: React.FC = () => {
   const { getContest, error } = useContest();
   const [contest, setContest] = useState<DailyContestType | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>("");
-  const { isSidebarVisible } = useUIContext();
 
   useEffect(() => {
     const fetchContest = async () => {
