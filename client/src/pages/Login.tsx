@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="login min-h-screen bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:p-4 p-2">
+    <div className="login h-full bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:p-4 p-2">
       <div className="w-full max-w-[1200px] grid md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">

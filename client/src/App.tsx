@@ -76,7 +76,7 @@ function MainLayout() {
         <Header title={getHeaderTitle(location.pathname)} />
       )}
       <div
-        className={`flex flex-1 ${
+        className={`flex flex-1 h-full ${
           !shouldShowHeaderSidebar ||
           location.pathname === "/weekly-contest" ||
           location.pathname === "/daily-contest"
@@ -86,7 +86,7 @@ function MainLayout() {
       >
         {shouldShowHeaderSidebar && <Sidebar />}
         <main
-          className={`flex-1 ${
+          className={`flex-1 h-full ${
             !shouldShowHeaderSidebar || location.pathname === "/chatbot"
               ? "bg-gray-50 p-0"
               : "sm:p-6 md:p-8 p-2"

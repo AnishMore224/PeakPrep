@@ -76,7 +76,7 @@ export const StudentFeedback: React.FC = () => {
         <span>Back</span>
       </a>
 
-      <div className="flex flex-col md:flex-row min-h-screen">
+      <div className="flex flex-col md:flex-row">
         <StudentProfile student={student} />
         <FeedbackForm student={student} />
       </div>
