@@ -116,7 +116,7 @@ function ChatBot() {
 
   return (
     <div
-      className={`flex-1 bg-gray-200 transition-all duration-300 overflow-hidden ${
+      className={`flex-1 bg-gray-200 transition-all duration-300 overflow-hidden sm:p-0 ${
         isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
       }`}
     >
@@ -125,12 +125,12 @@ function ChatBot() {
           <ClipLoader color="#3B82F6" size={50} />
         </div>
       )}
-      <div className="flex justify-center max-h-[calc(100vh-4rem)]">
-        <div className="w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col">
+      <div className="flex justify-center max-h-[calc(100vh-4rem)] sm:p-0">
+        <div className="sm:w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col relative">
           <div className="flex-1 py-3">
             <MessageList messages={messages} />
           </div>
-          <div className="bg-gray-200 border-t border-gray-200">
+          <div className="bg-gray-200 border-t border-gray-200 absolute bottom-0 left-0 right-0">
             <div className="max-w-5xl mx-auto px-4 py-3">
               <div className="flex items-center space-x-4 mb-1">
                 <label

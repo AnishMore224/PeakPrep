@@ -91,9 +91,9 @@ function DailyContestDetails() {
             <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-6">
               <div className="flex flex-col sm:flex-row justify-between items-center">
                 <div>
-                  <h1 className="text-3xl font-bold text-white">{contest.title}</h1>
+                  <h1 className="text-3xl font-bold text-white text-center">{contest.title}</h1>
                   {contest.description && (
-                    <p className="mt-2 text-blue-100">{contest.description}</p>
+                    <p className="mt-2 text-blue-100 text-center">{contest.description}</p>
                   )}
                 </div>
                 <div className="mt-4 sm:mt-0">

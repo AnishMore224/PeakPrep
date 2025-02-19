@@ -77,7 +77,7 @@ function Feedbacks() {
   return (
     <>
       <div
-        className={`flex-1 p-6 md:p-8 transition-all duration-300 ${
+        className={`flex-1 py-6 px-3 md:p-8 transition-all duration-300 ${
           isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
         }`}
       >
@@ -115,7 +115,7 @@ function Feedbacks() {
               className="shadow-lg rounded-xl p-6 bg-white bg-opacity-90 transition-all transform hover:scale-[1.05] hover:shadow-2xl hover:bg-opacity-100 border border-gray-200 cursor-pointer h-[280px] flex flex-col"
               onClick={() => setSelectedFeedback(card)}
             >
-              <h2 className="text-2xl font-bold text-primary mb-3 line-clamp-1">
+              <h2 className="text-2xl font-bold text-primary mb-3">
                 {card.companyName}
               </h2>
               <p className="text-gray-600 text-sm mb-2">

@@ -152,8 +152,8 @@ const Sidebar: React.FC = () => {
   return (
     <aside
       className={`
-    fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300
-     md:overflow-y-auto overflow-y-scroll z-10
+    fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300 
+     md:overflow-y-auto overflow-y-auto z-10
     ${isSidebarVisible ? "block" : "hidden"} 
     md:block 
     ${!isSidebarVisible ? "md:w-20" : "md:w-64"}
@@ -215,8 +215,9 @@ const Sidebar: React.FC = () => {
               ${!isSidebarVisible ? "justify-center" : ""}
             `}
             aria-label="Sign out"
+            onClick={logout}
           >
-            <LogOut onClick={logout} size={24} />
+            <LogOut size={24} />
             {isSidebarVisible && <span>Sign out</span>}
           </button>
         </div>

@@ -170,25 +170,25 @@ export const CodingContestForm = () => {
           className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
         />
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className="block">
-            <span className="text-gray-700">Start Time:</span>
+<div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1">Start Time:</label>
             <input
               type="datetime-local"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
               className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
             />
-          </label>
-          <label className="block">
-            <span className="text-gray-700">End Time:</span>
+          </div>
+          <div>
+            <label className="block mb-1">End Time:</label>
             <input
               type="datetime-local"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+              className="w-full  p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
             />
-          </label>
+          </div>
         </div>
 
         <textarea

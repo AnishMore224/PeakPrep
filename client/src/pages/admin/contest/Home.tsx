@@ -69,7 +69,7 @@ const Home = () => {
     return (
         <Layout>
             <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-8 sm:flex-row flex-col sm:space-x-4 sm:space-y-0 space-y-4">
                     <div className="flex space-x-1 rounded-xl bg-blue-100 p-1">
                         <button
                             className={`flex items-center px-4 py-2 mx-4 rounded-lg ${

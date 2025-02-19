@@ -79,8 +79,7 @@ function MainLayout() {
         className={`flex flex-1 ${
           !shouldShowHeaderSidebar ||
           location.pathname === "/weekly-contest" ||
-          location.pathname === "/daily-contest" ||
-          location.pathname === "/contest"
+          location.pathname === "/daily-contest"
             ? "pt-0"
             : "pt-15"
         }`}
@@ -90,7 +89,7 @@ function MainLayout() {
           className={`flex-1 ${
             !shouldShowHeaderSidebar || location.pathname === "/chatbot"
               ? "bg-gray-50 p-0"
-              : "p-6 md:p-8"
+              : "sm:p-6 md:p-8 p-2"
           }`}
         >
           <Routes>
