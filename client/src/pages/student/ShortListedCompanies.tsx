@@ -43,7 +43,7 @@ function ShortListedCompanies() {
 
   return (
     <div
-      className={`flex-1 bg-gray-50 transition-all duration-300 ${
+      className={`flex-1 bg-gray-50 transition-all duration-300 pt-7 ${
         isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
       }`}
     >

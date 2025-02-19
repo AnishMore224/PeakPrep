@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="login min-h-screen bg-gray-50 flex items-center justify-center p-8">
+    <div className="login min-h-screen bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:p-4 p-2">
       <div className="w-full max-w-[1200px] grid md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">
@@ -28,7 +28,7 @@ export const Login: React.FC = () => {
         </div>
 
         {/* Right side - Login form */}
-        <div className="p-12 md:p-16">
+        <div className="sm:p-12 md:p-16 p-8">
           <div className="mb-12">
             <h1 className="text-3xl font-bold mb-4 flex items-center gap-4">
               <svg

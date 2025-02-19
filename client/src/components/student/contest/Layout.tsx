@@ -15,7 +15,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div
-      className={`flex-1 p-6 md:p-8  transition-all duration-300 ${isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
+      className={`flex-1 py-6 sm:p-6 md:p-8  transition-all duration-300 ${isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
         }`}
     >
       <main className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">

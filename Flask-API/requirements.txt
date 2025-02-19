@@ -7,7 +7,7 @@ google-generativeai
 opencv-python
 PyPDF2
 openvino
-deepgram
+deepgram-sdk
 SpeechRecognition
 moviepy
 ffmpeg-python
