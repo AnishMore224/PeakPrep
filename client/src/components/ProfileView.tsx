@@ -10,7 +10,7 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
       <div className="flex items-center gap-4 mb-8">
         <div className="relative">
           <img
-            src="../../public/profile.png"
+            src="/profile.png"
             alt="Profile"
             className="w-16 h-16 rounded-full"
           />
