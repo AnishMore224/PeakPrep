@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useFeedback } from "../../contexts/feedback.context";
-import { Star, X, Search, Share, Download } from "lucide-react";
+import { Star, X, Search } from "lucide-react";
 import { useUIContext } from "../../contexts/ui.context";
 import SortButton from "../../components/student/SortButton";
 

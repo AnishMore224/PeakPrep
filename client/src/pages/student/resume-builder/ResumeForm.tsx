@@ -19,7 +19,7 @@ import {
 
 const ResumeForm: React.FC = () => {
   const [resumeData, setResumeData] = useState<ResumeData>(initialResumeData);
-  const [latexOutput, setLatexOutput] = useState<React.ReactNode>(null);
+  const [latexOutput, _setLatexOutput] = useState<React.ReactNode>(null);
   const RESUME_API_URL = import.meta.env.VITE_RESUME_API_URL as string;
 
   useEffect(() => {
@@ -201,7 +201,7 @@ const ResumeForm: React.FC = () => {
   const saveResume = async () => {
     console.log("saving: ", resumeData);
     const token = localStorage.getItem("token");
-    const response = await fetch(`${RESUME_API_URL}/save`, {
+    await fetch(`${RESUME_API_URL}/save`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

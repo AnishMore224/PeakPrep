@@ -53,4 +53,4 @@ mongoose
       console.log(`API running at http://localhost:${PORT}/`);
     });
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("Database connection error:", err));

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+// import { useLocation } from 'react-router-dom';
+// import { ArrowLeft } from 'lucide-react';
 import { useUIContext } from '../../../contexts/ui.context';
 
 interface LayoutProps {
@@ -8,10 +8,10 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  // const location = useLocation();
+  // const navigate = useNavigate();
   const { isSidebarVisible } = useUIContext();
-  const showBackButton = location.pathname !== '/contest-main';
+  // const showBackButton = location.pathname !== '/contest-main';
 
   return (
     <div

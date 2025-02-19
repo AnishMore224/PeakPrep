@@ -3,7 +3,6 @@ import {
   Users,
   FileText,
   Calendar,
-  TrendingUp,
   Briefcase,
   GraduationCap,
 } from "lucide-react";

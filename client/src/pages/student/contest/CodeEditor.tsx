@@ -36,7 +36,7 @@ function CodeEditor() {
   >("vscodeDark");
   const [code, setCode] = useState(InitialCode.java);
   const [questions, setQuestions] = useState<any[]>([]);
-  const [timeLeft, setTimeLeft] = useState("30:00");
+  const [timeLeft, _setTimeLeft] = useState("30:00");
   const [activeTab, setActiveTab] = useState("description");
   const [isRunning, setIsRunning] = useState(false);
   const [languageName, setLanguageName] = useState<
