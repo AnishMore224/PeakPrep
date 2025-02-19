@@ -48,12 +48,12 @@ body {
 }
 
 .login {
-  background-image: url("../public/bg1.png");
+  background-image: url("/bg1.png");
   background-size: cover;
 }
 
 .signup {
-  background-image: url("../public/bg2.png");
+  background-image: url("/bg2.png");
   background-size: cover;
 }
 

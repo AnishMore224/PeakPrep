@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import "../../public/Login1.png";
-import "../../public/bg1.png";
 import { useAuth } from "../contexts/auth.context";
 import { Eye, EyeOff } from 'lucide-react';
 
@@ -23,7 +21,7 @@ export const Login: React.FC = () => {
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">
           <img
-            src="../../public/Login1.png"
+            src="/Login1.png"
             alt="Graduate illustration"
             className="w-full max-w-[400px]"
           />
