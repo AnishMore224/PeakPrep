@@ -19,6 +19,7 @@ export function Interview() {
   const mediaStreamDestination = useRef<MediaStreamAudioDestinationNode | null>(
     null
   );
+  const FLASK_API = import.meta.env.VITE_FLASK_API as string;
 
   useEffect(() => {
     if (isInterviewStarted) {
@@ -50,7 +51,7 @@ export function Interview() {
         const formData = new FormData();
         formData.append("resume", fileInputRef.current.files[0]);
 
-        fetch("http://127.0.0.1:8000/generate_questions", {
+        fetch(`${FLASK_API}/generate_questions`, {
           method: "POST",
           body: formData,
         })
@@ -152,7 +153,7 @@ export function Interview() {
     formData.append("video", blob, "interview-recording.webm");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/complete_interview", {
+      const response = await fetch(`${FLASK_API}/complete_interview`, {
         method: "POST",
         body: formData,
       });

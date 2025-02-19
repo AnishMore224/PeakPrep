@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import ApiResponse, { response } from "../types/response";
+import { Request, Response } from "express";
+import { response } from "../types/response";
 import { IUser, IHR } from "../types/collections";
 import HR from '../models/HR';
 import Student from '../models/Student';

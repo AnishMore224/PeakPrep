@@ -9,7 +9,8 @@ import CryptoJS from "crypto-js";
 export const StudentFeedback: React.FC = () => {
   const { isSidebarVisible } = useUIContext();
   const secretKey = import.meta.env.VITE_SECRET_KEY;
-  const IV = CryptoJS.enc.Utf8.parse("1234567890123456"); 
+
+  const IV = CryptoJS.enc.Utf8.parse(import.meta.env.VITE_SECRET_IV as string); 
 
   const decryptStudentId = (encryptedId: string, secretKey: string): string => {
     const base64EncryptedId = encryptedId
@@ -32,7 +33,7 @@ export const StudentFeedback: React.FC = () => {
   const [student, setStudent] = useState<any>(null);
   const [studentId, setStudentId] = useState<string>("");
   const token = localStorage.getItem("token");
-  const BASE_URL = "http://localhost:3030/api/details";
+  const BASE_URL = import.meta.env.VITE_DETAILS_API_URL as string;
 
   useEffect(() => {
     if (encryptedIdParam) {

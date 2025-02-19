@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../../public/signup.png";
 import { useAuth } from "../contexts/auth.context";
-import { studentRegisterInfoType, HrRegisterInfoType } from "../types/index";
 import { Eye, EyeOff } from "lucide-react";
 
 export const SignUp = () => {
@@ -14,8 +13,6 @@ export const SignUp = () => {
     hrRegisterInfo,
     updateStudentRegisterInfo,
     updateHrRegisterInfo,
-    isRegisterLoading,
-    registerError,
   } = useAuth();
 
   const changeUserType = (type: string) => {

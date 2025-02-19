@@ -46,6 +46,8 @@ import StudentCodingContestDetails from "./pages/student/contest/details/CodingC
 import AdminDailyContestDetails from "./pages/admin/contest/details/DailyContestDetails";
 import AdminCodingContestDetails from "./pages/admin/contest/details/CodingContestDetails";
 import { getHeaderTitle } from "./utils/functions";
+import Verification from "./pages/Verification";
+import Password from "./pages/Password";
 
 function MainLayout() {
   const location = useLocation();
@@ -55,6 +57,8 @@ function MainLayout() {
     "/codeEditor",
     "/interview",
     "/interview-result",
+    "/verify-email",
+    "/change-password",
   ];
   const shouldShowHeaderSidebar = !hideHeaderSidebarPaths.includes(
     location.pathname
@@ -69,9 +73,7 @@ function MainLayout() {
   return (
     <>
       {shouldShowHeaderSidebar && (
-        <Header
-          title={getHeaderTitle(location.pathname)}
-        />
+        <Header title={getHeaderTitle(location.pathname)} />
       )}
       <div
         className={`flex flex-1 ${
@@ -91,265 +93,284 @@ function MainLayout() {
               : "p-6 md:p-8"
           }`}
         >
-            <Routes>
+          <Routes>
             <Route
               path="/"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <StudentDashboard />
-                ) : user?.role === "admin" ? (
-                <AdminDashboard />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <StudentDashboard />
+                  ) : user?.role === "admin" ? (
+                    <AdminDashboard />
+                  ) : (
+                    <HRDashboard />
+                  )
                 ) : (
-                <HRDashboard />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/login"
               element={
-              isAuthenticated ? <Navigate to="/" replace /> : <Login />
+                isAuthenticated ? <Navigate to="/" replace /> : <Login />
               }
             />
             <Route
               path="/signup"
               element={
-              isAuthenticated ? <Navigate to="/" replace /> : <SignUp />
+                isAuthenticated ? <Navigate to="/" replace /> : <SignUp />
               }
             />
             <Route
               path="/profile"
               element={
-              isAuthenticated ? (
-                <Profile />
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
+                isAuthenticated ? (
+                  <Profile />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
               }
             />
             <Route
               path="/companies"
               element={
-              isAuthenticated ? (
-                <ShortListedCompanies />
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
+                isAuthenticated ? (
+                  <ShortListedCompanies />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
               }
             />
             <Route
               path="/candidates"
               element={
-              isAuthenticated ? (
-                <Candidate />
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
+                isAuthenticated ? (
+                  <Candidate />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
               }
             />
             <Route
               path="/ChatBot"
               element={
-              isAuthenticated ? (
-                <ChatBot />
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
+                isAuthenticated ? (
+                  <ChatBot />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
               }
             />
             <Route
               path="/feedbacks"
               element={
-              isAuthenticated ? (
-                <Feedbacks />
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
+                isAuthenticated ? (
+                  <Feedbacks />
+                ) : (
+                  <Navigate to="/login" state={{ from: location }} replace />
+                )
               }
             />
             <Route
               path="/allcompanies"
               element={
-              isAuthenticated ? (
-                user?.role !== "admin" ? (
-                <NotAuthorized />
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCompanies />
+                  )
                 ) : (
-                <AllCompanies />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/allcandidates"
               element={
-              isAuthenticated ? (
-                user?.role !== "admin" ? (
-                <NotAuthorized />
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <AllCandidate />
+                  )
                 ) : (
-                <AllCandidate />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/hrs"
               element={
-              isAuthenticated ? (
-                user?.role !== "admin" ? (
-                <NotAuthorized />
+                isAuthenticated ? (
+                  user?.role !== "admin" ? (
+                    <NotAuthorized />
+                  ) : (
+                    <Hrs />
+                  )
                 ) : (
-                <Hrs />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
 
             <Route
               path="/feedbackform"
               element={
-              isAuthenticated ? (
-                user?.role === "hr" || user?.role === "admin" ? (
-                <StudentFeedback />
+                isAuthenticated ? (
+                  user?.role === "hr" || user?.role === "admin" ? (
+                    <StudentFeedback />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/resume"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <ResumeForm />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ResumeForm />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/atsChecker"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <ATS />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ATS />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/openSource"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <OpenSource />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <OpenSource />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/resources"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <ResourcesPage />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <ResourcesPage />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/contest"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <StudentContestHome />
-                ) : user?.role === "admin" ? (
-                <AdminContestHome />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <StudentContestHome />
+                  ) : user?.role === "admin" ? (
+                    <AdminContestHome />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/contest/create"
               element={
-              isAuthenticated ? (
-                user?.role === "admin" ? (
-                <CreateContest />
+                isAuthenticated ? (
+                  user?.role === "admin" ? (
+                    <CreateContest />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/contest/daily/:id"
               element={
-              isAuthenticated ? (
-                user?.role === "admin" ? (
-                <AdminDailyContestDetails />
-                ) : user?.role === "student" ? (
-                <StudentDailyContestDetails />
+                isAuthenticated ? (
+                  user?.role === "admin" ? (
+                    <AdminDailyContestDetails />
+                  ) : user?.role === "student" ? (
+                    <StudentDailyContestDetails />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to="/login" state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to="/login" state={{ from: location }} replace />
-              )
               }
             />
             <Route
               path="/contest/coding/:id"
               element={
-              isAuthenticated ? (
-                user?.role === "student" ? (
-                <StudentCodingContestDetails />
-                ) : user?.role === "admin" ? (
-                <AdminCodingContestDetails />
+                isAuthenticated ? (
+                  user?.role === "student" ? (
+                    <StudentCodingContestDetails />
+                  ) : user?.role === "admin" ? (
+                    <AdminCodingContestDetails />
+                  ) : (
+                    <NotAuthorized />
+                  )
                 ) : (
-                <NotAuthorized />
+                  <Navigate to={"/login"} state={{ from: location }} replace />
                 )
-              ) : (
-                <Navigate to={"/login"} state={{ from: location }} replace />
-              )
               }
             />
+            <Route
+              path="/verify-email"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" replace />
+                ) : user ? (
+                  <Verification />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route path="/change-password" element={
+              isAuthenticated ? (
+                <Password />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />
             <Route path="*" element={<NotFound />} />
-            </Routes>
+          </Routes>
         </main>
       </div>
     </>
@@ -358,23 +379,23 @@ function MainLayout() {
 
 export function App() {
   return (
-    <AuthProvider>
-      <UIProvider>
-        <CompanyProvider>
-          <StudentProvider>
-            <HrProvider>
-              <FeedbackProvider>
-                <ContestProvider>
-                  <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <UIProvider>
+          <CompanyProvider>
+            <StudentProvider>
+              <HrProvider>
+                <FeedbackProvider>
+                  <ContestProvider>
                     <MainLayout />
-                  </BrowserRouter>
-                </ContestProvider>
-              </FeedbackProvider>
-            </HrProvider>
-          </StudentProvider>
-        </CompanyProvider>
-      </UIProvider>
-    </AuthProvider>
+                  </ContestProvider>
+                </FeedbackProvider>
+              </HrProvider>
+            </StudentProvider>
+          </CompanyProvider>
+        </UIProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

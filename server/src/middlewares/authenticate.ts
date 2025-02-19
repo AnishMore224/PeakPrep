@@ -19,7 +19,7 @@ export const isAdmin = async (
 
     const decoded: any = jwt.verify(
       token,
-      (process.env.JWT_SECRET as string) || "your_secret_key"
+      (process.env.JWT_SECRET as string)
     );
     const user = await User.findOne({ _id: decoded.id }); // from token we get the role of the user
 

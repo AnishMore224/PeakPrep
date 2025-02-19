@@ -10,8 +10,8 @@ import { getRequest } from "../utils/services";
 import { Student, StudentData } from "../types";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./auth.context";
-const BASE_URL = "http://localhost:3030/api/studentSelection";
-const ADMIN_BASE_URL = "http://localhost:3030/api/details";
+const BASE_URL = import.meta.env.VITE_STUDENT_SELECTION_API_URL;
+const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL;
 const StudentContext = createContext<StudentContextProps | undefined>(
   undefined
 );

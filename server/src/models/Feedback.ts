@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { IFeedback } from '../types/collections';
 
 const FeedbackSchema: Schema = new Schema(

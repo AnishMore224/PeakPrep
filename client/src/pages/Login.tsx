@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/auth.context";
 import { Eye, EyeOff } from 'lucide-react';
 
 export const Login: React.FC = () => {
-  const { login, loginInfo, loginError, isLoginLoading, updateLoginInfo } = useAuth();
+  const { login, loginInfo, updateLoginInfo } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

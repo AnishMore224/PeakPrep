@@ -1,10 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
-import { IStudent, IUser } from "../types/collections";
-import ApiResponse, { response } from "../types/response";
-// import { switchDB } from "../utils/db";
+import { IUser } from "../types/collections";
+import { response } from "../types/response";
 import User from "../models/User";
 import Student from "../models/Student";
 import Admin from "../models/Admin";
@@ -47,6 +46,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
       username,
       password: hashedPassword,
       role: "student",
+      verified: false,
     });
     await user.save();
 
@@ -66,7 +66,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
 
     const token = jwt.sign(
       { id: user._id, username: student._id, role: "student" },
-      process.env.JWT_SECRET || "your_secret_key"
+      process.env.JWT_SECRET as string
     );
     // user_id: UUID, regd_no: regd_No, role: student
 
@@ -82,6 +82,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
           branch,
           section,
           email,
+          verified: false,
         },
       },
     });
@@ -129,6 +130,7 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
       username: email,
       password: hashedPassword,
       role: "hr",
+      verified: false,
     });
     await user.save();
     
@@ -142,7 +144,7 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
 
     const token = jwt.sign(
       { id: user._id, username: email, role: "hr" },
-      process.env.JWT_SECRET || "your_secret_key"
+      process.env.JWT_SECRET as string
     );
 
     res.status(201).json({
@@ -157,6 +159,7 @@ export const registerHr = async (req: Request, res: Response): Promise<any> => {
           companyId: companyObject._id,
           username: email,
           role: "hr",
+          verified: false,
         },
       },
     });
@@ -202,7 +205,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user._id, username: username, role: user.role },
-        process.env.JWT_SECRET || "your_secret_key"
+        process.env.JWT_SECRET as string
       );
 
       res.status(200).json({
@@ -217,6 +220,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             branch: student?.branch,
             section: student?.section,
             email: student?.email,
+            verified: user?.verified,
           },
         },
       });
@@ -225,7 +229,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user._id, role: user.role, username: admin?.email },
-        process.env.JWT_SECRET || "your_secret_key"
+        process.env.JWT_SECRET as string
       );
       res.status(200).json({
         ...response,
@@ -238,6 +242,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             username,
             email: username,
             role: user.role,
+            verified: user?.verified,
           },
         },
       });
@@ -261,6 +266,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             companyName: company?.name,
             username,
             role: user.role,
+            verified: user?.verified,
           },
         },
       });
@@ -280,12 +286,16 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
   try {
     const decoded: any = jwt.verify(
       token,
-      process.env.JWT_SECRET || "your_secret_key"
+      process.env.JWT_SECRET as string
     );
     if (!decoded) {
       return res.status(400).json({ ...response, error: "Invalid token." });
     }
     const { id, role, username } = decoded;
+    const user = await User.findOne({ _id: id });
+    if (!user) {
+      return res.status(404).json({ ...response, error: "User not found." });
+    }
     if (role === "student") {
       const student = await Student.findOne({ _id: username });
       if (!student) {
@@ -304,6 +314,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
             section: student.section,
             email: student.email,
             role,
+            verified: user.verified,
           },
         },
       });
@@ -321,6 +332,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
             username,
             email: username,
             role,
+            verified: user.verified,
           },
         },
       });
@@ -340,6 +352,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
             companyName: company?.name,
             username,
             role,
+            verified: user.verified,
           },
         },
       });

@@ -23,10 +23,8 @@ function ChatBot() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputText(e.target.value);
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -87,7 +85,7 @@ function ChatBot() {
     formData.append("file", file);
 
     const response = await axios.post(
-      "http://localhost:5001/api/pdf-to-image",
+      `${FLASK_API}/pdf-to-image`,
       formData,
       {
         headers: {
@@ -105,7 +103,7 @@ function ChatBot() {
     chatHistory: string[]
   ) => {
     const response = await axios.post(
-      "http://localhost:5001/api/gemini-response",
+      `${FLASK_API}/gemini-response`,
       {
         inputText,  
         pdfContent,

@@ -47,7 +47,6 @@ function CodeEditor() {
     { id: number; input: string; output: string; error: string | null }[]
   >([]);
 
-  
   const [testCases, setTestCases] = useState<TestCase[]>([
     { id: 1, input: "[[1,7,3],[9,8,2],[4,5,6]]", output: "" },
   ]);
@@ -57,7 +56,7 @@ function CodeEditor() {
   };
 
   const handleInputChange = (id: number, value: string) => {
-    setTestCases((prevCases: TestCase[]) => 
+    setTestCases((prevCases: TestCase[]) =>
       prevCases.map((c: TestCase) => (c.id === id ? { ...c, input: value } : c))
     );
   };
@@ -65,14 +64,12 @@ function CodeEditor() {
   useEffect(() => {
     const shuffledQuestions = contestQuestions.sort(() => 0.5 - Math.random());
     setQuestions(shuffledQuestions.slice(0, 2));
-    
   }, []);
 
   const handleRunCode = async () => {
     setIsRunning(true);
     const currentCase = testCases.find((c) => c.id === activeTestCase);
     if (!currentCase) return;
-    console.log(code);
     const apiKey = import.meta.env.VITE_RAPID_API_KEY as string; // Replace with your RapidAPI Key
 
     const options = {
@@ -100,7 +97,6 @@ function CodeEditor() {
       const output = result.stdout ? atob(result.stdout) : null;
       const error = result.stderr ? atob(result.stderr) : null;
 
-      console.log("Submission result:", response.data);
       setTestCases((cases) =>
         cases.map((c) =>
           c.id === activeTestCase
@@ -118,63 +114,58 @@ function CodeEditor() {
     setIsRunning(true);
     const currentCase = testCases.find((c) => c.id === activeTestCase);
     if (!currentCase) return;
-    const apiKey = "be419a058emsh1b88bb624d81732p1a6e4ajsnb1a0cdda705c"; // Replace with your RapidAPI Key
-    console.log(`Submitting code in ${languageName}:`);
-    console.log(code);
+    const apiKey = import.meta.env.VITE_RAPID_API_KEY as string; // Replace with your RapidAPI Key
+    const options = {
+      method: "POST",
+      url: "https://judge0-ce.p.rapidapi.com/submissions",
+      params: {
+        base64_encoded: "true",
+        wait: "true",
+        fields: "*",
+      },
+      headers: {
+        "x-rapidapi-key": apiKey,
+        "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
+        "Content-Type": "application/json",
+      },
+      data: {
+        language_id: 62,
+        source_code: btoa(code),
+        stdin: "",
+      },
+    };
 
-    // console.log(`Submitting code in ${languageName}:`);
-    // console.log(code);
-    // const options = {
-    //   method: "POST",
-    //   url: "https://judge0-ce.p.rapidapi.com/submissions",
-    //   params: {
-    //     base64_encoded: "true",
-    //     wait: "true",
-    //     fields: "*",
-    //   },
-    //   headers: {
-    //     "x-rapidapi-key": apiKey,
-    //     "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-    //     "Content-Type": "application/json",
-    //   },
-    //   data: {
-    //     language_id: 62,
-    //     source_code: btoa(code),
-    //     stdin: "",
-    //   },
-    // };
+    try {
+      const response = await axios.request(options);
+      const result = response.data;
+      const output = result.stdout ? atob(result.stdout) : null;
+      const error = result.stderr ? atob(result.stderr) : null;
 
-    // try {
-    //   const response = await axios.request(options);
-    //   const result = response.data;
-    //   const output = result.stdout ? atob(result.stdout) : null;
-    //   const error = result.stderr ? atob(result.stderr) : null;
+      setTestCases((cases) =>
+        cases.map((c) =>
+          c.id === activeTestCase
+            ? { ...c, output: output || `Error: ${error}` }
+            : c
+        )
+      );
 
-    //   console.log("Submission result:", response.data);
-    //   setTestCases((cases) =>
-    //     cases.map((c) =>
-    //       c.id === activeTestCase
-    //         ? { ...c, output: output || `Error: ${error}` }
-    //         : c
-    //     )
-    //   );
-
-    //   setSubmissionResults((prevResults) => [
-    //     ...prevResults,
-    //     {
-    //       id: activeTestCase,
-    //       input: currentCase.input,
-    //       output: output || "",
-    //       error: error,
-    //     },
-    //   ]);
-    // } catch (error) {
-    //   console.error("Execution error:", error);
-    // }
+      setSubmissionResults((prevResults) => [
+        ...prevResults,
+        {
+          id: activeTestCase,
+          input: currentCase.input,
+          output: output || "",
+          error: error,
+        },
+      ]);
+    } catch (error) {
+      console.error("Execution error:", error);
+    }
     setIsRunning(false);
   };
 
-  const currentTestCase = testCases.find((c) => c.id === activeTestCase) || null;
+  const currentTestCase =
+    testCases.find((c) => c.id === activeTestCase) || null;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col overflow-hidden ">
@@ -292,8 +283,8 @@ function CodeEditor() {
           />
 
           {/* Editor */}
-            <div className="flex-1 flex-col">
-              <Editor
+          <div className="flex-1 flex-col">
+            <Editor
               currentLanguage={languageName}
               currentTheme={theme}
               currentCode={code}
@@ -304,8 +295,8 @@ function CodeEditor() {
               setTestCases={setTestCases}
               currentTestCase={currentTestCase}
               handleInputChange={handleInputChange}
-              />
-            </div>
+            />
+          </div>
         </div>
       </div>
     </div>

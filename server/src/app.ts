@@ -17,13 +17,13 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT;
 
 // middlewares
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5174",
+  origin: process.env.CLIENT_URL,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));

@@ -10,7 +10,7 @@ import { getRequest, postRequest } from "../utils/services";
 import { Feedback,FeedbackAdd } from "../types";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./auth.context";
-const BASE_URL = "http://localhost:3030/api/feedback";
+const BASE_URL = import.meta.env.VITE_FEEDBACK_API as string;
 const FeedbackContext = createContext<FeedbackContextProps | undefined>(
   undefined
 );

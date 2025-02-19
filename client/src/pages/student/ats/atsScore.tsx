@@ -37,6 +37,7 @@ function atsScore() {
     const [btn, setBtn] = useState<string>("");
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { isSidebarVisible } = useUIContext();
+    const FLASK_API = import.meta.env.VITE_FLASK_API;
 
     const handleFileUpload = (uploadedFile: File) => {
         setFile(uploadedFile);
@@ -56,7 +57,7 @@ function atsScore() {
         formData.append("prompt", prompt);
 
         try {
-            const response = await axios.post("http://127.0.0.1:5001/api/gemini-response-resume", formData, {
+            const response = await axios.post(`${FLASK_API}/gemini-response-resume`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },

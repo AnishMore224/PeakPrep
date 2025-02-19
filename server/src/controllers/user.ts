@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import ApiResponse, { response } from "../types/response";
+import { response } from "../types/response";
 import HR from "../models/HR";
 import Student from "../models/Student";
 import Admin from "../models/Admin";
