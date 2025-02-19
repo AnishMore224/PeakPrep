@@ -24,7 +24,7 @@ export const SearchBar: React.FC<SearchBarProps> = React.memo(({ onSearch, onSor
           </div>
         </div>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-          <button className="px-6 py-2 border border-slate-200 rounded-lg hover:border-indigo-500 hover:text-indigo-600 transition-colors duration-200 w-full sm:w-auto">
+          <button className="px-6 py-2 border border-slate-200 rounded-lg hover:border-indigo-500 hover:text-indigo-600 transition-colors duration-200 w-full sm:w-auto" onClick={onExport}>
             Export
           </button>
           <button className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200 w-full sm:w-auto">

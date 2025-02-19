@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export function Interview() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isRecording, setIsRecording] = useState(false);
+  const [_isRecording, setIsRecording] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [questions, setQuestions] = useState<string[]>([]);
   const [hasUploadedResume, setHasUploadedResume] = useState(false);

@@ -5,17 +5,17 @@ import ContestCard from "../../../components/admin/contest/ContestCard";
 import DeleteConfirmation from "../../../components/admin/contest/DeleteConfirmation";
 import { useContest } from "../../../contexts/contest.context";
 import { DailyContestType, CodingContestType } from "../../../types/index";
-import { useUIContext } from "../../../contexts/ui.context";
+// import { useUIContext } from "../../../contexts/ui.context";
 import Layout from "../../../components/student/contest/Layout";
 
 const Home = () => {
     const { dailyContests, codingContests, deleteContest } = useContest();
-    const { isSidebarVisible } = useUIContext();
+    // const { isSidebarVisible } = useUIContext();
     const [activeTab, setActiveTab] = useState<"daily" | "coding">("daily");
     const [contestToDelete, setContestToDelete] = useState<
         DailyContestType | CodingContestType | null
     >(null);
-    const [contests, setContests] = useState({
+    const [contests, _setContests] = useState({
         daily: dailyContests,
         coding: codingContests,
     });

@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
-  BookOpen,
   Code,
   Users,
   FileText,
   Filter,
-  Play,
   FileText as Document,
   ExternalLink,
   Brain,
