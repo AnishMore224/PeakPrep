@@ -17,7 +17,7 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 // middlewares
 app.use(express.json());
@@ -49,7 +49,7 @@ mongoose
   .connect(process.env.DBURI as string)
   .then(() => {
     console.log("Connected to Database !");
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`API running at http://localhost:${PORT}/`);
     });
   })
