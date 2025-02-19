@@ -55,7 +55,7 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
                  hover:from-blue-600 hover:to-indigo-700 
                  focus:ring-2 focus:ring-blue-300 
                  transition-all duration-300"
-              onClick={() => (window.location.href = "/change-password")}
+              onClick={() => navigate("/change-password")}
             >
               Change Password
             </button>
@@ -75,7 +75,7 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
                    hover:from-blue-600 hover:to-indigo-700 
                    focus:ring-2 focus:ring-blue-300 
                    transition-all duration-300"
-              onClick={() => (window.location.href = "/change-password")}
+              onClick={() => navigate("/change-password")}
             >
               Change Password
             </button>
