@@ -4,6 +4,7 @@ interface IUser extends Document {
   username: string;
   password: string;
   role: "admin" | "hr" | "student";
+  verified: boolean;
 }
 interface IStudent extends Document {
   userId: string;
@@ -165,4 +166,10 @@ interface ApiResponse {
   message: string;
 }
 
-export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType, ApiResponse, Contest };
+interface Verification {
+  email: string;
+  verificationCode: string;
+  expiresIn: Date;
+}
+
+export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType, ApiResponse, Contest, Verification };

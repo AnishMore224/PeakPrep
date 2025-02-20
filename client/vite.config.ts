@@ -10,6 +10,9 @@ export default defineConfig({
   ],
   server: {
     port: 5173
+  },
+  build: {
+    outDir: "dist", // This ensures the build output goes to dist/
   }
 })
 

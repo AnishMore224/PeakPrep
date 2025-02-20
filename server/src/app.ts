@@ -17,13 +17,13 @@ import cors from "cors";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 // middlewares
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:5174",
+  origin: process.env.CLIENT_URL,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -49,8 +49,8 @@ mongoose
   .connect(process.env.DBURI as string)
   .then(() => {
     console.log("Connected to Database !");
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`API running at http://localhost:${PORT}/`);
     });
   })
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("Database connection error:", err));

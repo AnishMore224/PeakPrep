@@ -58,19 +58,16 @@ export function AllCandidate() {
         <StatCard
           title="Total Students"
           value="1,234"
-          change="+10% from last month"
           icon={<Users className="text-blue-600" />}
         />
         <StatCard
           title="Average GPA"
           value="3.7"
-          change="+0.1 from last semester"
           icon={<GraduationCap className="text-blue-600" />}
         />
         <StatCard
           title="Graduation Rate"
           value="92%"
-          change="+2% from last year"
           icon={<TrendingUp className="text-blue-600" />}
         />
       </div>

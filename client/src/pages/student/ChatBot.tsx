@@ -23,10 +23,8 @@ function ChatBot() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputText(e.target.value);
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -87,7 +85,7 @@ function ChatBot() {
     formData.append("file", file);
 
     const response = await axios.post(
-      "http://localhost:5001/api/pdf-to-image",
+      `${FLASK_API}/pdf-to-image`,
       formData,
       {
         headers: {
@@ -105,7 +103,7 @@ function ChatBot() {
     chatHistory: string[]
   ) => {
     const response = await axios.post(
-      "http://localhost:5001/api/gemini-response",
+      `${FLASK_API}/gemini-response`,
       {
         inputText,  
         pdfContent,
@@ -118,7 +116,7 @@ function ChatBot() {
 
   return (
     <div
-      className={`flex-1 bg-gray-200 transition-all duration-300 overflow-hidden ${
+      className={`flex-1 bg-gray-200 transition-all duration-300 overflow-hidden sm:p-0 ${
         isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
       }`}
     >
@@ -127,12 +125,12 @@ function ChatBot() {
           <ClipLoader color="#3B82F6" size={50} />
         </div>
       )}
-      <div className="flex justify-center max-h-[calc(100vh-4rem)]">
-        <div className="w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col">
+      <div className="flex justify-center max-h-[calc(100vh-4rem)] sm:p-0">
+        <div className="sm:w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col relative">
           <div className="flex-1 py-3">
             <MessageList messages={messages} />
           </div>
-          <div className="bg-gray-200 border-t border-gray-200">
+          <div className="bg-gray-200 border-t border-gray-200 absolute bottom-0 left-0 right-0">
             <div className="max-w-5xl mx-auto px-4 py-3">
               <div className="flex items-center space-x-4 mb-1">
                 <label

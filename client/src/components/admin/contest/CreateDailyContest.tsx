@@ -114,7 +114,7 @@ export const DailyContestForm = () => {
               type="datetime-local"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
-              className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+              className="w-full p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const DailyContestForm = () => {
               type="datetime-local"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
-              className="p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
+              className="w-full  p-2 border border-blue-200 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>

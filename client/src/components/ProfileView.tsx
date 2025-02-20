@@ -1,18 +1,18 @@
-import React from "react";
 import { Admin, Hr, Student } from "../contexts/auth.context.tsx";
-import { Profile } from "../pages/Profile.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileViewProps {
   user: Student | Hr | Admin | null;
 }
 
 export const ProfileView = ({ user }: ProfileViewProps) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-gray-200 rounded-3xl p-8">
       <div className="flex items-center gap-4 mb-8">
         <div className="relative">
           <img
-            src="../../public/profile.png"
+            src="/profile.png"
             alt="Profile"
             className="w-16 h-16 rounded-full"
           />
@@ -34,9 +34,6 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
         </div>
         <div>
           <h2 className="text-lg font-semibold">{user?.name}</h2>
-          <button className="text-sm text-gray-600 hover:text-gray-800">
-            Change profile
-          </button>
         </div>
       </div>
 
@@ -52,19 +49,52 @@ export const ProfileView = ({ user }: ProfileViewProps) => {
             <ProfileField label="Email" value={(user as Student).email} />
             <ProfileField label="Branch" value={(user as Student).branch} />
             <ProfileField label="Section" value={(user as Student).section} />
+            <button
+              className="w-full mt-4 py-2 px-4 text-white font-semibold rounded-lg 
+                 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md 
+                 hover:from-blue-600 hover:to-indigo-700 
+                 focus:ring-2 focus:ring-blue-300 
+                 transition-all duration-300"
+              onClick={() => navigate("/change-password")}
+            >
+              Change Password
+            </button>
           </>
         ) : user?.role === "hr" ? (
           <>
             <ProfileField label="Name" value={(user as Hr).name} />
             <ProfileField label="Username" value={(user as Hr).username} />
             <ProfileField label="Email" value={(user as Hr).email} />
-            <ProfileField label="Company Name" value={(user as Hr).companyName} />
+            <ProfileField
+              label="Company Name"
+              value={(user as Hr).companyName}
+            />
+            <button
+              className="w-full mt-4 py-2 px-4 text-white font-semibold rounded-lg 
+                   bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md 
+                   hover:from-blue-600 hover:to-indigo-700 
+                   focus:ring-2 focus:ring-blue-300 
+                   transition-all duration-300"
+              onClick={() => navigate("/change-password")}
+            >
+              Change Password
+            </button>
           </>
         ) : (
           <>
             <ProfileField label="Name" value={(user as Admin).name} />
             <ProfileField label="Username" value={(user as Admin).username} />
             <ProfileField label="Email" value={(user as Admin).email} />
+            <button
+              className="w-full mt-4 py-2 px-4 text-white font-semibold rounded-lg 
+                 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md 
+                 hover:from-blue-600 hover:to-indigo-700 
+                 focus:ring-2 focus:ring-blue-300 
+                 transition-all duration-300"
+              onClick={() => navigate("/change-password")}
+            >
+              Change Password
+            </button>
           </>
         )}
       </div>

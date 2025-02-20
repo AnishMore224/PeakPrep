@@ -10,8 +10,8 @@ interface ContestCardProps {
 
 const ContestCard: React.FC<ContestCardProps> = ({ contest, type }) => {
   const navigate = useNavigate();
-  const now = new Date();
-  const isOngoing = now >= new Date(contest.startTime) && now <= new Date(contest.endTime);
+  // const now = new Date();
+  // const isOngoing = now >= new Date(contest.startTime) && now <= new Date(contest.endTime);
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('en-US', {

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { IHR } from '../types/collections';
 
 const HrSchema: Schema = new Schema({

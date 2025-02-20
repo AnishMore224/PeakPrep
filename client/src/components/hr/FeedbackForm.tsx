@@ -59,9 +59,9 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({student}) => {
   };
 
   return (
-    <div className="w-full md:w-2/3 lg:w-3/4 bg-gradient-to-br from-gray-50 to-white p-8 min-h-screen">
+    <div className="w-full md:w-2/3 lg:w-3/4 bg-gradient-to-br from-gray-50 to-white sm:p-8 py-7 px-3">
       <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
+        <div className="mb-8 sm:ml-0 ml-3">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Student Feedback</h1>
           <p className="text-gray-600">Share your experience and help us improve</p>
         </div>

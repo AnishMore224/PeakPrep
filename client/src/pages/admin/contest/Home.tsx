@@ -5,17 +5,17 @@ import ContestCard from "../../../components/admin/contest/ContestCard";
 import DeleteConfirmation from "../../../components/admin/contest/DeleteConfirmation";
 import { useContest } from "../../../contexts/contest.context";
 import { DailyContestType, CodingContestType } from "../../../types/index";
-import { useUIContext } from "../../../contexts/ui.context";
+// import { useUIContext } from "../../../contexts/ui.context";
 import Layout from "../../../components/student/contest/Layout";
 
 const Home = () => {
     const { dailyContests, codingContests, deleteContest } = useContest();
-    const { isSidebarVisible } = useUIContext();
+    // const { isSidebarVisible } = useUIContext();
     const [activeTab, setActiveTab] = useState<"daily" | "coding">("daily");
     const [contestToDelete, setContestToDelete] = useState<
         DailyContestType | CodingContestType | null
     >(null);
-    const [contests, setContests] = useState({
+    const [contests, _setContests] = useState({
         daily: dailyContests,
         coding: codingContests,
     });
@@ -69,7 +69,7 @@ const Home = () => {
     return (
         <Layout>
             <div className="max-w-6xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex justify-between items-center mb-8 sm:flex-row flex-col sm:space-x-4 sm:space-y-0 space-y-4">
                     <div className="flex space-x-1 rounded-xl bg-blue-100 p-1">
                         <button
                             className={`flex items-center px-4 py-2 mx-4 rounded-lg ${

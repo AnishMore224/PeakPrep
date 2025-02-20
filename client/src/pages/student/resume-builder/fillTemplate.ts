@@ -104,8 +104,3 @@ export async function generateLatexWithData(resumeData: ResumeData): Promise<str
     throw error;
   }
 }
-
-// Usage Example: Generate LaTeX string with filled data
-// generateLatexWithData(resumeData).then(filledLatex => {
-//   console.log(filledLatex);  // Print or save the filled LaTeX string
-// });

@@ -21,7 +21,7 @@ function Hrs() {
 
   return (
     <div
-      className={`flex-1 bg-gray-50 transition-all duration-300 ${
+      className={`flex-1 py-2 sm:p-0 bg-gray-50 transition-all duration-300 ${
         isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
       }`}
     >

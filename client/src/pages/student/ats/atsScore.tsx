@@ -37,6 +37,7 @@ function atsScore() {
     const [btn, setBtn] = useState<string>("");
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { isSidebarVisible } = useUIContext();
+    const FLASK_API = import.meta.env.VITE_FLASK_API;
 
     const handleFileUpload = (uploadedFile: File) => {
         setFile(uploadedFile);
@@ -56,7 +57,7 @@ function atsScore() {
         formData.append("prompt", prompt);
 
         try {
-            const response = await axios.post("http://127.0.0.1:5001/api/gemini-response-resume", formData, {
+            const response = await axios.post(`${FLASK_API}/gemini-response-resume`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -92,11 +93,11 @@ function atsScore() {
 
     return (
         <div
-            className={`flex-1 bg-gray-50 transition-all duration-300 ${
+            className={`bg-gray-50 transition-all duration-300 ${
                 isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
             }`}
         >
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto py-8 px-4">
                 <div className="text-center mb-8 sm:mb-12">
                     <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
                         Resume ATS Analyzer
@@ -123,10 +124,10 @@ function atsScore() {
                             value={jobDescription}
                             onChange={(e) => setJobDescription(e.target.value)}
                         />
-                        <Button onClick={() => handleGenerateResult(inputPrompt1, "btn1")} className="mt-4" id="btn1">
+                        <Button onClick={() => handleGenerateResult(inputPrompt1, "btn1")} className="mt-4 mr-5" id="btn1">
                             Tell Me About the Resume
                         </Button>
-                        <Button onClick={() => handleGenerateResult(inputPrompt3, "btn3")} className="mt-4 ml-4" id="btn3">
+                        <Button onClick={() => handleGenerateResult(inputPrompt3, "btn3")} className="mt-4" id="btn3">
                             Percentage Match
                         </Button>
                     </>

@@ -46,41 +46,19 @@ interface Feedback {
   updatedAt: string;
 }
 
-// const UserCount: React.FC = () => {
-//   const [userCount, setUserCount] = useState<number>(0);
-//   const BASE_URL = "http://localhost:3030/api/user";
-
-//   useEffect(() => {
-//     const fetchUserCount = async () => {
-//       try {
-//         const response = await fetch($"{BASE_URL}/");
-//         const data = await response.json();
-//         setUserCount(data.count);
-//       } catch (error) {
-//         console.error("Failed to fetch user count:", error);
-//       }
-//     };
-
-//     fetchUserCount();
-//   }, []);
-
-//   return <div>User Count: {userCount}</div>;
-// };
-
 const AdminDashboard: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [selectedTab, setSelectedTab] = useState("group");
   const { isSidebarVisible } = useUIContext();
   const { students } = useStudent();  // Add this line to get students data
   const { companies } = useCompany();  // Add this line to get companies data
   const { hrmembers } = useHr();  // Add this line to get HR data
   const [recentFeedback, setRecentFeedback] = useState<Feedback[]>([]);
-
+  const FEEDBACK_API = import.meta.env.VITE_FEEDBACK_API;
   useEffect(() => {
     const fetchRecentFeedback = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:3030/api/feedback/recent", {
+        const response = await fetch(`${FEEDBACK_API}/recent`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -138,9 +116,7 @@ const AdminDashboard: React.FC = () => {
       status: "upcoming",
     },
   ];
-
-// Remove or comment out this static data
-// const feedback: Feedback[] = [ ... ];
+  
 
   const renderStatCard = ({ title, value, icon: Icon, trend }: StatData, index: number) => (
     <div key={index} className="bg-white p-6 rounded-lg border border-gray-200">

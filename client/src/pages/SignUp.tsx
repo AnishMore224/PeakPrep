@@ -1,7 +1,5 @@
 import { useState } from "react";
-import "../../public/signup.png";
 import { useAuth } from "../contexts/auth.context";
-import { studentRegisterInfoType, HrRegisterInfoType } from "../types/index";
 import { Eye, EyeOff } from "lucide-react";
 
 export const SignUp = () => {
@@ -14,8 +12,6 @@ export const SignUp = () => {
     hrRegisterInfo,
     updateStudentRegisterInfo,
     updateHrRegisterInfo,
-    isRegisterLoading,
-    registerError,
   } = useAuth();
 
   const changeUserType = (type: string) => {
@@ -293,7 +289,7 @@ export const SignUp = () => {
         </div>
         <div className="image bg-gray-200 p-6 flex items-center justify-center">
           <img
-            src="../../public/signup.png"
+            src="/signup.png"
             alt="Graduate illustration"
             className="w-full max-w-[450px]"
           />

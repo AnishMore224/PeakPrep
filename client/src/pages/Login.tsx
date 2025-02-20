@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import "../../public/Login1.png";
-import "../../public/bg1.png";
 import { useAuth } from "../contexts/auth.context";
 import { Eye, EyeOff } from 'lucide-react';
 
 export const Login: React.FC = () => {
-  const { login, loginInfo, loginError, isLoginLoading, updateLoginInfo } = useAuth();
+  const { login, loginInfo, updateLoginInfo } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,19 +16,19 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="login min-h-screen bg-gray-50 flex items-center justify-center p-8">
+    <div className="login h-full bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:p-4 p-2">
       <div className="w-full max-w-[1200px] grid md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden">
         {/* Left side - Image */}
         <div className="image bg-gray-200 p-12 flex items-center justify-center">
           <img
-            src="../../public/Login1.png"
+            src="/Login1.png"
             alt="Graduate illustration"
             className="w-full max-w-[400px]"
           />
         </div>
 
         {/* Right side - Login form */}
-        <div className="p-12 md:p-16">
+        <div className="sm:p-12 md:p-16 p-8">
           <div className="mb-12">
             <h1 className="text-3xl font-bold mb-4 flex items-center gap-4">
               <svg

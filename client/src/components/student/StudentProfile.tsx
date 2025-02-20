@@ -42,32 +42,8 @@ const InfoItem: React.FC<InfoItemProps> = ({ icon, label, value }) => (
 
 export const StudentProfile: React.FC<StudentProfileProps> = ({ student }) => {
 
-
-  // const studentInfo = [
-  //   {
-  //     icon: <GraduationCap className="text-blue-600" size={24} />,
-  //     label: "Registration Number",
-  //     value: "2241008003"
-  //   },
-  //   {
-  //     icon: <Mail className="text-blue-600" size={24} />,
-  //     label: "Email",
-  //     value: "04adityahansraj@gmail.com"
-  //   },
-  //   {
-  //     icon: <BookOpen className="text-blue-600" size={24} />,
-  //     label: "Branch",
-  //     value: "CSE"
-  //   },
-  //   {
-  //     icon: <Users2 className="text-blue-600" size={24} />,
-  //     label: "Section",
-  //     value: "CSE-2241003"
-  //   }
-  // ];
-
   return (
-    <div className="w-full md:w-1/3 lg:w-2/4 bg-gradient-to-b from-blue-50 to-white p-8 min-h-screen">
+    <div className="w-full md:w-1/3 lg:w-2/4 bg-gradient-to-b from-blue-50 to-white p-8">
       <div className="flex flex-col items-center mb-8">
         <div className="w-36 h-36 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center mb-4 shadow-lg ring-4 ring-white">
           <UserCircle size={88} className="text-blue-500" />

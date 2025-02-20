@@ -8,7 +8,7 @@ interface CandidateListProps {
 
 export function CandidateList({ filter, majorFilter }: CandidateListProps) {
   const secretKey = import.meta.env.VITE_SECRET_KEY;
-  const IV = CryptoJS.enc.Utf8.parse(import.meta.env.SECRET_IV); // 16-byte IV (fixed) // Ensure your secret key is securely stored
+  const IV = import.meta.env.VITE_SECRET_IV; // 16-byte IV (fixed)
   const { students } = useStudent();
   const filteredStudents = students.filter(
     (student) =>
@@ -19,7 +19,7 @@ export function CandidateList({ filter, majorFilter }: CandidateListProps) {
 
   function encryptData(data: string, secretKey: string): string {
     const key = CryptoJS.enc.Utf8.parse(secretKey.trim()); // Trim to avoid accidental spaces
-    const iv = CryptoJS.enc.Utf8.parse("1234567890123456"); // Fixed 16-byte IV (same everywhere)
+    const iv = CryptoJS.enc.Utf8.parse(IV); // Fixed 16-byte IV (same everywhere)
     const encrypted = CryptoJS.AES.encrypt(data, key, {
       iv: iv,
       mode: CryptoJS.mode.CBC,

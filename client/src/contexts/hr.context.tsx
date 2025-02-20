@@ -11,7 +11,7 @@ import { Hr } from "../types";
 import { useAuth } from "./auth.context";
 import { jwtDecode } from "jwt-decode";
 
-const ADMIN_BASE_URL = "http://localhost:3030/api/details";
+const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL;
 
 
 const HrContext = createContext<HrContextProps | undefined>(undefined);

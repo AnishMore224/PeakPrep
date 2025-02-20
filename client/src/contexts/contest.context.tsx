@@ -25,7 +25,7 @@ interface ContestContextProps {
   ) => Promise<void>;
 }
 
-const BASE_URL = "http://localhost:3030/api/contest";
+const BASE_URL = import.meta.env.VITE_CONTEST_API_URL as string;
 
 const ContestContext = createContext<ContestContextProps | undefined>(
   undefined

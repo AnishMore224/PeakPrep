@@ -38,9 +38,9 @@ export const student = async (req: Request, res: Response): Promise<any> => {
   const decryptStudentId = (encryptedId: string, secretKey: string): string => {
     // Convert URL-safe Base64 back to original format
     const base64EncryptedId = encryptedId
-      .replace(/-/g, "+") // Convert '-' back to '+'
-      .replace(/_/g, "/"); // Convert '_' back to '/'
-      const IV = CryptoJS.enc.Utf8.parse("1234567890123456");
+      .replace(/-/g, "+") 
+      .replace(/_/g, "/");
+      const IV = CryptoJS.enc.Utf8.parse(process.env.SECRET_IV as string);
       const decryptedBytes = CryptoJS.AES.decrypt(base64EncryptedId, CryptoJS.enc.Utf8.parse(secretKey), {
         iv: IV, 
         mode: CryptoJS.mode.CBC,

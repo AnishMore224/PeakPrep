@@ -9,17 +9,21 @@ import React, {
 import { postRequest, getRequest } from "../utils/services";
 import { HrRegisterInfoType, studentRegisterInfoType } from "../types";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
-const BASE_URL = "http://localhost:3030/api/auth";
+
+const BASE_URL = import.meta.env.VITE_AUTH_API_URL as string;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState<Admin | Student | Hr | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [jwtToken, setJwtToken] = useState<string | null>(null);
   const [authLoading, setAuthLoading] = useState<boolean>(true);
+  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
 
   const [loginInfo, setLoginInfo] = useState({ username: "", password: "" });
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -64,6 +68,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setHrRegisterInfo(info);
   }, []);
 
+  const encryptEmail = (email: string): string => {
+    return btoa(email);
+  };
+
   const login = useCallback(
     async (event: any) => {
       event.preventDefault();
@@ -81,7 +89,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
-      setIsAuthenticated(true);
       // decode token and set role
       const decoded: any = jwtDecode(token);
       const role = decoded.role;
@@ -105,6 +112,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         const admin = { role, username, email, name };
         setUser(admin);
       }
+      const isEmailVerified = response.data.user.verified;
+      setIsEmailVerified(isEmailVerified);
+      if (!isEmailVerified) {
+        console.log("Redirecting to verification page");
+        const email = encryptEmail(response.data.user.email);
+        return navigate(`/verify-email?email=${email}`); // Redirect to verification page with email
+      }
+      setIsAuthenticated(true);
     },
     [loginInfo] // dependencies
   );
@@ -138,7 +153,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       localStorage.setItem("token", token);
       setJwtToken(token);
       setUser(response.data.user);
-      setIsAuthenticated(true);
       const { username, email, name, branch, section } = {
         ...response.data.user,
       };
@@ -151,6 +165,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         section,
       };
       setUser(student);
+      const isEmailVerified = response.data.user.verified;
+      setIsEmailVerified(isEmailVerified);
+      if (!isEmailVerified) {
+        const email = encryptEmail(response.data.user.email);
+        return navigate(`/verify-email?email=${email}`); // Redirect to verification page with email
+      }
+      setIsAuthenticated(true);
     },
     [studentRegisterInfo] // dependencies
   );
@@ -185,7 +206,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
-      setIsAuthenticated(true);
       const { role, email, name, companyName } = { ...response.data.user };
       const hr = {
         role,
@@ -195,6 +215,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         username: HrRegisterInfo.username,
       };
       setUser(hr);
+      const isEmailVerified = response.data.user.verified;
+      setIsEmailVerified(isEmailVerified);
+      if (!isEmailVerified) {
+        const email = encryptEmail(response.data.user.email);
+        return navigate(`/verify-email?email=${email}`); // Redirect to verification page with email
+      }
+      setIsAuthenticated(true);
     },
     [HrRegisterInfo] // dependencies
   );
@@ -204,6 +231,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     setJwtToken(null);
     setUser(null);
     setIsAuthenticated(false);
+    setIsEmailVerified(false);
   };
 
   useEffect(() => {
@@ -214,7 +242,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
           setAuthLoading(true);
           const response = await getRequest(`${BASE_URL}/user`, token);
           if (response.error) throw new Error(response.error);
-          setIsAuthenticated(true);
           setJwtToken(token);
           const decoded: any = jwtDecode(token);
           const role = decoded.role;
@@ -240,12 +267,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
             const admin = { role, username, email, name };
             setUser(admin);
           }
+          const isEmailVerified = response.data.user.verified;
+          setIsEmailVerified(isEmailVerified);
+          if (!isEmailVerified) {
+            navigate(`/verify-email`); // Redirect to verification page
+            return;
+          } 
+          setIsAuthenticated(true);
         } catch (error) {
           console.error("Failed to decode token or fetch user:", error);
           localStorage.removeItem("token");
           setUser(null);
           setJwtToken(null);
           setIsAuthenticated(false);
+          setIsEmailVerified(false);
         } finally {
           setAuthLoading(false);
         }
@@ -255,7 +290,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
     };
     fetchUser();
-  }, []); // Empty dependency array ensures this runs only once
+  }, [isEmailVerified]); // Empty dependency array ensures this runs only once
 
   return (
     <AuthContext.Provider
@@ -278,6 +313,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         hrRegister,
         login,
         authLoading,
+        isEmailVerified,
+        setIsEmailVerified
       }}
     >
       {children}
@@ -336,4 +373,6 @@ export interface AuthContextType {
   hrRegister: (event: any) => void;
   login: (event: any) => void;
   authLoading: boolean;
+  isEmailVerified: boolean;
+  setIsEmailVerified: React.Dispatch<React.SetStateAction<boolean>>;
 }

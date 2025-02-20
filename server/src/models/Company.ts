@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { ICompany } from '../types/collections';
 
 const CompanySchema: Schema = new Schema({
