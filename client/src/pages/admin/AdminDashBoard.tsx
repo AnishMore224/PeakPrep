@@ -142,8 +142,8 @@ const AdminDashboard: React.FC = () => {
 // Remove or comment out this static data
 // const feedback: Feedback[] = [ ... ];
 
-  const renderStatCard = ({ title, value, icon: Icon, trend }: StatData) => (
-    <div className="bg-white p-6 rounded-lg border border-gray-200">
+  const renderStatCard = ({ title, value, icon: Icon, trend }: StatData, index: number) => (
+    <div key={index} className="bg-white p-6 rounded-lg border border-gray-200">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600">{title}</p>
@@ -183,7 +183,7 @@ const AdminDashboard: React.FC = () => {
         <main className="flex-1 overflow-y-auto p-6">
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat) => renderStatCard(stat))}
+            {stats.map((stat, index) => renderStatCard(stat, index))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

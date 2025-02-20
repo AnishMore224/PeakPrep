@@ -25,7 +25,7 @@ import { StudentProvider } from "./contexts/student.context";
 import { CompanyProvider } from "./contexts/company.context";
 import NotAuthorized from "./pages/NotAuthorized";
 import { AllCandidate } from "./pages/admin/Candidates";
-import AllCompanies from "./pages/admin/Companies";
+import AllCompanies from "./pages/admin/companies";
 import Hrs from "./pages/admin/Hrs";
 import { HrProvider } from "./contexts/hr.context";
 import ATS from "./pages/student/ats/atsScore"; // Import the AtsScore component

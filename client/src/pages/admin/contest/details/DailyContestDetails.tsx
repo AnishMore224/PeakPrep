@@ -16,7 +16,7 @@ type TabType = "overview" | "questions" | "rankings" | "settings";
 function DailyContestDetails() {
   const { id } = useParams<{ id: string }>();
   const contestId = id;
-  const { getContest, error } = useContest();
+  const { getContest, updateContest, error } = useContest();
   const [contest, setContest] = useState<DailyContestType | null>(null);
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [activeTab, setActiveTab] = useState<TabType>("overview");
@@ -69,6 +69,11 @@ function DailyContestDetails() {
       });
     }
   };
+
+
+  const handleSaveSettings = async () => {
+    await updateContest(contest as DailyContestType, "DailyContest");
+  }
 
   if (error) {
     return <div className="m-10 text-red-500">Error: {error}</div>;
@@ -154,7 +159,7 @@ function DailyContestDetails() {
             {activeTab === "questions" && <QuestionsTab contest={contest} />}
             {activeTab === "rankings" && <RankingsTab contest={contest} />}
             {activeTab === "settings" && (
-              <SettingsTab contest={contest} handleSettingsChange={handleSettingsChange} />
+              <SettingsTab contest={contest} handleSettingsChange={handleSettingsChange} handleSaveSettings={handleSaveSettings} />
             )}
           </div>
         </div>
