@@ -159,7 +159,11 @@ const AdminDashboard: React.FC = () => {
         <main className="flex-1 overflow-y-auto p-6">
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat) => renderStatCard(stat))}
+            {stats.map((stat, index) => (
+              <React.Fragment key={index}>
+              {renderStatCard(stat)}
+              </React.Fragment>
+            ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

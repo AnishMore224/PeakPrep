@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/User";
 import Student from "../models/Student";
+import { response } from "../types/response";
 
 dotenv.config();
 
@@ -34,7 +35,6 @@ const sendMail = async (
 
     return await transporter.sendMail(mailOptions);
   } catch (error) {
-    console.error("Error sending email:", error);
     return error;
   }
 };
@@ -54,7 +54,6 @@ const generateAndStoreCode = async (email: string): Promise<string | null> => {
     );
     return verificationCode;
   } catch (error) {
-    console.error("Error saving verification code:", error);
     return null;
   }
 };
@@ -63,12 +62,14 @@ const generateAndStoreCode = async (email: string): Promise<string | null> => {
 export const sendVerificationMail = async (
   req: Request,
   res: Response
-): Promise<void> => {
+): Promise<any> => {
   const { email } = req.body;
-
+  if(!email) {
+    return res.status(400).json({...response, error: "Email is required" });
+  }
   const verificationCode = await generateAndStoreCode(email);
   if (!verificationCode) {
-    res.status(500).json({ message: "Failed to generate verification code" });
+    return res.status(500).json({...response, error: "Failed to generate verification code" });
   }
 
   const mailOptions = {
@@ -80,9 +81,9 @@ export const sendVerificationMail = async (
 
   const result = await sendMail(mailOptions);
   if ((result as SentMessageInfo).messageId) {
-    res.status(200).json({ message: "Verification email sent" });
+    res.status(200).json({...response, success: true, message: "Verification email sent" });
   } else {
-    res.status(500).json({ message: "Failed to send verification email" });
+    res.status(500).json({...response, error: "Failed to send verification email" });
   }
 };
 
@@ -96,7 +97,7 @@ export const verifyCode = async (req: Request, res: Response): Promise<any> => {
       verificationCode,
     });
     if (!verification) {
-      res.status(400).json({ message: "Invalid verification code" });
+      res.status(400).json({...response, error: "Invalid verification code" });
     }
 
     if (
@@ -104,34 +105,33 @@ export const verifyCode = async (req: Request, res: Response): Promise<any> => {
       Date.now() > new Date(verification.expiresIn).getTime()
     ) {
       await Verification.deleteOne({ email, verificationCode });
-      return res.status(400).json({ message: "Verification code expired" });
+      return res.status(400).json({...response, error: "Verification code expired" });
     }
 
     await Verification.deleteOne({ email, verificationCode });
 
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    if (!token) return res.status(401).json({...response, error: "Unauthorized" });
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!decoded) return res.status(401).json({ message: "Unauthorized" });
+    if (!decoded) return res.status(401).json({...response, error: "Unauthorized" });
 
     if (decoded.role === "student") {
       const student = await Student.findOne({ email });
       if (!student)
-        return res.status(404).json({ message: "Student not found" });
+        return res.status(404).json({...response, error: "Student not found" });
 
       await User.findOneAndUpdate({ _id: student.userId }, { verified: true });
     } else {
       const user = await User.findOne({ email });
-      if (!user) return res.status(404).json({ message: "User not found" });
+      if (!user) return res.status(404).json({...response, error: "User not found" });
 
       await User.findOneAndUpdate({ _id: user._id }, { verified: true });
     }
 
-    res.status(200).json({ message: "Verification successful" });
+    res.status(200).json({...response, success: true, message: "Verification successful" });
   } catch (error) {
-    console.error("Verification error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({...response, error: "Internal server error" });
   }
 };
 
@@ -141,26 +141,28 @@ export const PasswordResetMail = async (
   res: Response
 ): Promise<any> => {
   const { email } = req.body;
-
+  if(!email) {
+    return res.status(400).json({...response, error: "Email is required" });
+  }
   const verificationCode = await generateAndStoreCode(email);
   if (!verificationCode) {
     return res
       .status(500)
-      .json({ message: "Failed to generate verification code" });
+      .json({...response, error: "Failed to generate verification code" });
   }
 
   const mailOptions = {
     from: process.env.USER_EMAIL as string,
-    to: "anishmore322@gmail.com",
+    to: email,
     subject: "Reset Your Password - PeakPrep",
     html: `<p>Your password reset code is <strong>${verificationCode}</strong>. It will expire in 5 minutes.</p>`,
   };
 
   const result = await sendMail(mailOptions);
   if ((result as SentMessageInfo).messageId) {
-    res.status(200).json({ message: "Password reset email sent" });
+    res.status(200).json({...response, success: true, message: "Password reset email sent" });
   } else {
-    res.status(500).json({ message: "Failed to send password reset email" });
+    res.status(500).json({...response, error: "Failed to send password reset email" });
   }
 };
 
@@ -170,35 +172,37 @@ export const verifyAndUpdatePassword = async (
   res: Response
 ): Promise<any> => {
   const { email, verificationCode, newPassword } = req.body;
-
+  if(!email || !verificationCode || !newPassword) {
+    return res.status(400).json({...response, error: "All fields are required" });
+  }
   try {
     const verification = await Verification.findOne({
       email,
       verificationCode,
     });
     if (!verification) {
-      return res.status(400).json({ message: "Invalid verification code" });
+      return res.status(400).json({...response, error: "Invalid verification code" });
     }
 
     if (Date.now() > new Date(verification.expiresIn).getTime()) {
       await Verification.deleteOne({ email, verificationCode });
-      return res.status(400).json({ message: "Verification code expired" });
+      return res.status(400).json({...response, error: "Verification code expired" });
     }
 
     await Verification.deleteOne({ email, verificationCode });
 
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
+    if (!token) return res.status(401).json({...response, error: "Unauthorized" });
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!decoded) return res.status(401).json({ message: "Unauthorized" });;
+    if (!decoded) return res.status(401).json({...response, error: "Unauthorized" });;
     // Hash the new password before saving
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     if (decoded.role === "student") {
       const student = await Student.findOne({ email });
       if (!student)
-        return res.status(404).json({ message: "Student not found" });
+        return res.status(404).json({...response, error: "Student not found" });
 
       await User.findOneAndUpdate(
         { _id: student.userId },
@@ -206,7 +210,7 @@ export const verifyAndUpdatePassword = async (
       );
     } else {
       const user = await User.findOne({ email });
-      if (!user) return res.status(404).json({ message: "User not found" });
+      if (!user) return res.status(404).json({...response, error: "User not found" });
 
       await User.findOneAndUpdate(
         { _id: user._id },
@@ -214,9 +218,8 @@ export const verifyAndUpdatePassword = async (
       );
     }
 
-    res.status(200).json({ message: "Password updated successfully" });
+    res.status(200).json({...response, success: true, message: "Password updated successfully" });
   } catch (error) {
-    console.error("Password update error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({...response, error: "Internal server error" });
   }
 };

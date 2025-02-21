@@ -8,15 +8,19 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
-  const { toggleSidebar } = useUIContext();
+  const { toggleSidebar, hamburgerRef } = useUIContext();
   const navigate = useNavigate();
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-sm fixed top-0 left-0 w-full h-16 z-50">
       {/* Left: Hamburger Menu and Optional Title */}
       <div className="flex items-center space-x-4">
-        <button
-          onClick={toggleSidebar}
+      <button
+          ref={hamburgerRef}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents outside click detection
+            toggleSidebar();
+          }}
           className="p-2 rounded-md hover:bg-gray-100"
           aria-label="Toggle Sidebar"
         >

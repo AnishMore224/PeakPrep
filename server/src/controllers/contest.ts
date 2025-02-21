@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import DailyContest from "../models/contest/DailyContest";
 import CodingContest from "../models/contest/CodingContest";
 import jwt from "jsonwebtoken";
-
+import { response } from "../types/response";
 import { Model } from "mongoose";
 
 const getModel = (type: string): Model<any> => {
@@ -25,7 +25,7 @@ export const joinContest = async (
     if (!token) {
       return res
         .status(401)
-        .json({ success: false, message: "Unauthorized", error: null });
+        .json({...response, success: false, message: "Unauthorized", error: null });
     }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     const studentId = decoded.username;
@@ -33,6 +33,7 @@ export const joinContest = async (
 
     if (!contestId || !studentId || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID, Student ID, and type are required",
         error: null,
@@ -45,7 +46,7 @@ export const joinContest = async (
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
 
     if (
@@ -55,6 +56,7 @@ export const joinContest = async (
       )
     ) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Student already joined the contest",
         error: null,
@@ -71,7 +73,7 @@ export const joinContest = async (
       error: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -81,9 +83,9 @@ export const getDailyContests = async (
 ): Promise<any> => {
   try {
     const contests = await DailyContest.find();
-    res.status(200).json({ success: true, data: { contests }, error: null });
+    res.status(200).json({...response, success: true, data: { contests }, error: null });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -93,9 +95,9 @@ export const getCodingContests = async (
 ): Promise<any> => {
   try {
     const contests = await CodingContest.find();
-    res.status(200).json({ success: true, data: { contests }, error: null });
+    res.status(200).json({...response, success: true, data: { contests }, error: null });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -104,6 +106,7 @@ export const getContest = async (req: Request, res: Response): Promise<any> => {
     const { id, type } = req.params;
     if (!id || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID and type are required",
         error: null,
@@ -115,11 +118,11 @@ export const getContest = async (req: Request, res: Response): Promise<any> => {
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
-    res.status(200).json({ success: true, data: { contest }, error: null });
+    res.status(200).json({...response, success: true, data: { contest }, error: null });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -132,6 +135,7 @@ export const createContest = async (
       req.body;
     if (!type || !title || !startTime || !endTime) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Type, Title, Start Time, and End Time are required",
         error: null,
@@ -149,13 +153,14 @@ export const createContest = async (
     });
     await contest.save();
     res.status(200).json({
+      ...response,
       success: true,
       message: "Contest created successfully",
       data: { contest },
       error: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -176,6 +181,7 @@ export const updateContest = async (
     } = req.body;
     if (!contestId || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID and type are required",
         error: null,
@@ -187,7 +193,7 @@ export const updateContest = async (
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
 
     contest.title = title || contest.title;
@@ -198,13 +204,14 @@ export const updateContest = async (
     contest.questions = questions || contest.questions;
     await contest.save();
     res.status(200).json({
+      ...response,
       success: true,
       message: "Contest updated successfully",
       data: { contest },
       error: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -216,6 +223,7 @@ export const deleteContest = async (
     const { contestId, type } = req.body;
     if (!contestId || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID and type are required",
         error: null,
@@ -227,16 +235,17 @@ export const deleteContest = async (
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
     res.status(200).json({
+      ...response,
       success: true,
       message: "Contest deleted successfully",
       data: null,
       error: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -248,6 +257,7 @@ export const getContestParticipants = async (
     const { id, type } = req.params;
     if (!id || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID and type are required",
         error: null,
@@ -259,15 +269,16 @@ export const getContestParticipants = async (
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
     res.status(200).json({
+      ...response,
       success: true,
       data: { participants: contest.participants },
       error: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };
 
@@ -279,6 +290,7 @@ export const getContestResults = async (
     const { id, type } = req.params;
     if (!id || !type) {
       return res.status(400).json({
+        ...response,
         success: false,
         message: "Contest ID and type are required",
         error: null,
@@ -290,7 +302,7 @@ export const getContestResults = async (
     if (!contest) {
       return res
         .status(404)
-        .json({ success: false, message: "Contest not found", error: null });
+        .json({...response, success: false, message: "Contest not found", error: null });
     }
     interface ParticipantResult {
       studentId: string;
@@ -305,8 +317,8 @@ export const getContestResults = async (
         status: participant.status,
       })
     );
-    res.status(200).json({ success: true, data: { results }, error: null });
+    res.status(200).json({...response, success: true, data: { results }, error: null });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error });
+    res.status(500).json({...response, success: false, message: "Server error", error });
   }
 };

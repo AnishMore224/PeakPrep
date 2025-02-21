@@ -126,7 +126,7 @@ function ChatBot() {
         </div>
       )}
       <div className="flex justify-center max-h-[calc(100vh-4rem)] sm:p-0">
-        <div className="sm:w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col relative">
+        <div className="sm:w-3/4 max-w-5xl bg-gray-200 min-h-[calc(100vh-4rem)] flex flex-col relative w-full">
           <div className="flex-1 py-3">
             <MessageList messages={messages} />
           </div>

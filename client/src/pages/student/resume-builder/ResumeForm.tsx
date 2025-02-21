@@ -33,8 +33,8 @@ const ResumeForm: React.FC = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-      setResumeData(data.resume);
+      const result = await response.json();
+      setResumeData(result.data.resume);
     };
 
     fetchResume();
