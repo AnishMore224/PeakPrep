@@ -1,7 +1,7 @@
 import latex from "node-latex";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
+import { response } from "../types/response";
 import { ResumeData } from "../types/collections";
 import { Request, Response } from "express";
 import Resume from "../models/Resume";
@@ -114,7 +114,6 @@ function fillTemplate(template: string, data: ResumeData): string {
 }
 
 async function save(data: ResumeData, token: string): Promise<void> {
-  console.log("Saving resume data:", data);
   try {
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!decoded) {
@@ -130,9 +129,7 @@ async function save(data: ResumeData, token: string): Promise<void> {
       const resumeId = savedResume._id;
       await Student.findOneAndUpdate({ _id: data.studentId }, { resumeId });
     }
-    console.log('saved');
   } catch (err) {
-    console.error("Error saving resume:", err);
     throw new Error("Failed to save resume");
   }
 }
@@ -141,35 +138,33 @@ export const getResume = async (req: Request, res: Response): Promise<any> => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).json({...response, error: "Unauthorized"});
     }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!decoded) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).json({...response, error: "Invalid token"});
     }
     const studentId = decoded.username;
     const resume = await Resume.findOne({ studentId });
     if (!resume) {
-      return res.status(404).send("Resume not found");
+      return res.status(404).json({...response, error: "Resume not found"});
     }
-    res.status(200).json({ resume: resume.resume });
+    res.status(200).json({...response, success: true, data: { resume: resume.resume } });
   } catch (err) {
-    console.error("Error fetching resume:", err);
-    res.status(500).send("Failed to fetch resume");
+    res.status(500).json({...response, error: "Failed to get resume"});
   }
 }
 
 export const saveResume = async (req: Request, res: Response): Promise<any> => {
   try {
     const resumeData = req.body.resumeData;
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).send("Unauthorized");
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({...response, error: "Unauthorized"});
     }
-    const token = authHeader.split(" ")[1];
     await save(resumeData, token);
   } catch(err) {
-    console.error(err);
+    res.status(500).json({...response, error: "Failed to save resume"});
   }
 }
 
@@ -178,7 +173,10 @@ export const generatePdf = async (req: Request, res: Response): Promise<any> => 
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if(!token) {
-      return res.status(401).send("Unauthorized");
+      return res.status(401).json({
+        ...response,
+        error: "Unauthorized",
+      });
     }
     // await save(resumeData, token);
 
@@ -189,13 +187,13 @@ export const generatePdf = async (req: Request, res: Response): Promise<any> => 
     res.setHeader("Content-Type", "application/pdf");
 
     pdfStream.pipe(res);
-
+    pdfStream.on("finish", () => {
+      res.status(200).json({...response, success: true, message: "PDF generated successfully"});
+    });
     pdfStream.on("error", (err) => {
-      console.error("Error generating PDF:", err);
-      res.status(500).send("Failed to generate PDF");
+    res.status(500).json({...response, error: "Failed to generate PDF"});
     });
   } catch (err) {
-    console.error("Unexpected error:", err);
-    res.status(500).send("Unexpected error occurred");
+    res.status(500).json({...response, error: "Failed to generate PDF"});
   }
 };

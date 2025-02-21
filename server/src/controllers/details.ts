@@ -26,7 +26,6 @@ export const students = async (req: Request, res: Response): Promise<any> => {
       message: "Successfully fetched students",
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -52,6 +51,11 @@ export const student = async (req: Request, res: Response): Promise<any> => {
 
   try {
     const { studentId } = req.query;
+    if (!studentId) {
+      return res
+        .status(400)
+        .json({ ...response, error: "Student ID is required" });
+    }
     const secretKey = process.env.SECRET_KEY as string;
     const decryptedStudentId = decryptStudentId(studentId as string, secretKey);
     const regd_no = decryptedStudentId;
@@ -91,7 +95,6 @@ export const student = async (req: Request, res: Response): Promise<any> => {
       });
     }
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -113,7 +116,6 @@ export const companies = async (req: Request, res: Response): Promise<any> => {
       message: "Successfully fetched companies",
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -123,9 +125,15 @@ export const companies = async (req: Request, res: Response): Promise<any> => {
 //Called by Admin, HR and Student
 export const company = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { name, token } = req.body;
+    const { name } = req.query;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!name || !token) {
+      return res
+        .status(400)
+        .json({ ...response, error: "All fields are required" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!name || !decoded) {
+    if (!decoded) {
       return res
         .status(400)
         .json({ ...response, error: "All fields are required" });
@@ -169,7 +177,6 @@ export const company = async (req: Request, res: Response): Promise<any> => {
       });
     }
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -196,7 +203,6 @@ export const hrs = async (req: Request, res: Response): Promise<any> => {
       message: "Successfully fetched HRs",
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -206,9 +212,15 @@ export const hrs = async (req: Request, res: Response): Promise<any> => {
 //Called by Admin, HR and Student
 export const hr = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { id, token } = req.body;
+    const { id } = req.query;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!id || !token) {
+      return res
+        .status(400)
+        .json({ ...response, error: "All fields are required" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!id || !decoded) {
+    if (!decoded) {
       return res
         .status(400)
         .json({ ...response, error: "All fields are required" });
@@ -249,7 +261,6 @@ export const hr = async (req: Request, res: Response): Promise<any> => {
       });
     }
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -315,7 +326,6 @@ export const getStudentSelections = async (
       message: "Successfully fetched companies",
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });

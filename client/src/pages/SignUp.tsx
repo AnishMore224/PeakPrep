@@ -37,7 +37,7 @@ export const SignUp = () => {
   }
 
   return (
-    <div className="signup min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <div className="signup min-h-screen bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:py-4 sm:px-10 p-3">
       <div className=" w-full max-w-[1200px] grid md:grid-cols-2 bg-white rounded-xl shadow-lg overflow-auto">
         <div className="p-6 md:p-8">
           <div className="mb-6">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -136,9 +136,34 @@ const adminNavItems: NavItem[] = [
   } 
 ];
 const Sidebar: React.FC = () => {
-  const { isSidebarVisible, toggleSidebar } = useUIContext();
+  const { isSidebarVisible, toggleSidebar, hamburgerRef } = useUIContext();
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  // Close sidebar if clicked outside
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  // Close sidebar if clicked outside (excluding the hamburger button)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(event.target as Node)
+      ) {
+        if (isSidebarVisible) {
+          toggleSidebar();
+        }
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }
+, [isSidebarVisible, toggleSidebar]);
 
   let navItems: NavItem[] = [];
   if (user?.role === "student") {
@@ -151,6 +176,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
+    ref={sidebarRef}
       className={`
     fixed top-0 left-0 h-full bg-white shadow-lg transition-all duration-300 
      md:overflow-y-auto overflow-y-auto z-10

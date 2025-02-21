@@ -1,17 +1,18 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useRef } from 'react';
 
 const UIContext = createContext<UIContextProps | undefined>(undefined);
 
 export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
   const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
 
   return (
     <UIContext.Provider
       value={{
         isSidebarVisible,
-        toggleSidebar
+        toggleSidebar,
+        hamburgerRef,
       }}
     >
       {children}
@@ -22,6 +23,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 export interface UIContextProps {
   isSidebarVisible: boolean;
   toggleSidebar: () => void;
+  hamburgerRef: React.RefObject<HTMLButtonElement>; 
 }
 
 export const useUIContext = (): UIContextProps => {

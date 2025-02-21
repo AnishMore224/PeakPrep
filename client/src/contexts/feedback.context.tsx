@@ -57,7 +57,7 @@ export const FeedbackProvider = ({ children }: { children: ReactNode }) => {
       }
     } else return;
     getFeedbacks();
-  }, [getFeedbacks, user]);
+  }, [getFeedbacks, user, token]);
   return (
     <FeedbackContext.Provider value={{ feedbacks, getFeedbacks, addFeedback, updateFeedback, getFeedback, feedback}}>
       {children}

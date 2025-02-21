@@ -14,17 +14,17 @@ export const addFeedback = async (
   if (!studentIds || !companyName || !type || !rating || !comment) {
     return res
       .status(400)
-      .send({ ...response, error: "All fields are required." });
+      .json({ ...response, error: "All fields are required." });
   }
   try {
     const students = await Student.find({ _id: { $in: studentIds } });
     if (!students.length || students.length !== studentIds.length) {
-      return res.status(404).send({ ...response, error: "Student not found." });
+      return res.status(404).json({ ...response, error: "Student not found." });
     }
 
     const company = await Company.findOne({ name: companyName });
     if (!company) {
-      return res.status(404).send({ ...response, error: "Company not found." });
+      return res.status(404).json({ ...response, error: "Company not found." });
     }
 
     const feedback = new Feedback({
@@ -42,13 +42,13 @@ export const addFeedback = async (
       await student.save();
     });
 
-    res.send({
+    res.status(201).json({
       ...response,
       success: true,
       message: "Feedback added successfully.",
     });
   } catch (error) {
-    res.status(500).send({ ...response, error });
+    res.status(500).json({ ...response, error });
   }
 };
 
@@ -60,7 +60,7 @@ export const deleteFeedback = async (
   if (!feedbackId) {
     return res
       .status(400)
-      .send({ ...response, error: "Feedback ID required." });
+      .json({ ...response, error: "Feedback ID required." });
   }
   try {
     const feedback = await Feedback.findOne({
@@ -69,7 +69,7 @@ export const deleteFeedback = async (
     if (!feedback) {
       return res
         .status(404)
-        .send({ ...response, error: "Feedback not found." });
+        .json({ ...response, error: "Feedback not found." });
     }
     await feedback.deleteOne();
     const student = await Student.findOne({ _id: feedback.studentId });
@@ -80,13 +80,13 @@ export const deleteFeedback = async (
       await student.save();
     }
 
-    res.send({
+    res.json({
       ...response,
       success: true,
       message: "Feedback deleted successfully.",
     });
   } catch (error) {
-    res.status(500).send({ ...response, error });
+    res.status(500).json({ ...response, error });
   }
 };
 
@@ -98,7 +98,7 @@ export const updateFeedback = async (
   if (!feedbackId || !type || !rating || !comment) {
     return res
       .status(400)
-      .send({ ...response, error: "All fields are required." });
+      .json({ ...response, error: "All fields are required." });
   }
   try {
     const feedback = await Feedback.findOne({
@@ -107,19 +107,19 @@ export const updateFeedback = async (
     if (!feedback) {
       return res
         .status(404)
-        .send({ ...response, error: "Feedback not found." });
+        .json({ ...response, error: "Feedback not found." });
     }
     feedback.type = type;
     feedback.rating = rating;
     feedback.comment = comment;
     await feedback.save();
-    res.send({
+    res.json({
       ...response,
       success: true,
       message: "Feedback updated successfully.",
     });
   } catch (error) {
-    res.status(500).send({ ...response, error });
+    res.status(500).json({ ...response, error });
   }
 };
 
@@ -128,12 +128,12 @@ export const getFeedbacks = async (req: Request, res: Response): Promise<any> =>
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if(!token) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({...response, error: "All fields are required" });
     }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
 
     if (!decoded) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({...response, error: "All fields are required" });
     }
     const student = await Student.findOne({ _id: decoded.username }).populate({
       path: "feedback",
@@ -141,18 +141,18 @@ export const getFeedbacks = async (req: Request, res: Response): Promise<any> =>
     });
 
     if (!student) {
-      return res.status(404).json({ error: "Student not found" });
+      return res.status(404).json({...response, error: "Student not found" });
     }
 
     const feedbacksData = student.feedback;
 
     return res.status(200).json({
+      ...response,
       success: true,
       data: feedbacksData,
       message: "Successfully fetched feedback",
     });
   } catch (error) {
-    console.error(error);
     return res
       .status(500)
       .json({ ...response, error: "Internal Server Error" });
@@ -162,52 +162,57 @@ export const getFeedbacks = async (req: Request, res: Response): Promise<any> =>
 //Called by Admin, HR and Student
 export const getFeedback = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { feedbackId, company_name, regd_no, token } = req.body;
+    const { feedbackId, company_name, regd_no} = req.query;
+    if (!feedbackId || !company_name || !regd_no) {
+      return res.status(400).json({...response, error: "All fields are required" });
+    }
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(400).json({...response, error: "Authorization token is required" });
+    }
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!decoded) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({...response, error: "All fields are required" });
     }
 
     if (decoded.role === "student" || decoded.role === "admin") {
       if (decoded.role === "student" && decoded.username !== regd_no) {
-        return res.status(403).json({ error: "Access denied" });
-      }
-      if (!regd_no || !company_name) {
-        return res.status(400).json({ error: "All fields are required" });
+        return res.status(403).json({...response, error: "Access denied" });
       }
       const feedback = await Feedback.findOne({
         studentId: regd_no,
         companyName: company_name,
       });
       if (!feedback) {
-        return res.status(404).json({ error: "Feedback not found" });
+        return res.status(404).json({...response, error: "Feedback not found" });
       }
       const { studentId, ...feedbackData } = feedback.toObject();
       return res.status(200).json({
+        ...response,
         success: true,
         data: feedbackData,
         message: "Successfully fetched feedback",
       });
     } else if (decoded.role === "hr") {
       if (!feedbackId) {
-        return res.status(400).json({ error: "All fields are required" });
+        return res.status(400).json({...response, error: "All fields are required" });
       }
       
       const feedback = await Feedback.findOne({
-        _id: feedbackId as mongoose.Types.ObjectId,
+        _id: new mongoose.Types.ObjectId(feedbackId as string),
       });
       if (!feedback) {
-        return res.status(404).json({ error: "Feedback not found" });
+        return res.status(404).json({...response, error: "Feedback not found" });
       }
       return res.status(200).json({
+        ...response,
         success: true,
         data: feedback,
         message: "Successfully fetched feedback",
       });
     }
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    return res.status(500).json({...response, error: "Internal Server Error" });
   }
 };
 
@@ -235,18 +240,19 @@ export const getRecentFeedback = async (req: Request, res: Response): Promise<an
 
     if (!recentFeedback) {
       return res.status(404).json({
+        ...response,
         success: false,
         message: "No feedback found"
       });
     }
 
     return res.status(200).json({
+      ...response,
       success: true,
       data: recentFeedback,
       message: "Successfully fetched recent feedback"
     });
   } catch (error: any) {
-    console.error("Error in getRecentFeedback:", error);
     return res.status(500).json({ 
       ...response, 
       error: "Internal Server Error",

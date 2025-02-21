@@ -91,7 +91,7 @@ function Feedbacks() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search companies..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors duration-200"
               />
             </div>
 
@@ -108,7 +108,7 @@ function Feedbacks() {
           </div>
         </div>
 
-        <div className="px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredFeedback.map((card, index) => (
             <div
               key={index}
@@ -123,7 +123,7 @@ function Feedbacks() {
               </p>
               <p className="text-gray-700 text-sm mb-4 flex-grow">
                 <span className="font-semibold">Feedback:</span>{" "}
-                "{truncateText(card.comment, 140)}"
+                "{truncateText(card.comment, 100)}"
               </p>
 
               <div className="text-gray-600 text-sm space-y-2">

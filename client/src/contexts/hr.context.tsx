@@ -13,7 +13,6 @@ import { jwtDecode } from "jwt-decode";
 
 const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL;
 
-
 const HrContext = createContext<HrContextProps | undefined>(undefined);
 
 export interface HrContextProps {
@@ -23,32 +22,44 @@ export interface HrContextProps {
 
 export const HrProvider = ({ children }: { children: ReactNode }) => {
   const [hrmembers, setHrMembers] = useState<Hr[]>([]);
-  const token = localStorage.getItem("token");
   const { jwtToken } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
 
   const getHrMembers = useCallback(async () => {
-    const response = await getRequest(`${ADMIN_BASE_URL}/hrs`, token);
-    if (response.success) {
-      setHrMembers(response.data.hrsData);
-    } else {
-      console.error(response.error);
+    if (!token) return;
+
+    try {
+      const response = await getRequest(`${ADMIN_BASE_URL}/hrs`, token);
+      if (response.success) {
+        setHrMembers(response.data.hrsData);
+      } else {
+        console.error(response.error);
+      }
+    } catch (error) {
+      console.error("Error fetching HR members:", error);
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
     if (!token) {
       setHrMembers([]);
       return;
     }
-    const decoded: any = jwtDecode(token);
-    if (decoded.role === "admin") {
-      getHrMembers();
-    } else {
+
+    try {
+      const decoded: any = jwtDecode(token);
+      if (decoded?.role === "admin") {
+        getHrMembers();
+      } else {
+        setHrMembers([]);
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
       setHrMembers([]);
-      return;
     }
-  }, [getHrMembers, jwtToken]);
+  }, [token, getHrMembers, jwtToken]); // Depend on jwtToken to trigger re-run when it updates
 
   return (
     <HrContext.Provider value={{ hrmembers, getHrMembers }}>
