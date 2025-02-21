@@ -48,6 +48,8 @@ import AdminCodingContestDetails from "./pages/admin/contest/details/CodingConte
 import { getHeaderTitle } from "./utils/functions";
 import Verification from "./pages/Verification";
 import Password from "./pages/Password";
+import Upload from "./pages/student/Upload";
+import GetFiles from "./pages/GetFiles";
 
 function MainLayout() {
   const location = useLocation();
@@ -76,7 +78,7 @@ function MainLayout() {
         <Header title={getHeaderTitle(location.pathname)} />
       )}
       <div
-        className={`flex flex-1 h-full ${
+        className={`flex flex-1 h-full bg-gray-50 ${
           !shouldShowHeaderSidebar ||
           location.pathname === "/weekly-contest" ||
           location.pathname === "/daily-contest"
@@ -368,6 +370,8 @@ function MainLayout() {
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/getFiles" element={<GetFiles />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

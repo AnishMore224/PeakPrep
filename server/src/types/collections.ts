@@ -172,4 +172,13 @@ interface Verification {
   expiresIn: Date;
 }
 
-export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType, ApiResponse, Contest, Verification };
+interface IAsset extends Document {
+  public_id: string;
+  secure_url: string;
+  format: string;
+  resource_type: string;
+  created_at: Date;
+  bytes: number;
+}
+
+export type { IUser, IStudent, IHR, ICompany, IFeedback, IAdmin, ResumeData, DailyContestType, CodingContestType, ApiResponse, Contest, Verification, IAsset };
