@@ -24,7 +24,8 @@ const StudentSchema: Schema = new Schema({
   feedback: [{ type: Schema.Types.ObjectId, ref: 'Feedback' }],
   companies: [{ type: Schema.Types.ObjectId, ref: 'Company' }],
   placedAt: [{ type: Schema.Types.ObjectId, ref: 'Company', default: null }],
-  completedCompanies: [{ type: Schema.Types.ObjectId, ref: 'Company' }]
+  completedCompanies: [{ type: Schema.Types.ObjectId, ref: 'Company' }],
+  assets : [{ type: Schema.Types.ObjectId, ref: 'Asset' }],
 }, {
   timestamps: true,
   versionKey: false

@@ -96,7 +96,7 @@ export interface Document {
 
 export interface DocumentSectionProps {
   title: string;
-  documents: Document[];
+  documents: Asset[];
   showUpload?: boolean;
 }
 
@@ -252,4 +252,14 @@ export interface CodingContestType {
     answer: string;
     score: number;
   }[];
+}
+
+export interface Asset{
+  _id: mongoose.Types.ObjectId;
+  public_id: string;
+  secure_url: string;
+  format: string;
+  resource_type: string;
+  created_at: Date;
+  bytes: number;
 }

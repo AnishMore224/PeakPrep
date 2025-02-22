@@ -17,6 +17,7 @@ interface IStudent extends Document {
   companies: mongoose.Types.ObjectId[];
   placedAt: mongoose.Types.ObjectId[];
   completedCompanies: mongoose.Types.ObjectId[];
+  assets: mongoose.Types.ObjectId[];
 }
 
 interface IHR extends Document {
@@ -24,6 +25,7 @@ interface IHR extends Document {
   companyId: mongoose.Types.ObjectId;
   name: string;
   email: string;
+  assets: mongoose.Types.ObjectId[];
 }
 
 interface ICompany extends Document {
@@ -47,6 +49,7 @@ interface IAdmin extends Document {
   userId: string;
   name: string;
   email: string;
+  assets: mongoose.Types.ObjectId[];
 }
 
 interface ResumeData {
