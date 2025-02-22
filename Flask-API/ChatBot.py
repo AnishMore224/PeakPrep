@@ -64,7 +64,7 @@ def get_gemini_response_resume(input, pdf_content, prompt):
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
         # Convert PDF to image
-        images = pdf2image.convert_from_bytes(uploaded_file.read())
+        images = pdf2image.convert_from_bytes(uploaded_file.read(), poppler_path="/usr/bin/")
         first_page = images[0]
         # Convert image to bytes
         img_byte_arr = io.BytesIO()
@@ -84,7 +84,7 @@ def input_pdf_setup(uploaded_file):
 def input_pdf_setup_text(uploaded_file):
     if uploaded_file:
         # Read the PDF file from the uploaded file object
-        pdf_reader = PyPDF2.PdfReader(io.BytesIO(uploaded_file.read()))
+        pdf_reader = PyPDF2.PdfReader(io.BytesIO(uploaded_file.read()), poppler_path="/usr/bin/")
         
         # Extract text from all pages
         text = "".join([page.extract_text() for page in pdf_reader.pages if page.extract_text()])
