@@ -8,12 +8,13 @@ import React, {
 import { deleteRequest, getRequest } from "../utils/services";
 import { Asset } from "../types";
 
-const BASE_URL = "http://localhost:3030/api/cloudinary"; // Replace with your actual base URL
+const BASE_URL = import.meta.env.VITE_DOCUMENT_API_URL; // Replace with your actual base URL
 
 interface DocumentContextProps {
   documents: Asset[];
   setDocuments: (documents: Asset[]) => void;
   deleteDocument: (public_id: string, resource_type: string) => void;
+  error: string | null;
 }
 
 const DocumentContext = createContext<DocumentContextProps | undefined>(
@@ -84,7 +85,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({
   }, [token]);
   return (
     <DocumentContext.Provider
-      value={{ documents, setDocuments, deleteDocument }}
+      value={{ documents, setDocuments, deleteDocument, error }}
     >
       {children}
     </DocumentContext.Provider>
