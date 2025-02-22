@@ -172,28 +172,25 @@ export const generatePdf = async (req: Request, res: Response): Promise<any> => 
   const resumeData = req.body.resumeData;
   try {
     const token = req.headers.authorization?.split(" ")[1];
-    if(!token) {
-      return res.status(401).json({
-        ...response,
-        error: "Unauthorized",
-      });
+    if (!token) {
+      return res.status(401).json({ ...response, error: "Unauthorized" });
     }
-    // await save(resumeData, token);
-
+    
     const templatePath = path.join(__dirname, "../utils/templates/t1.tex");
     const template = fs.readFileSync(templatePath, "utf8");
     const latexCode = fillTemplate(template, resumeData);
     const pdfStream = latex(latexCode);
+    
     res.setHeader("Content-Type", "application/pdf");
-
+    // Pipe the PDF stream to the response
     pdfStream.pipe(res);
-    pdfStream.on("finish", () => {
-      res.status(200).json({...response, success: true, message: "PDF generated successfully"});
-    });
+    
+    // Optionally, handle errors on the stream:
     pdfStream.on("error", (err) => {
-    res.status(500).json({...response, error: "Failed to generate PDF"});
+      res.end();
     });
+    
   } catch (err) {
-    res.status(500).json({...response, error: "Failed to generate PDF"});
+    res.status(500).json({ ...response, error: "Failed to generate PDF" });
   }
 };
