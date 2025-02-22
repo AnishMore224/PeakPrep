@@ -5,7 +5,7 @@ FROM python:3.11-slim
 RUN apt-get update && apt-get install -y poppler-utils
 
 # Set the working directory in the container
-WORKDIR /
+WORKDIR /app
 
 # Copy the project files into the container
 COPY . /app
