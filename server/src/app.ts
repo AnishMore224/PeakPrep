@@ -56,22 +56,3 @@ mongoose
     });
   })
   .catch((err) => console.error("Database connection error:", err));
-
-// import { v2 as cloudinary } from "cloudinary";
-// import dotenv from 'dotenv';
-
-// dotenv.config();
-
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
-
-// const secureUrl = cloudinary.url("pdf_uploads/nmichlyyo3zycoj3xvks.pdf", {
-//   resource_type: "raw",
-//   sign_url: true,
-//   expires_at: Math.floor(Date.now() / 1000) + 3600, // Valid for 1 hour
-// });
-
-// console.log(secureUrl);
