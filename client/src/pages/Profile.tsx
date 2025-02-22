@@ -2,10 +2,12 @@ import { ProfileView } from '../components/ProfileView';
 import { DocumentSection } from '../components/DocumentSection.tsx';
 import { useUIContext } from "../contexts/ui.context.tsx";
 import { useAuth } from '../contexts/auth.context.tsx';
+import { useDocument } from '../contexts/document.context.tsx';
 
 export function Profile() {
   const { isSidebarVisible } = useUIContext();
   const { user } = useAuth();
+  const { documents } = useDocument();
   return (
     <div className={`flex-1 bg-gray-50 transition-all duration-300 ${
       isSidebarVisible ? "md:ml-64 ml-0" : "md:ml-20 ml-0"
@@ -19,45 +21,24 @@ export function Profile() {
           
           <div className="space-y-8">
             <DocumentSection 
-              title="Resume" 
-              documents={[
-                { name: 'Resume.pdf', type: 'pdf' },
-                { name: 'Cover Letter.pdf', type: 'pdf' },
-                { name: 'Recommendation Letter.pdf', type: 'pdf' },
-                { name: 'Certifications.pdf', type: 'pdf' }
-              ]}
-            />
-            <DocumentSection 
-              title="Identification Documents" 
-              documents={[
-                { name: 'ID Card', type: 'id', editable: true },
-                { name: 'Passport', type: 'passport', editable: true },
-                { name: 'Residence Permit', type: 'permit', editable: true }
-              ]}
+              title="Documents" 
+              documents={documents}
               showUpload
             />
           </div>)
           : user?.role === 'admin' ? (
             <div className="space-y-8">
               <DocumentSection 
-                title="Company Documents" 
-                documents={[
-                  { name: 'Business License', type: 'license', editable: true },
-                  { name: 'Tax Certificate', type: 'tax', editable: true },
-                  { name: 'Company Profile', type: 'profile', editable: true }
-                ]}
+                title="Documents" 
+                documents={documents}
                 showUpload
               />
             </div>)
           : user?.role === 'hr' ? (
             <div className="space-y-8">
               <DocumentSection 
-                title="Company Documents" 
-                documents={[
-                  { name: 'Business License', type: 'license', editable: true },
-                  { name: 'Tax Certificate', type: 'tax', editable: true },
-                  { name: 'Company Profile', type: 'profile', editable: true }
-                ]}
+                title="Documents" 
+                documents={documents}
                 showUpload
               />
             </div>)

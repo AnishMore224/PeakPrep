@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Upload as UploadIcon, FileText, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import { SyncLoader } from 'react-spinners';
 import { useUIContext } from '../../contexts/ui.context';
-import Header from '../../components/Header';
-import Sidebar from '../../components/Sidebar';
 import { getRequest, postRequest } from '../../utils/services';
 
 const Upload = () => {
@@ -24,16 +22,16 @@ const Upload = () => {
         setIsDragging(false);
     };
 
-    const handleDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        
-        const droppedFile = e.dataTransfer.files[0];
-        if (droppedFile?.type === 'application/pdf') {
-            setFile(droppedFile);
-            setUploadStatus('idle');
-        }
-    };
+     const handleDrop = (e: React.DragEvent) => {
+            e.preventDefault();
+            setIsDragging(false);
+            
+            const droppedFile = e.dataTransfer.files[0];
+            if (droppedFile) {
+                setFile(droppedFile);
+                setUploadStatus('idle');
+            }
+        };
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -43,6 +41,7 @@ const Upload = () => {
         }
     };
 
+
     const handleUpload = async () => {
         if (!file) return;
         try {
@@ -50,43 +49,61 @@ const Upload = () => {
             const url = `${import.meta.env.VITE_CLOUDINARY_BACKEND_URL}/signature/PeakPrepDocs`;
             const res = await getRequest(url);
             const { signature, timestamp, uploadPreset } = res.data;
-            // Use the destructured elements here
-            console.log(signature, timestamp, uploadPreset);
+
             const formData = new FormData();
             formData.append('file', file);
             formData.append('api_key', import.meta.env.VITE_CLOUDINARY_API_KEY);
             formData.append('timestamp', timestamp.toString());
             formData.append('upload_preset', uploadPreset);
             formData.append('signature', signature);
-            formData.append('resource_type', 'raw');
+            
+            // Detect file type
+            const isImage = file.type.startsWith('image/');
+            formData.append('resource_type', isImage ? 'image' : 'auto');
 
-            const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`, {
-                method: 'POST',
-                body: formData,
-            }).then((response) => response.json())
-            .then(async (data) => {
-                const uploadData = {
-                    public_id: data.public_id,
-                    secure_url: data.secure_url,
-                    format: data.format,
-                    resource_type: data.resource_type,
-                    created_at: data.created_at,
-                    bytes: data.bytes,
-                };
-                const saveResponse = await postRequest('http://localhost:3030/api/cloudinary/save', JSON.stringify(uploadData));
-                console.log('Saved asset info:', saveResponse);
-                setUploadStatus('success');
-                console.log('Uploaded asset info:', data);
-            })  
-            .catch((error) => console.error('Upload error:', error));
+            const uploadResponse = await fetch(
+                `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/upload`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
+            console.log('Upload response:', uploadResponse);
+            if (!uploadResponse.ok) {
+                const errorData = await uploadResponse.json();
+                console.error("Upload failed:", errorData);
+                throw new Error(errorData.error.message || "Upload failed");
+            }
+            const data = await uploadResponse.json();
+            console.log('Upload response:', data);
+            if (!data.secure_url) throw new Error('Upload failed');
+
+            const uploadData = {
+                public_id: data.public_id,
+                secure_url: data.secure_url,
+                format: data.format || "unknown",
+                resource_type: data.resource_type || (isImage ? 'image' : 'auto'),
+                created_at: data.created_at || new Date().toISOString(),
+                bytes: data.bytes || 0,
+            };
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('No token found');
+            const saveResponse = await postRequest(
+                'http://localhost:3030/api/cloudinary/save',
+                JSON.stringify(uploadData),
+                token
+            );
+
+            if (!saveResponse.success) throw new Error('Failed to save asset');
+
+            setUploadStatus('success');
         } catch (error) {
-            console.error('Upload failed:', error);
             setUploadStatus('error');
         } finally {
             setUploadLoading(false);
         }
-
     };
+
 
     const handleRemoveFile = () => {
         setFile(null);
@@ -95,9 +112,9 @@ const Upload = () => {
 
     return (
         <div className="flex h-[83vh]">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="flex-1 flex flex-col">
-                <Header title="Upload PDF" />
+                {/* <Header title="Upload PDF" /> */}
                 <main
                     className={`flex-1 p-6 md:p-8 transition-all duration-300 ${
                         isSidebarVisible ? 'md:ml-64 ml-0' : 'md:ml-20 ml-0'
@@ -108,8 +125,8 @@ const Upload = () => {
                             <div className="bg-white rounded-lg shadow-lg p-6">
                                 <div className="text-center mb-8">
                                     <FileText className="w-12 h-12 text-blue-500 mx-auto mb-3" />
-                                    <h1 className="text-2xl font-bold text-gray-800">PDF Upload</h1>
-                                    <p className="text-gray-600 mt-2">Upload your PDF file here</p>
+                                    <h1 className="text-2xl font-bold text-gray-800">Files Upload</h1>
+                                    <p className="text-gray-600 mt-2">Upload your files here</p>
                                 </div>
 
                                 <div
@@ -127,7 +144,7 @@ const Upload = () => {
                                         type="file"
                                         ref={fileInputRef}
                                         onChange={handleFileSelect}
-                                        accept=".pdf"
+                                        accept="image/*,.pdf"
                                         className="hidden"
                                     />
                                     <UploadIcon className="w-8 h-8 text-gray-400 mx-auto mb-4" />
@@ -154,7 +171,7 @@ const Upload = () => {
                                             ) : uploadStatus === 'success' ? (
                                                 'Uploaded!'
                                             ) : (
-                                                'Upload PDF'
+                                                'Upload File'
                                             )}
                                         </button>
                                         <div className="flex justify-center items-center ml-4">

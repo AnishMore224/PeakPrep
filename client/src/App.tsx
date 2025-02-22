@@ -49,7 +49,7 @@ import { getHeaderTitle } from "./utils/functions";
 import Verification from "./pages/Verification";
 import Password from "./pages/Password";
 import Upload from "./pages/student/Upload";
-import GetFiles from "./pages/GetFiles";
+import { DocumentProvider } from "./contexts/document.context";
 
 function MainLayout() {
   const location = useLocation();
@@ -367,11 +367,17 @@ function MainLayout() {
                 <Navigate to="/login" replace />
               )
             } />
+            <Route path="/upload" element={
+              isAuthenticated ? 
+              (
+                <Upload />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            } />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/getFiles" element={<GetFiles />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
@@ -390,7 +396,9 @@ export function App() {
               <HrProvider>
                 <FeedbackProvider>
                   <ContestProvider>
-                    <MainLayout />
+                   <DocumentProvider>
+                      <MainLayout />
+                   </DocumentProvider>
                   </ContestProvider>
                 </FeedbackProvider>
               </HrProvider>

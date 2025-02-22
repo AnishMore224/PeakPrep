@@ -1,6 +1,6 @@
 // routes/cloudinary.routes.ts
 import { Router } from 'express';
-import { getSignature, getSignedUrl, saveAsset } from '../controllers/cloudinary';
+import { deleteAsset, getAssets, getSignature, getSignedUrl, saveAsset, } from '../controllers/cloudinary';
 
 const router = Router();
 // Base URL: http://localhost:3030/api/cloudinary
@@ -8,5 +8,7 @@ const router = Router();
 router.get('/signature/:uploadPreset', getSignature);
 router.get('/signed-url/:public_id', getSignedUrl);
 router.post('/save', saveAsset);
+router.get('/getAsset', getAssets);
+router.delete('/deleteAsset', deleteAsset);
 
 export default router;
