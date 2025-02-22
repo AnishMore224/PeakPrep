@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
-WORKDIR /
+WORKDIR /usr/src/app
 
 # Copy package files and install dependencies
 COPY package*.json ./
