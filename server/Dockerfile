@@ -3,9 +3,7 @@ FROM node:18-bullseye-slim
 
 # Install TeX Live packages required for LaTeX compilation
 RUN apt-get update && apt-get install -y \
-    texlive-latex-base \
-    texlive-fonts-recommended \
-    texlive-latex-extra \
+    texlive-full \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
