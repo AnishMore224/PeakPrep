@@ -32,9 +32,14 @@ const NotAuthorized: React.FC = () => {
                 403
                 </h1>
                 <div className="space-y-2">
-                <h2 className="text-3xl font-semibold text-gray-800">Not Authorized</h2>
-                <p className="text-gray-600 max-w-md mx-auto">
-                    You do not have permission to view this page.
+                <h2 className="text-xl text-gray-600 max-w-md mx-auto flex items-center justify-center">
+                The&nbsp;<img src="../../public/onepiece.png" alt="O" className="inline-block w-6 h-6 rounded-full border-2 border-black-500" />
+                    ne Piece is real&nbsp;<b>but</b>&nbsp;you're&nbsp;<b className='text-red-500'>NOT</b>
+                </h2>
+                <h2 className="text-3xl font-semibold text-gray-800">
+                </h2>
+                <p className="text-3xl text-gray-600 max-w-md mx-auto">
+                <b>Authorized</b> to view this page.
                 </p>
                 </div>
             </div>

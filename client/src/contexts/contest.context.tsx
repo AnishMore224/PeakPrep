@@ -6,15 +6,20 @@ import {
   useState,
 } from "react";
 import { DailyContestType, CodingContestType } from "../types";
-import { deleteRequest, getRequest, postRequest, putRequest } from "../utils/services";
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from "../utils/services";
 import { useAuth } from "./auth.context";
+import { useError } from "./error.context";
 
 interface ContestContextProps {
   dailyContests: DailyContestType[];
   codingContests: CodingContestType[];
   getDailyContests: () => Promise<void>;
   getCodingContests: () => Promise<void>;
-  error: string | null;
   updateError: (message: string | null) => void;
   createContest: (contestData: any) => Promise<void>;
   getContest: (contestId: string | undefined, type: string) => Promise<any>;
@@ -38,7 +43,7 @@ export const ContestProvider = ({
 }) => {
   const [dailyContests, setDailyContests] = useState<DailyContestType[]>([]);
   const [codingContests, setCodingContests] = useState<CodingContestType[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { setError } = useError();
 
   const { jwtToken } = useAuth();
 
@@ -135,7 +140,7 @@ export const ContestProvider = ({
       try {
         const response = await putRequest(
           `${BASE_URL}/update/`,
-          JSON.stringify({...contestData, type}),
+          JSON.stringify({ ...contestData, type }),
           jwtToken
         );
         if (response?.ok) {
@@ -164,7 +169,6 @@ export const ContestProvider = ({
       value={{
         dailyContests,
         codingContests,
-        error,
         updateError,
         getDailyContests,
         getCodingContests,

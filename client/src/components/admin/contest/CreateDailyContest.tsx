@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { useContest } from "../../../contexts/contest.context";
-import Error from "../../Error";
 
 interface Question {
   questionText: string;
@@ -24,7 +23,7 @@ export const DailyContestForm = () => {
       options: ["1", "2", "3", "4"],
     },
   ]);
-  const { createContest, error, updateError } = useContest();
+  const { createContest } = useContest();
 
   const addQuestion = () => {
     setQuestions([
@@ -82,15 +81,6 @@ export const DailyContestForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="text-red-500">
-          <Error message={error} onClose={() => {
-            window.location.href = "/contest";
-            updateError(null);
-          }} />
-        </div>
-      )}
-      
       <div className="space-y-4">
         <input
           type="text"

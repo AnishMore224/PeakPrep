@@ -10,7 +10,7 @@ import { postRequest, getRequest } from "../utils/services";
 import { HrRegisterInfoType, studentRegisterInfoType } from "../types";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-
+import { useError } from "./error.context";
 
 const BASE_URL = import.meta.env.VITE_AUTH_API_URL as string;
 
@@ -19,6 +19,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const navigate = useNavigate();
+  const { setError } = useError();
   const [user, setUser] = useState<Admin | Student | Hr | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [jwtToken, setJwtToken] = useState<string | null>(null);
@@ -26,10 +27,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
 
   const [loginInfo, setLoginInfo] = useState({ username: "", password: "" });
-  const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
 
-  const [registerError, setRegisterError] = useState<string | null>(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState<boolean>(false);
   const [studentRegisterInfo, setStudentRegisterInfo] =
     useState<studentRegisterInfoType>({
@@ -76,7 +75,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     async (event: any) => {
       event.preventDefault();
       setIsLoginLoading(true);
-      setLoginError(null);
+      setError(null);  
       const response = await postRequest(
         `${BASE_URL}/login`,
         JSON.stringify(loginInfo)
@@ -85,7 +84,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setIsLoginLoading(false);
       setLoginInfo({ username: "", password: "" });
 
-      if (response.error) return setLoginError(response.error);
+      if (response.error) {
+        return setError(response.error);
+      }
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
@@ -128,10 +129,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     async (event: any) => {
       event.preventDefault();
       setIsRegisterLoading(true);
-      setRegisterError(null);
+      setError(null);
       if (studentRegisterInfo.username.length !== 10) {
         setIsRegisterLoading(false);
-        return setRegisterError("Username must be exactly 10 characters long.");
+        return setError("Username must be exactly 10 characters long.");
       }
       const response = await postRequest(
         `${BASE_URL}/register`,
@@ -148,7 +149,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         password: "",
       });
 
-      if (response.error) return setRegisterError(response.error);
+      if (response.error) return setError(response.error);
       const token = response.data.token;
       localStorage.setItem("token", token);
       setJwtToken(token);
@@ -180,11 +181,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     async (event: any) => {
       event.preventDefault();
       setIsRegisterLoading(true);
-      setRegisterError(null);
+      setError(null);
       const collegeId = import.meta.env.VITE_COLLEGE_ID;
       if (HrRegisterInfo.collegeId !== collegeId) {
         setIsRegisterLoading(false);
-        return setRegisterError("Invalid College ID");
+        return setError("Invalid College ID");
       }
       const response = await postRequest(
         `${BASE_URL}/registerHr`,
@@ -201,7 +202,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         password: "",
       });
 
-      if (response.error) return setRegisterError(response.error);
+      if (response.error) return setError(response.error);
 
       const token = response.data.token;
       localStorage.setItem("token", token);
@@ -300,9 +301,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         isAuthenticated,
         jwtToken,
         loginInfo,
-        loginError,
         isLoginLoading,
-        registerError,
         isRegisterLoading,
         studentRegisterInfo,
         hrRegisterInfo: HrRegisterInfo,
@@ -360,9 +359,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   jwtToken: string | null;
   loginInfo: { username: string; password: string };
-  loginError: string | null;
   isLoginLoading: boolean;
-  registerError: string | null;
   isRegisterLoading: boolean;
   studentRegisterInfo: studentRegisterInfoType;
   hrRegisterInfo: HrRegisterInfoType;

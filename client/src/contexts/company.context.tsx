@@ -9,6 +9,7 @@ import {
 import { getRequest } from "../utils/services";
 import { Company, CompanyData } from "../types";
 import { useAuth } from "./auth.context";
+import { useError } from "./error.context";
 import { jwtDecode } from "jwt-decode";
 
 const BASE_URL = import.meta.env.VITE_STUDENT_SELECTION_API_URL as string;
@@ -22,13 +23,14 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
   const [companies, setCompanies] = useState<Company[] | CompanyData[]>([]);
   const token = localStorage.getItem("token");
   const { isAuthenticated } = useAuth();
+  const { setError } = useError();
 
   const getCompanies = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/companies`, token);
     if (response.success) {
       setCompanies(response.data.companies);
     } else {
-      console.error(response.error);
+      setError(response.error);
     }
   }, [token]);
 
@@ -37,7 +39,7 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
     if (response.success) {
       setCompanies(response.data.companies);
     } else {
-      console.error(response.error);
+      setError(response.error);
     }
   }, [token]);
 
@@ -61,7 +63,9 @@ export const CompanyProvider = ({ children }: { children: ReactNode }) => {
   }, [isAuthenticated, getCompanies, getAllCompanies]);
 
   return (
-    <CompanyContext.Provider value={{ companies, getCompanies, getAllCompanies }}>
+    <CompanyContext.Provider
+      value={{ companies, getCompanies, getAllCompanies }}
+    >
       {children}
     </CompanyContext.Provider>
   );

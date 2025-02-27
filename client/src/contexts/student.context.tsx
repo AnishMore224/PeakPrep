@@ -10,6 +10,8 @@ import { getRequest } from "../utils/services";
 import { Student, StudentData } from "../types";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./auth.context";
+import { useError } from "./error.context";
+
 const BASE_URL = import.meta.env.VITE_STUDENT_SELECTION_API_URL;
 const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL;
 const StudentContext = createContext<StudentContextProps | undefined>(
@@ -18,6 +20,7 @@ const StudentContext = createContext<StudentContextProps | undefined>(
 export const StudentProvider = ({ children }: { children: ReactNode }) => {
   const [students, setStudents] = useState<Student[] | StudentData[]>([]);
   const { user } = useAuth();
+  const { setError } = useError();
   const token = localStorage.getItem("token");
   const getStudents = useCallback(async () => {
     const response = await getRequest(`${BASE_URL}/students`, token);
@@ -42,6 +45,8 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
           })
         : [];
       setStudents(student);
+    } else {
+      setError(response.error);
     }
   }, [token]);
 
@@ -65,6 +70,8 @@ export const StudentProvider = ({ children }: { children: ReactNode }) => {
           })
         : [];
       setStudents(student);
+    } else {
+      setError(response.error);
     }
   }, [token]);
 
