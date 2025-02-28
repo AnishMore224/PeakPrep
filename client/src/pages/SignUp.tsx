@@ -12,11 +12,12 @@ export const SignUp = () => {
     hrRegisterInfo,
     updateStudentRegisterInfo,
     updateHrRegisterInfo,
+    registerError,
   } = useAuth();
 
   const changeUserType = (type: string) => {
     setUserType(type);
-  }
+  };
 
   const handleStudentRegisterInfoChange = (event: any) => {
     updateStudentRegisterInfo({
@@ -30,11 +31,11 @@ export const SignUp = () => {
       ...hrRegisterInfo,
       [event.target.name]: event.target.value,
     });
-  }
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  }
+  };
 
   return (
     <div className="signup min-h-screen bg-gray-50 flex items-center justify-center lg:p-8 md:p-5 sm:py-4 sm:px-10 p-3">
@@ -122,7 +123,7 @@ export const SignUp = () => {
                       required
                     />
                   </div>
-                    <div>
+                  <div>
                     <label
                       htmlFor="branch"
                       className="block text-base font-medium text-gray-700 mb-1"
@@ -137,15 +138,23 @@ export const SignUp = () => {
                       className="input-field text-base"
                       required
                     >
-                      <option value="" disabled>Select your branch</option>
-                      <option value="CSE">Computer Science Engineering (CSE)</option>
-                      <option value="CSIT">Computer Science and Information Technology (CSIT)</option>
-                      <option value="ECE">Electronics and Communication Engineering (ECE)</option>
+                      <option value="" disabled>
+                        Select your branch
+                      </option>
+                      <option value="CSE">
+                        Computer Science Engineering (CSE)
+                      </option>
+                      <option value="CSIT">
+                        Computer Science and Information Technology (CSIT)
+                      </option>
+                      <option value="ECE">
+                        Electronics and Communication Engineering (ECE)
+                      </option>
                       <option value="ME">Mechanical Engineering (ME)</option>
                       <option value="CE">Civil Engineering (CE)</option>
                       <option value="EE">Electrical Engineering (EE)</option>
                     </select>
-                    </div>
+                  </div>
                   <div>
                     <label
                       htmlFor="section"
@@ -237,8 +246,16 @@ export const SignUp = () => {
                   id="email"
                   name="email"
                   type="email"
-                  value={userType === "student" ? studentRegisterInfo.email : hrRegisterInfo.email}
-                  onChange={userType === "student" ? handleStudentRegisterInfoChange : handleHrRegisterInfoChange}
+                  value={
+                    userType === "student"
+                      ? studentRegisterInfo.email
+                      : hrRegisterInfo.email
+                  }
+                  onChange={
+                    userType === "student"
+                      ? handleStudentRegisterInfoChange
+                      : handleHrRegisterInfoChange
+                  }
                   className="input-field text-base"
                   placeholder="Enter your email"
                   required
@@ -257,8 +274,16 @@ export const SignUp = () => {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    value={userType === "student" ? studentRegisterInfo.password : hrRegisterInfo.password}
-                    onChange={userType === "student" ? handleStudentRegisterInfoChange : handleHrRegisterInfoChange}
+                    value={
+                      userType === "student"
+                        ? studentRegisterInfo.password
+                        : hrRegisterInfo.password
+                    }
+                    onChange={
+                      userType === "student"
+                        ? handleStudentRegisterInfoChange
+                        : handleHrRegisterInfoChange
+                    }
                     className="input-field text-base"
                     placeholder="Enter your password"
                     required
@@ -272,6 +297,10 @@ export const SignUp = () => {
                   </button>
                 </div>
               </div>
+
+              {registerError && (
+                <div className="text-red-500 text-sm mt-2">{registerError}</div>
+              )}
 
               <button type="submit" className="btn-primary text-base py-2 px-4">
                 Sign up

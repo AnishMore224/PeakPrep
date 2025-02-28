@@ -191,7 +191,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     if (!user) {
       return res
         .status(400)
-        .json({ ...response, error: "Invalid username or password." });
+        .json({ ...response, error: "Username not found." });
     }
 
     // Check if the password is correct

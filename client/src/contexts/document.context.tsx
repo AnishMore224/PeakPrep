@@ -7,14 +7,13 @@ import React, {
 } from "react";
 import { deleteRequest, getRequest } from "../utils/services";
 import { Asset } from "../types";
-
+import { useError } from "./error.context";
 const BASE_URL = import.meta.env.VITE_DOCUMENT_API_URL; // Replace with your actual base URL
 
 interface DocumentContextProps {
   documents: Asset[];
   setDocuments: (documents: Asset[]) => void;
   deleteDocument: (public_id: string, resource_type: string) => void;
-  error: string | null;
 }
 
 const DocumentContext = createContext<DocumentContextProps | undefined>(
@@ -37,8 +36,8 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({
   children,
 }) => {
   const [documents, setDocuments] = useState<Asset[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const { setError } = useError();
 
   const getDocuments = async () => {
     try {
@@ -85,7 +84,7 @@ export const DocumentProvider: React.FC<DocumentProviderProps> = ({
   }, [token]);
   return (
     <DocumentContext.Provider
-      value={{ documents, setDocuments, deleteDocument, error }}
+      value={{ documents, setDocuments, deleteDocument }}
     >
       {children}
     </DocumentContext.Provider>

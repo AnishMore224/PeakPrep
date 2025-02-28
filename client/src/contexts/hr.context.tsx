@@ -9,6 +9,7 @@ import {
 import { getRequest } from "../utils/services";
 import { Hr } from "../types";
 import { useAuth } from "./auth.context";
+import { useError } from "./error.context";
 import { jwtDecode } from "jwt-decode";
 
 const ADMIN_BASE_URL = import.meta.env.VITE_DETAILS_API_URL;
@@ -23,6 +24,7 @@ export interface HrContextProps {
 export const HrProvider = ({ children }: { children: ReactNode }) => {
   const [hrmembers, setHrMembers] = useState<Hr[]>([]);
   const { jwtToken } = useAuth();
+  const { setError } = useError();
   const [token, setToken] = useState<string | null>(null);
 
   const getHrMembers = useCallback(async () => {
@@ -33,10 +35,10 @@ export const HrProvider = ({ children }: { children: ReactNode }) => {
       if (response.success) {
         setHrMembers(response.data.hrsData);
       } else {
-        console.error(response.error);
+        setError(response.error);
       }
     } catch (error) {
-      console.error("Error fetching HR members:", error);
+      setError(error as string);
     }
   }, [token]);
 

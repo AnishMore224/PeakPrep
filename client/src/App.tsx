@@ -50,6 +50,8 @@ import Verification from "./pages/Verification";
 import Password from "./pages/Password";
 import Upload from "./pages/student/Upload";
 import { DocumentProvider } from "./contexts/document.context";
+import { ErrorProvider } from "./contexts/error.context";
+import ErrorPopup from "./components/ErrorPopup";
 
 function MainLayout() {
   const location = useLocation();
@@ -74,6 +76,7 @@ function MainLayout() {
 
   return (
     <>
+      <ErrorPopup />
       {shouldShowHeaderSidebar && (
         <Header title={getHeaderTitle(location.pathname)} />
       )}
@@ -360,21 +363,22 @@ function MainLayout() {
                 )
               }
             />
-            <Route path="/change-password" element={
-              isAuthenticated ? (
-                <Password />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } />
-            <Route path="/upload" element={
-              isAuthenticated ? 
-              (
-                <Upload />
-              ) : (
-                <Navigate to="/login" replace />
-              )
-            } />
+            <Route
+              path="/change-password"
+              element={
+                isAuthenticated ? (
+                  <Password />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
+            <Route
+              path="/upload"
+              element={
+                isAuthenticated ? <Upload /> : <Navigate to="/login" replace />
+              }
+            />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/interview" element={<Interview />} />
             <Route path="/interview-result" element={<InterviewResults />} />
@@ -389,23 +393,25 @@ function MainLayout() {
 export function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <UIProvider>
-          <CompanyProvider>
-            <StudentProvider>
-              <HrProvider>
-                <FeedbackProvider>
-                  <ContestProvider>
-                   <DocumentProvider>
-                      <MainLayout />
-                   </DocumentProvider>
-                  </ContestProvider>
-                </FeedbackProvider>
-              </HrProvider>
-            </StudentProvider>
-          </CompanyProvider>
-        </UIProvider>
-      </AuthProvider>
+      <ErrorProvider>
+        <AuthProvider>
+          <UIProvider>
+            <CompanyProvider>
+              <StudentProvider>
+                <HrProvider>
+                  <FeedbackProvider>
+                    <ContestProvider>
+                      <DocumentProvider>
+                        <MainLayout />
+                      </DocumentProvider>
+                    </ContestProvider>
+                  </FeedbackProvider>
+                </HrProvider>
+              </StudentProvider>
+            </CompanyProvider>
+          </UIProvider>
+        </AuthProvider>
+      </ErrorProvider>
     </BrowserRouter>
   );
 }

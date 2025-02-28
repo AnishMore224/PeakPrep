@@ -100,7 +100,6 @@ export const Login: React.FC = () => {
                 </button>
               </div>
             </div>
-
             <button type="submit" className="btn-primary text-lg py-3 px-6">
               Log in
             </button>
